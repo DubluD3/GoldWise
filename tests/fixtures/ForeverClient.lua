@@ -31,7 +31,9 @@ function ForeverClient.new(readBuild, registration)
     if registration ~= "missing" then
         globals.EventUtil = {
             RegisterOnceFrameEventAndCallback = function(event, callback, argument)
-                assert(event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD", "unexpected fixture event")
+                assert(event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD"
+                    or event == "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED" or event == "AUCTION_HOUSE_BROWSE_FAILURE"
+                    or event == "AUCTION_HOUSE_CLOSED", "unexpected fixture event")
                 if registration == "fails" then
                     error("registration unavailable")
                 end

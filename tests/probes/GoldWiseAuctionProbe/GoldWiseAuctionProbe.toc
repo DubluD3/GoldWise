@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: GoldWise Auction Probe
+## Version: 1
+## Notes: Disposable GW-010 read of the local Auction House browse cache.
+
+AuctionObservation.lua
+Probe.lua

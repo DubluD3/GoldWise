@@ -17,7 +17,7 @@
 | API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe and product scan | YES for the manual open-window path on `70862` | GW-009 open-window smoke test passed |
-| API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
+| API-006 | AH readiness, browse cache, and result events | CLIENT-EXTRACTED signatures and UI usage | NO | BLOCKED-API-VERIFICATION |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
 | API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product capture | YES for readable player fields and entry callbacks on `70862` | GW-007 live smoke test passed |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
@@ -131,6 +131,23 @@ The [disposable probe](../development/PROFESSION_PROBE.md) runs on manual reques
 `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The installed GoldWise `0.1.4-dev` manual scan passed and its reported data matched the open crafting window on build `70862`. The owner did not separately report the closed-window result.
 
 Decision: `VERIFIED` for the manual read of an open local crafting window in the probe and installed addon on `70862`. Closed-window handling, base-profession fallback, and rejection of external views passed offline checks.
+
+### API-006 · GW-010 Auction House browse cache
+
+These signatures and UI call sites are `CLIENT-EXTRACTED` from Forever build `70658`, accessed November 9, 2026. [Functions](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/functions.txt) · [Events](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/events.txt) · [Structures](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/structures.txt) · [Blizzard browse frame](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_AuctionHouseUI/Shared/Blizzard_AuctionHouseBrowseResultsFrame.lua)
+
+| Candidate | Signature and probe use |
+|---|---|
+| `AuctionHouseFrame.BrowseResultsFrame:IsVisible()` | `IsVisible() → bool`. Check the shipped browse frame and its parent without modifying either. |
+| `C_AuctionHouse.IsThrottledMessageSystemReady` | `() → canSendThrottledMessage: bool`. Probe checks at arm and read. False or unavailable stops that attempt. The probe does not infer a cooldown length. |
+| `C_AuctionHouse.GetBrowseResults` | `() → browseResults: table<BrowseResultInfo>`. The shipped UI uses this for replacement browse rows. The probe reads it once on explicit request after observing an update. |
+| `C_AuctionHouse.HasFullBrowseResults` | `() → hasFullBrowseResults: bool`. Describes the current browse result set. False or unavailable yields partial coverage. |
+| `BrowseResultInfo` and `ItemKey` | Read only `itemKey`, `totalQuantity`, and `minPrice`, with key fields `itemID`, `itemLevel`, `itemSuffix`, and `battlePetSpeciesID`. `minPrice` is `BigUInteger` in the export. The model accepts only safe integer values and labels this a browse minimum in copper without inferring a unit basis or completed sale. |
+| `AUCTION_HOUSE_BROWSE_RESULTS_UPDATED`, `AUCTION_HOUSE_BROWSE_FAILURE`, `AUCTION_HOUSE_CLOSED` | Synchronous events with no payload. Subscribe once per event via the API-002 helper. A failure or close cancels the test. An update has no request ID and may also follow item or commodity activity. |
+
+The [disposable probe](../development/AUCTION_PROBE.md) records only readiness, the observed event, and a bounded local cache sample on build `70862`. It uses the existing secret-value guard and `GetServerTime`. The player makes one native search. The probe makes zero requests, never paginates, and does not store or transmit results. The 128-row project limit describes processing capacity, independent of any Blizzard throttle. A stale, restricted, closed, throttled, or unavailable view produces an explicit fallback. In-game verification is `NOT RUN`.
+
+`C_AuctionHouse.SendBrowseQuery(query: AuctionHouseBrowseQuery)` and `C_AuctionHouse.RequestMoreBrowseResults()` are documented candidates and are outside the probe. Exact query attribution, addon-originated request behavior, and any cooldown limit remain unverified. Product integration and addon-originated querying remain blocked pending evidence and the applicable [policy review](../compliance/BLIZZARD_POLICY.md). The official policy and EULA were rechecked November 9, 2026.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

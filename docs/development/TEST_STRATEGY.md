@@ -47,6 +47,8 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-009 live profession probe | [Disposable probe](PROFESSION_PROBE.md) | Owner reported skill `87/150`, 35 observed learned rows, and a learned sample on `70862`. Closed-window result was not reported. | PASS for open-window reads |
 | GW-009 installed profession scan | Owner ran `/run GoldWiseProfessionScan()` in GoldWise `0.1.4-dev` on build `70862` on 2026-11-09 | Owner confirmed the open-window scan passed and all reported data was correct. | PASS for open-window scan |
 | GW-009 installed closed-window fallback | [Close the crafting window and repeat the scan](../../README.md#test-the-startup-build) | Live result not separately reported. The offline product test verified the unavailable message and cleared snapshot. | PENDING live evidence |
+| GW-010 Auction House cache model and probe | `sh scripts/test.sh` with Lua 5.1.5 | 68 checks passed across 13 suites, including one manual read after an update, readiness gates, close, failure, expiry, restricted rows, and bounded processing. | PASS |
+| GW-010 live browse-cache probe | [One native search and local cache read](AUCTION_PROBE.md) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

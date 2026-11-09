@@ -21,7 +21,8 @@ Date reviewed: 2026-11-09. **Internal interpretation, not legal advice or Blizza
 |---|---|
 | Display addon version and read local client build metadata | In scope for the GW-004 smoke test. Read once on load and display one local status message. |
 | Read inventory and professions via supported UI APIs | Candidate. Require per-call evidence on the target build and a fallback for missing or restricted data. |
-| Request Auction House results | Blocked pending GW-010. Require evidence for the player trigger, readiness, throttling, bounds, and result lifecycle. |
+| Read Auction House results already returned to the visible browse window | In scope for a manual GW-010 discovery probe. Bound reads and keep the data local. |
+| Issue addon-originated Auction House queries | Blocked pending verified trigger, readiness, throttling, and result lifecycle, plus owner policy review. |
 | Local historical price analysis | Candidate |
 | Suggest listing price, item strategy, profession path | In scope |
 | Player manually executes trades and crafts | In scope |
@@ -51,5 +52,6 @@ The policy check is a document review. Client QA for the bootstrap belongs to GW
 No addon design can guarantee zero account enforcement risk. Avoid any claims of 'Blizzard approved' without written proof.
 
 ## Change log
+- 2026-11-09: Rechecked the official addon policy and EULA for GW-010. The probe observes a native search and reads the local browse cache on request. The query path remains blocked.
 - 2026-11-09: GW-002 reviewed the add-on policy, EULA, and Blizzard's third-party software notice. Recorded the smoke-test scope and kept Auction House queries blocked pending review.
 - 2026-11-09: initial policy summary against official forum post; specific current Forever API behaviors remain unverified.

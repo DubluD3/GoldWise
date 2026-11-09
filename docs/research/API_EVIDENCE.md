@@ -1,6 +1,6 @@
 # Forever API evidence register
 
-**Live current-build status on 2026-11-09: NOT VERIFIED.** This is a research queue, not proof that calls work. Never promote a row based solely on an LLM answer. Before implementing a call capture exact signature, returns, events, build and an in-game observed result (if testing needed).
+**Live evidence on 2026-11-09:** The owner ran the build-identity probe on Forever `1.60.1`, build `70862`, interface `16001`. Each row tracks the specific behavior covered by that evidence. Before implementing a call, capture the exact signature, returns, events, build, and any required in-game result.
 
 ## Sources to verify
 1. Official Blizzard addon policy: https://eu.forums.blizzard.com/en/wow/t/wow-user-interface-add-on-development-policy/1642 (reviewed 2026-11-09).
@@ -12,8 +12,8 @@
 ## Research matrix
 | ID | Candidate namespace / behavior | Evidence class | Current build verified? | Implementation status |
 |---|---|---|---|---|
-| API-001 | `GetBuildInfo` / TOC interface | CLIENT-EXTRACTED/community | NO | BLOCKED |
-| API-002 | addon load and SavedVariables lifecycle | CLIENT-EXTRACTED/community | NO | BLOCKED |
+| API-001 | `GetBuildInfo` / TOC interface | CLIENT-EXTRACTED signature; OBSERVED-IN-GAME first four returns | YES for build metadata on `70862` | Use observed interface `16001` for the GW-004 load test |
+| API-002 | addon load and SavedVariables lifecycle | CLIENT-EXTRACTED for signatures; UNKNOWN for live lifecycle | NO | BLOCKED-API-VERIFICATION |
 | API-003 | `C_Container` bag slots, item info and quantity | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
@@ -22,6 +22,39 @@
 | API-008 | realm/faction/character context | UNKNOWN live behavior | NO | BLOCKED |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
 | API-010 | AH deposit/cut by auction type | UNKNOWN live behavior | NO | BLOCKED |
+
+## GW-001 startup evidence
+
+The following signatures come from a Blizzard-generated UI source export mirrored by the community. The export identifies itself as Forever `1.60.1.70658` (October 28, 2026). Its declarations establish what that build documented. Record the actual running build separately. [Export provenance](https://github.com/reckhou/WoWBlzCode/tree/7245053a9f2cab5ea5e1ac5221489329d28b320c#current-versions)
+
+### API-001 · Build identity
+
+- Source class and access: `CLIENT-EXTRACTED`, 2026-11-09 09:50 UTC. [BuildDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/BuildDocumentation.lua)
+- Signature: global `GetBuildInfo()` takes no arguments. It returns `buildVersion: cstring`, `buildNumber: cstring`, `buildDate: cstring`, `interfaceVersion: number`, `localizedVersion: cstring`, and `buildInfo: string`, in that order. The export declares all six non-nil and lists no secret-value annotation for this symbol.
+- Lifecycle and rate: the owner ran the probe once after login. It registers no event and uses no polling. Behavior in other lifecycle states and any rate limits remain `UNKNOWN`.
+- Classification: read-only build metadata. The probe runs locally and prints the first four values in the chat window. Share only that output.
+- Observed in game: `PASS`, owner-reported on 2026-11-09. Output: `1.60.1 70862 Nov 6 2026 16001`. `Nov 6 2026` is the returned build date.
+- Decision: `VERIFIED` for the four values consumed by the probe on build `70862`. `localizedVersion` and `buildInfo` remain client-extracted. Use the observed interface for the GW-004 TOC and validate actual loading separately. Recheck on client patches.
+
+#### Manual probe
+
+Select **World of Warcraft: Forever** in Battle.net, log in on a character in a safe area, and paste this single line into the in-game chat box. Run it once.
+
+```text
+/run local ok,v,b,d,i=pcall(GetBuildInfo);if ok and type(v)=="string" and v~="" and type(b)=="string" and b~="" and type(d)=="string" and d~="" and type(i)=="number" and i>0 then print(v,b,d,i) else print("GW-001: build unavailable") end
+```
+
+- **Normal:** record the version, build number, build date, interface number, and time observed in UTC. The reported interface number is a candidate for the GW-004 TOC. A load test still has to establish that the addon works on that build.
+- **Missing or partial:** a missing function, an error, or incomplete metadata prints `GW-001: build unavailable`. If the command itself is unavailable or gives no output, record that outcome. Keep API-001 blocked and use the client UI's displayed version/build as partial evidence if available.
+- **Wrong client or stale evidence:** if the result comes from a different game version, or the client has patched since the observation, keep it separate from evidence for the current Forever build.
+
+Offline verification on 2026-11-09 used the exact Lua from the chat command and a stubbed `GetBuildInfo` in Lua 5.1.5. All seven cases passed: complete result, missing function, thrown error, missing interface, empty build, wrong interface type, and zero interface.
+
+### API-002 · Startup and persistence candidates
+
+- Source class and access: `CLIENT-EXTRACTED`, 2026-11-09 09:50 UTC. [AddOnsDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/AddOnsDocumentation.lua) · [SystemDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/SystemDocumentation.lua)
+- The export declares synchronous `ADDON_LOADED(addOnName: cstring, containsBindings: bool)`, `PLAYER_LOGIN()`, and `PLAYER_LOGOUT()`. It declares `C_AddOns.GetAddOnMetadata(name: uiAddon, variable: cstring) -> value: cstring` with `SecretArguments = AllowedWhenUntainted`.
+- Observed in game: `NOT RUN`. Decision: `UNVERIFIED`. The build probe does not exercise this row. For GW-004, separately verify actual addon load, event payloads, and any metadata lookup on the recorded build. For GW-005, verify when SavedVariables become available and that they survive reload and restart. Keep each integration disabled until its behavior is confirmed.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- 2026-11-09: Added GW-021 manual balance sampling and categorization in GoldWise `0.1.6-dev`. The owner confirmed the balance probe and an installed unclassified net change on build `70862`. Live categorization is pending.
+- 2026-11-09: Added GW-021 manual balance sampling and categorization in GoldWise `0.1.6-dev`. The owner confirmed the balance probe, an installed unclassified net change, and manual labeling and clearing on build `70862`.
 - 2026-11-09: Split GW-023 offline regression checks into Lua and shell syntax, unit, and adapter contract jobs. Documented fixture and manual verification requirements.
 - 2026-11-09: Added the GW-013 offline recipe catalog for verified local profession snapshots. Trainer requirements remain unavailable pending live evidence.
 - 2026-11-09: Audited recipe and market sources for GW-003. Documented verified local observations, external dataset exclusions, and fallback rules.

@@ -19,7 +19,7 @@ On November 9, 2026, the owner confirmed that the copper amount matched the purs
 2. Run the same command at least one second later. If the balance stayed the same, expect `balance unchanged`. If ordinary gameplay changed your purse within five minutes of the previous sample, expect an entry number and a signed net copper change labeled `unclassified`.
 3. To test manual categorization on a recorded change, replace `ENTRY_ID` with its printed number in `/run GoldWiseLedgerCategorize(ENTRY_ID, "other")`. Expect `net change labeled other (user-reported)`. Repeat with `"unclassified"` to clear it. Share statuses only.
 
-On November 9, 2026, the owner reported that the installed ledger's positive net change matched a quest reward and was labeled `unclassified`. The entry ID is omitted. Live categorization and clearing have not been reported.
+On November 9, 2026, the owner reported that the installed ledger's positive net change matched a quest reward and was labeled `unclassified`. The owner then confirmed both expected responses when labeling the entry `other` and clearing the classification. The entry ID is omitted.
 
 ## Session ledger behavior
 

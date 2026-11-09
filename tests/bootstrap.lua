@@ -38,6 +38,6 @@ for _, case in ipairs(cases) do
     assert(client.buildReads == (case.getBuildInfo and 1 or 0), case.name)
     local status = case.supported and "loaded on Forever build 70862" or "client build unverified"
     local output = client.output
-    assert(#output == 1 and output[1] == "GoldWise " .. version .. ": " .. status .. ". Gameplay features disabled.", case.name)
+    assert(#output == 1 and output[1] == "GoldWise " .. version .. ": " .. status .. ".", case.name)
     print("PASS " .. case.name)
 end

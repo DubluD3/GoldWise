@@ -4,4 +4,5 @@
 ## Notes: Disposable GW-008 carried-bag check.
 
 InventorySnapshot.lua
+BagCapture.lua
 Probe.lua

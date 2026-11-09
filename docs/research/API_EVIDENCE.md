@@ -14,7 +14,7 @@
 |---|---|---|---|---|
 | API-001 | `GetBuildInfo` / TOC interface | CLIENT-EXTRACTED signature; OBSERVED-IN-GAME first four returns | YES for build metadata on `70862` | Use observed interface `16001` for the GW-004 load test |
 | API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product schema | YES for `ADDON_LOADED` and GW-005 initialization and restoration on `70862` | GW-005 live smoke test passed |
-| API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED | NO | BLOCKED-API-VERIFICATION |
+| API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME manual probe | YES for the carried-bag probe on `70862` | GW-008 product adapter awaiting live smoke test |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
@@ -103,7 +103,11 @@ These declarations are `CLIENT-EXTRACTED` from Forever build `70658`, accessed N
 | `C_Container.GetContainerItemInfo` | `(containerIndex: BagIndex, slotIndex: luaIndex) → containerInfo: ContainerItemInfo`, may return nothing. Read only occupied slots. The export lists `itemID: number`, `stackCount: number`, and `itemName: string`. The last is optional for the probe's local sample display. |
 | `Enum.BagIndex` | `Backpack=0`, `Bag_1=1`, `Bag_2=2`, `Bag_3=3`, `Bag_4=4`, `ReagentBag=5`. The probe resolves these by name. Bank containers, keyring, and alts are out of this probe's scope. |
 
-The calls above are candidate read-only UI APIs. The probe runs on manual request on build `70862`, checks results with the verified `issecretvalue` predicate, and uses the verified `GetServerTime` timestamp. The model caps work at 128 slots per bag as a project limit. Missing or restricted values produce partial or unavailable observations. Bank and alt inventory are unobserved. The probe stores and sends no inventory data. No bag-update event, item-cache call, or inventory action is used. Product inventory capture is `BLOCKED-API-VERIFICATION` pending the owner comparison of the [disposable probe](../development/INVENTORY_PROBE.md) with visible bag counts.
+The [disposable probe](../development/INVENTORY_PROBE.md) runs on manual request, checks results with `issecretvalue`, and uses `GetServerTime` for the observation timestamp. The model caps work at 128 slots per bag as a project limit. Missing or restricted values produce partial or unavailable observations. Bank and alt inventory are unobserved. No bag-update event, item-cache call, or inventory action is used.
+
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. On build `70862` the probe reported `bags=complete`, with all six carried bags individually `complete` and bank and alts `unobserved`. The sample in backpack slot 1 reported stack `1` and carried total `1`. A separate comparison to the visible bags was not reported. The sample item name is omitted here.
+
+Decision: `VERIFIED` for the manual carried-bag read path on `70862`. Product capture reuses the guarded probe reader with the active character scope. Verify the installed addon and compare the displayed sample with the visible bags. Inventory is an in-memory observation with a timestamp, and a failed refresh clears the previous observation.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

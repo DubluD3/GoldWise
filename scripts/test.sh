@@ -44,7 +44,7 @@ for suite in tests/*.lua; do
         profession_snapshot.lua|recipe_catalog.lua|storage.lua)
             group=unit
             ;;
-        *_probe.lua|bootstrap.lua|character_capture.lua|saved_variables.lua)
+        *_probe.lua|bootstrap.lua|character_capture.lua|ledger_capture.lua|saved_variables.lua)
             group=contract
             ;;
         *)

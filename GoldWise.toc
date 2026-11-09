@@ -1,7 +1,7 @@
 ## Interface: 16001
 ## Title: GoldWise
-## Version: 0.1.5-dev
-## Notes: Local character, inventory, profession, and browse observations for World of Warcraft: Forever.
+## Version: 0.1.6-dev
+## Notes: Local character, inventory, profession, browse, and balance observations for World of Warcraft: Forever.
 ## SavedVariables: GoldWiseDB
 
 adapters\Bootstrap.lua
@@ -18,3 +18,5 @@ adapters\ProfessionScan.lua
 data\AuctionObservation.lua
 adapters\AuctionCapture.lua
 adapters\AuctionObserve.lua
+data\Ledger.lua
+adapters\LedgerCapture.lua

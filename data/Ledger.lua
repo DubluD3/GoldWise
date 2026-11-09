@@ -1,3 +1,4 @@
+local _, addon = ...
 local Ledger = {}
 local MAX_ENTRIES = 64
 
@@ -80,6 +81,10 @@ function Ledger.categorize(state, observedAt, category)
         end
     end
     return false, "entry-unavailable"
+end
+
+if addon then
+    addon.ledgerModel = Ledger
 end
 
 return Ledger

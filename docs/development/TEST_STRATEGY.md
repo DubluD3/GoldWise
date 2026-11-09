@@ -45,7 +45,8 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-008 installed addon counts | Owner ran `/run GoldWiseInventoryScan()` in GoldWise `0.1.3-dev` on build `70862` on 2026-11-09 | Confirmed the same complete six-bag result and sample stack and carried total of `1`. Bank and alts were unobserved. | PASS |
 | GW-009 profession model, probe, and product scan | `sh scripts/test.sh` with Lua 5.1.5 | 59 checks passed across 11 suites. Profession cases cover closed or external views, filtered and unavailable recipe data, character scope, and clearing a failed refresh. | PASS |
 | GW-009 live profession probe | [Disposable probe](PROFESSION_PROBE.md) | Owner reported skill `87/150`, 35 observed learned rows, and a learned sample on `70862`. Closed-window result was not reported. | PASS for open-window reads |
-| GW-009 installed profession scan | [Install and test GoldWise](../../README.md#test-the-startup-build) | NOT RUN | PENDING |
+| GW-009 installed profession scan | Owner ran `/run GoldWiseProfessionScan()` in GoldWise `0.1.4-dev` on build `70862` on 2026-11-09 | Owner confirmed the open-window scan passed and all reported data was correct. | PASS for open-window scan |
+| GW-009 installed closed-window fallback | [Close the crafting window and repeat the scan](../../README.md#test-the-startup-build) | Live result not separately reported. The offline product test verified the unavailable message and cleared snapshot. | PENDING live evidence |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

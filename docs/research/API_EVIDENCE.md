@@ -16,7 +16,7 @@
 | API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product schema | YES for `ADDON_LOADED` and GW-005 initialization and restoration on `70862` | GW-005 live smoke test passed |
 | API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
-| API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME open-window probe | YES for the manual open-window path on `70862` | GW-009 product adapter awaiting live smoke test |
+| API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe and product scan | YES for the manual open-window path on `70862` | GW-009 open-window smoke test passed |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
 | API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product capture | YES for readable player fields and entry callbacks on `70862` | GW-007 live smoke test passed |
@@ -128,7 +128,9 @@ The [disposable probe](../development/PROFESSION_PROBE.md) runs on manual reques
 
 `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The probe returned Leatherworking skill `87/150`, `recipes=filtered`, `observed learned=35`, and Camp Tent as a learned sample. The closed-window result was not reported. The base-profession fallback and external-view rejection were exercised offline.
 
-Decision: `VERIFIED` for the reported manual read of an open local crafting window on `70862`. GoldWise reuses the guarded probe reader after character capture. The installed-addon open and closed-window checks are pending.
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The installed GoldWise `0.1.4-dev` manual scan passed and its reported data matched the open crafting window on build `70862`. The owner did not separately report the closed-window result.
+
+Decision: `VERIFIED` for the manual read of an open local crafting window in the probe and installed addon on `70862`. Closed-window handling, base-profession fallback, and rejection of external views passed offline checks.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

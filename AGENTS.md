@@ -4,7 +4,7 @@
 
 ## Context and scope
 - Project: GoldWise, free, open-source, privacy-preserving WoW Forever economic/professions advisor.
-- Status: planning only. NEVER say code is implemented or API behavior verified until tested.
+- Status is determined from the current branch, merged implementation and test evidence. NEVER claim code is implemented or API behavior verified without inspecting current code and actual tests.
 - Primary docs: `docs/product/PRODUCT.md`, `docs/planning/BACKLOG.md`, `docs/research/API_EVIDENCE.md`, `docs/compliance/BLIZZARD_POLICY.md`, `docs/architecture/ARCHITECTURE.md`.
 - Read the complete story before touching files. One focused story/PR. Do not implement future phases speculatively.
 
@@ -32,6 +32,18 @@
 - Bound scan retries/collection size, SavedVariables retention and per-frame work.
 - Do not execute economic transactions in V1; UI explains choices and lets player decide.
 - Respect data licenses; vendor libraries only after explicit approval and review.
+
+## UI/UX design rules (REQUIRED for UI stories)
+- Read [docs/design/DESIGN_SYSTEM.md](docs/design/DESIGN_SYSTEM.md) before creating or changing any screen, component, tooltip, theme or navigation behavior.
+- Direction: a restrained, readable **dark economy dashboard with subtle WoW fantasy accents**, not a copied website, ornate parchment wall or dense spreadsheet-first interface.
+- Use the documented token palette, spacing, type hierarchy and repeatable components as design targets, adapting to **verified WoW UI capabilities**. Do not assume CSS/web rendering, fonts, animation, frame templates, or resize APIs exist.
+- Prefer **Overview / Inventory / Professions / Market / My Plan** navigation. Give each recommendation a short action, transparent “Why?”, alternatives, data source/time and uncertainty.
+- Keep item rarity colors recognizable; supplement every color-coded status with words or icons. Do not represent asking prices as guaranteed sale proceeds.
+- Include empty, loading, stale, partial, unsupported and error states; never fill gaps with fictional live data.
+- Every interactive UI element must have a real, supported action, not a dead button. No automatic trade/craft controls or misleading labels.
+- Verify screen fit at relevant UI scales and resolutions, focus/readability/contrast, performance, and no taint/protected UI behavior. Record manual client QA honestly.
+- Prefer scope-limited UI changes; do not redesign existing working screens opportunistically unless the assigned story explicitly calls for it.
+- If a UI design conflicts with game restrictions or evidence, documented client behavior and safety requirements win.
 
 ## Required story sequence
 1. Read `docs/development/WORKFLOW.md` and referenced `GW-###` entry.

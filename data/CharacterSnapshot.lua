@@ -1,3 +1,4 @@
+local _, addon = ...
 local CharacterSnapshot = {}
 
 local function positiveInteger(value)
@@ -37,6 +38,10 @@ function CharacterSnapshot.fromObservation(observation, scopeKey)
         observedAt = observation.observedAt,
         source = "wow-client",
     }
+end
+
+if addon then
+    addon.characterSnapshotModel = CharacterSnapshot
 end
 
 return CharacterSnapshot

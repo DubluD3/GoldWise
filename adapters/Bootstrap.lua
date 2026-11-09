@@ -1,6 +1,6 @@
 local _, addon = ...
 
-addon.version = "0.1.1-dev"
+addon.version = "0.1.2-dev"
 addon.features = {
     inventory = false,
     professions = false,
@@ -13,7 +13,8 @@ addon.supportedClient = ok and clientVersion == "1.60.1" and build == "70862" an
 
 local status = "client build unverified"
 if addon.supportedClient then
-    status = "loaded on Forever build 70862"
+    addon.clientBuild = build
+    status = "loaded on Forever build " .. build
 end
 
 print("GoldWise " .. addon.version .. ": " .. status .. ". Gameplay features disabled.")

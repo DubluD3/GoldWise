@@ -8,9 +8,7 @@ end
 
 function ForeverClient.new(readBuild, registration)
     local client = { output = {}, buildReads = 0 }
-    local eventCallback
-    local registeredEvent
-    local expectedArgument
+    local subscriptions = {}
     local globals = {
         pairs = pairs,
         pcall = pcall,
@@ -36,10 +34,8 @@ function ForeverClient.new(readBuild, registration)
                 if registration == "fails" then
                     error("registration unavailable")
                 end
-                assert(eventCallback == nil, "duplicate fixture event registration")
-                eventCallback = callback
-                registeredEvent = event
-                expectedArgument = argument
+                assert(subscriptions[event] == nil, "duplicate fixture event registration")
+                subscriptions[event] = { callback = callback, argument = argument }
             end,
         }
     end
@@ -48,17 +44,25 @@ function ForeverClient.new(readBuild, registration)
         setfenv(assert(loadfile(path)), globals)(addonName, namespace)
     end
 
+    function client:loadToc(path, addonName, namespace)
+        for line in io.lines(path) do
+            if line:match("^[^#%s]") then
+                self:load(line:gsub("\\", "/"), addonName, namespace)
+            end
+        end
+    end
+
     function client:fire(event, ...)
-        if eventCallback == nil or event ~= registeredEvent then
+        local subscription = subscriptions[event]
+        if subscription == nil then
             return false
         end
-        if expectedArgument ~= nil and expectedArgument ~= select(1, ...) then
+        if subscription.argument ~= nil and subscription.argument ~= select(1, ...) then
             return false
         end
 
-        local callback = eventCallback
-        eventCallback = nil
-        callback(...)
+        subscriptions[event] = nil
+        subscription.callback(...)
         return true
     end
 

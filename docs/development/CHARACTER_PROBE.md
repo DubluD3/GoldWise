@@ -23,4 +23,4 @@ An `entry=manual` result confirms the probe loaded and ran the API calls. Report
 
 `data/CharacterSnapshot.lua` accepts one normalized observation and the existing `Storage.scopeKey` function. It returns a scope key, reported realm context, faction, region code, client build, observation time, and source. A second observation in the same scope can have a newer timestamp with the same key. Missing or invalid context yields no snapshot. The key treats the player identifier as opaque. Reported realm context needs separate verification before it can represent a stable realm or market identity.
 
-The product addon will connect the live adapter after API-008 is verified. Run `sh scripts/test.sh` with Lua 5.1 for the offline model and probe checks.
+The product addon uses the verified entry event to capture one snapshot per login or reload. It prints a status without identifiers and keeps the snapshot in its private Lua table for the session. Run `sh scripts/test.sh` with Lua 5.1 for the offline model, probe, and adapter checks. Follow the [product smoke test](../../README.md#test-the-startup-build) to verify the installed addon.

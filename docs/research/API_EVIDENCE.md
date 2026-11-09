@@ -19,7 +19,7 @@
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
-| API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME distinct character tags | PARTIAL | BLOCKED-API-VERIFICATION |
+| API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe | YES for readable player fields and entry callbacks on `70862` | GW-007 product adapter awaiting live smoke test |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
 | API-010 | AH deposit/cut by auction type | UNKNOWN live behavior | NO | BLOCKED |
 | API-011 | TOC Lua loading and local startup status | CLIENT-EXTRACTED manifest and namespace; OBSERVED-IN-GAME startup status | YES on login and `/reload` on `70862` | GW-004 live smoke test passed |
@@ -84,7 +84,9 @@ The following candidates are `CLIENT-EXTRACTED` from Forever build `70658`, acce
 
 The [disposable probe](../development/CHARACTER_PROBE.md) is local and read-only. It queries the player once per load or on a manual request and prints availability and local comparison tags. It neither stores nor sends player identifiers. A missing, secret, or invalid field leaves the candidate unavailable. The pure snapshot model requires complete context and falls back to no snapshot.
 
-`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. After the first probe produced no output, v2 produced results for two characters. The character tags differed and some other values matched. No tags or character details were recorded. The entry label, field-by-field availability, and same-character reload result are still unconfirmed. Product capture remains `BLOCKED-API-VERIFICATION` until the intended capture path and required fields are verified.
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. After the first probe produced no output, v2 reported on automatic login, automatic reload, and the manual command. Character and realm tags appeared and faction, region, and time each reported `ok`. The two characters produced different character tags. No raw values or tags were recorded. The owner did not report a separate comparison of the same character's tag across reload.
+
+Decision: `VERIFIED` for readable player context at the probed entry events on build `70862`. Product capture uses the same one-shot entry callback and guarded reads, with a live integration smoke test pending. The snapshot is scoped to the reported realm context and stays in memory for the session.
 
 One `COMMUNITY-REPORTED` launch diagnostic describes a different value for `GetRealmName` than the second return from `UnitFullName`. Treat the observed realm as client context. Market or realm-wide identity semantics need separate evidence. [Launch diagnostic](https://eu.forums.blizzard.com/en/wow/t/wow-forever-1601-addon-communication-stopped-working-after-launch-invalidchannel-7/640089)
 

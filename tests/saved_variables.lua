@@ -1,12 +1,9 @@
 local ForeverClient = dofile("tests/fixtures/ForeverClient.lua")
 
-local entries = {}
 local savedVariable
 for line in io.lines("GoldWise.toc") do
     if line:match("^## SavedVariables: ") then
         savedVariable = line:match("^## SavedVariables: (.+)$")
-    elseif line:match("^[^#%s]") then
-        entries[#entries + 1] = line:gsub("\\", "/")
     end
 end
 assert(savedVariable == "GoldWiseDB", "unexpected SavedVariables declaration")
@@ -15,9 +12,7 @@ local function loadAddon(build, saved, registration)
     local addon = {}
     local client = ForeverClient.new(ForeverClient.build("1.60.1", build, 16001), registration)
 
-    for _, entry in ipairs(entries) do
-        client:load(entry, "GoldWise", addon)
-    end
+    client:loadToc("GoldWise.toc", "GoldWise", addon)
     local globals = client.globals
     assert(globals.GoldWiseDB == nil and addon.storageState == nil, "storage touched before ADDON_LOADED")
 
@@ -64,6 +59,6 @@ print("PASS unverified build leaves saved data untouched")
 for _, registration in ipairs({ "missing", "fails" }) do
     saved, state, messages, registered = loadAddon("70862", existing, registration)
     assert(saved == existing and state == nil and not registered)
-    assert(#messages == 2 and messages[2] == "GoldWise local storage disabled (ADDON_LOADED registration unavailable).")
+    assert(messages[2] == "GoldWise local storage disabled (ADDON_LOADED registration unavailable).")
     print("PASS " .. registration .. " registration leaves saved data untouched")
 end

@@ -1,9 +1,11 @@
 ## Interface: 16001
 ## Title: GoldWise
-## Version: 0.1.1-dev
-## Notes: Startup and local storage test for World of Warcraft: Forever.
+## Version: 0.1.2-dev
+## Notes: Startup, local storage, and character context test for World of Warcraft: Forever.
 ## SavedVariables: GoldWiseDB
 
 adapters\Bootstrap.lua
 data\Storage.lua
 adapters\SavedVariables.lua
+data\CharacterSnapshot.lua
+adapters\CharacterCapture.lua

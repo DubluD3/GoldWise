@@ -37,8 +37,9 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-005 offline adapter | `lua tests/saved_variables.lua` with Lua 5.1.5 | 8 cases passed, including TOC load order, initialization, restore, migration, and preservation of rejected data | PASS |
 | GW-005 in-game product storage | Owner installed GoldWise `0.1.1-dev` on build `70862` on 2026-11-09 | First login printed `created (schema 1)`. Reload, character-selection relog, and full restart each printed `current (schema 1)`. | PASS |
 | GW-006 offline runner | `sh scripts/test.sh` with Lua 5.1.5 | 26 checks passed across four suites. Domain isolation and TOC adapter tests passed. | PASS |
-| GW-007 snapshot model and probe | `sh scripts/test.sh` with Lua 5.1.5 | 33 checks passed across six suites, including two-character scope, restricted values, and the manual check without event delivery | PASS |
-| GW-007 live character context | [Disposable probe](CHARACTER_PROBE.md#gw-007-character-context-verification) | Owner confirmed different tags for two characters in v2. Entry path, field availability, and same-character reload still need confirmation. | PARTIAL |
+| GW-007 snapshot model, probe, and product adapter | `sh scripts/test.sh` with Lua 5.1.5 | 38 checks passed across seven suites, including TOC load order, two-character scope, reload stability, and restricted or unavailable inputs | PASS |
+| GW-007 live character context | [Disposable probe](CHARACTER_PROBE.md#gw-007-character-context-verification) | Owner confirmed login, reload, and manual output on `70862`, all fields available, and different tags for two characters. Same-character tag comparison was not reported. | PASS for observed paths |
+| GW-007 in-game product capture | [Install and test GoldWise](../../README.md#test-the-startup-build) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

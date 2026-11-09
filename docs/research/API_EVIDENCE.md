@@ -173,6 +173,10 @@ GW-003 introduces no WoW API calls. For the actual target build and verified loc
 - `CLIENT-EXTRACTED` from Forever build `70658`, accessed November 9, 2026. `C_TradeSkillUI.GetRecipeRequirements(recipeID: number)` returns `table<CraftingRecipeRequirement>`, with `name: cstring`, `met: bool`, and `type: RecipeRequirementType`. The signature establishes no trainer identity or minimum trainer skill. `C_TooltipInfo.GetTrainerService(serviceIndex: luaIndex)` returns `TooltipData` when available, but service-to-recipe mapping and structured trainer requirements have no live proof. `C_TradeSkillUI.GetRecipeSchematic(recipeSpellID: number, isRecraft: bool, recipeLevel?: luaIndex)` returns `CraftingRecipeSchematic`. That is a candidate for later material and output evidence. None of these candidates is called by the catalog. [Pinned function index](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/functions.txt) · [Pinned structures](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/structures.txt)
 - `UNKNOWN` on build `70862`. Trainer identity, unlock requirements, rank thresholds, materials, and outputs have no live evidence in GW-013. Trainer and catalog integration are `BLOCKED-API-VERIFICATION` where they require these fields. The model reports trainer data as unavailable. No source is imported. [GW-003 source audit](https://github.com/DubluD3/GoldWise/blob/1bb09037e54265d05f2cb28bcb4b8f275a0860db/docs/research/DATA_PROVENANCE.md)
 
+## GW-023 verification boundary
+
+GW-023 splits existing offline tests into syntax, unit, and adapter contract checks. The matrix uses synthetic fixtures and exercises the documented contracts without a live game client. It adds no new WoW calls or live API evidence. [Test strategy and fixture policy](../development/TEST_STRATEGY.md#fixture-policy)
+
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:
 - Purpose / story:

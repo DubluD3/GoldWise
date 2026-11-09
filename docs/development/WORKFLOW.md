@@ -21,6 +21,9 @@ For API-related tasks:
 - No build script, CI or automated action should launch/control WoW.
 
 ## Review and handoff
+
+Update the current progress table in `docs/planning/BACKLOG.md` when a story starts, gets blocked, gains verification evidence, enters review, or merges. Record the status, evidence link, next action, and update date in the same change or an immediate follow-up. Check the backlog before every story handoff, including documentation-only and verification work.
+
 Provide in each PR:
 - GW ID, dependency status, outcome, acceptance criteria evidence.
 - API evidence ID/source/build and whether live verified.

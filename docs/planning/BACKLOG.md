@@ -13,9 +13,9 @@ Last updated November 9, 2026. `READY_FOR_REVIEW` means the work is pushed and r
 | [GW-004](https://github.com/DubluD3/GoldWise/issues/4) | `READY_FOR_REVIEW` | Bootstrap passed 8 offline checks. Owner confirmed startup on login and `/reload` on build `70862`. [Verification commit](https://github.com/DubluD3/GoldWise/commit/3cf8c375bd195f32e0a22ef8614a3d0d6d129624) |
 | [GW-005](https://github.com/DubluD3/GoldWise/issues/5) | `READY_FOR_REVIEW` | Owner confirmed schema v1 was created on first login and restored after reload, character-selection relog, and full restart. Migration and rejected data were tested offline. [Verification commit](https://github.com/DubluD3/GoldWise/commit/4796811962458fcb797d73297cdbb321962483d4) |
 | [GW-006](https://github.com/DubluD3/GoldWise/issues/6) | `READY_FOR_REVIEW` | All 26 Lua checks passed locally and in GitHub Actions. [Implementation](https://github.com/DubluD3/GoldWise/commit/a8da2ff064b3e9e969961b938e29d2bf01165533) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42600890124) |
-| [GW-007](https://github.com/DubluD3/GoldWise/issues/7) | `IN_PROGRESS` | Owner confirmed login, reload, and manual probe output with all required fields and different tags for two characters. Product capture passed offline checks. Next is the installed addon smoke test. [Test procedure](https://github.com/DubluD3/GoldWise/blob/feature/GW-007-character-snapshot/README.md#test-the-startup-build) |
+| [GW-007](https://github.com/DubluD3/GoldWise/issues/7) | `READY_FOR_REVIEW` | Owner confirmed product capture on login and `/reload` on build `70862`. The live probe distinguished two characters, and all 38 offline checks passed in CI. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-007-character-snapshot/docs/research/API_EVIDENCE.md#api-008--gw-007-character-context) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42604760991) |
 
-The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
+Next implementation story is [GW-008](https://github.com/DubluD3/GoldWise/issues/8), starting with inventory API evidence. The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
 
 | Capability | Feature | Stories | Delivery |
 |---|---|---|---|

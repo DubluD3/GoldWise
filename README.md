@@ -13,6 +13,8 @@ GoldWise is a planned **free, open-source, local-first, read-only economic and p
 
 Disable GoldWise in the AddOns list or remove its folder to undo the install. The smoke test uses no SavedVariables. From the repo root, run `lua5.1 tests/bootstrap.lua` with Lua 5.1 for the offline checks.
 
+The separate [GW-005 storage probe](docs/development/STORAGE_PROBE.md) tests client persistence with a disposable marker.
+
 ## Start here
 - [Codex instructions](AGENTS.md)
 - [Product vision and requirements](docs/product/PRODUCT.md)

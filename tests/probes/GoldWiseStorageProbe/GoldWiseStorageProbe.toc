@@ -1,0 +1,6 @@
+## Interface: 16001
+## Title: GoldWise Storage Probe
+## Notes: Disposable GW-005 SavedVariables test.
+## SavedVariables: GoldWiseStorageProbeMarker
+
+Probe.lua

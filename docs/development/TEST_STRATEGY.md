@@ -1,6 +1,6 @@
 # Verification strategy / quality gates
 
-Status as of 2026-11-09: GW-004 offline smoke test passed with Lua 5.1.5. Run `lua5.1 tests/bootstrap.lua` from the repo root. The repo has no bundled Lua runtime.
+Status as of 2026-11-09: GW-004 startup passed offline and in the live client. GW-005 storage and probe tests passed offline with Lua 5.1.5. The repo has no bundled Lua runtime.
 
 ## Offline tests
 - Fast unit tests for pure domain math: copper rounding, item quantities, availability, recipe dependency graph, resource reservations, goal constraints, confidence/abstain.
@@ -25,6 +25,9 @@ Status as of 2026-11-09: GW-004 offline smoke test passed with Lua 5.1.5. Run `l
 | GW-004 Lua syntax | `luac -p adapters/Bootstrap.lua tests/bootstrap.lua` with Lua 5.1.5 | Parsed both files | PASS |
 | GW-004 offline bootstrap | `lua tests/bootstrap.lua` with Lua 5.1.5 | 8 cases passed, including missing API, failed call, and a changed build with the same interface | PASS |
 | GW-004 in-game load and reload | Owner logged in and ran `/reload` on Forever build `70862` on 2026-11-09 | Both displayed the expected GoldWise `0.1.0-dev` startup message with gameplay features disabled | PASS |
+| GW-005 storage table and migration | `lua tests/storage.lua` with Lua 5.1.5 | 5 groups passed, covering scope isolation, round trip, migration, corrupt/future data, and capacity | PASS |
+| GW-005 probe callback | `lua tests/storage_probe.lua` with Lua 5.1.5 | 5 cases passed, covering marker states, unavailable event helper, and changed build | PASS |
+| GW-005 in-game persistence | [Reload, relog, and full restart](STORAGE_PROBE.md#in-game-procedure) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

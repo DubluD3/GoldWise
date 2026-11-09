@@ -1,6 +1,24 @@
 # Jira-style hierarchy: Capability → Feature → Story
 
-Status key: `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `IN_REVIEW`, `DONE`. All entries below start **PROPOSED**, pending G0. IDs are stable even if GitHub issue numbers differ. Priority P0=blocking MVP, P1=release B, P2=later. GitHub issues are execution records; this file is the taxonomy.
+Statuses are `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `READY_FOR_REVIEW`, `IN_REVIEW`, and `DONE`. Stories without a progress row are `PROPOSED`. IDs are stable even if GitHub issue numbers differ. P0 blocks the MVP, P1 targets release B, and P2 is later. GitHub issues hold story scope and acceptance criteria.
+
+## Current progress
+
+Last updated November 9, 2026. `READY_FOR_REVIEW` means the work is pushed and ready for owner review. Use `IN_REVIEW` when a story PR is open and `DONE` after owner acceptance, required evidence, and merge.
+
+| Story | Status | Evidence and next action |
+|---|---|---|
+| [GW-001](https://github.com/DubluD3/GoldWise/issues/1) | `READY_FOR_REVIEW` | Owner confirmed Forever `1.60.1`, build `70862`, interface `16001`. Review the scoped API evidence and remaining unknowns. [Evidence commit](https://github.com/DubluD3/GoldWise/commit/cc1bdfc27321724077543c8d03dea001edcb3312) |
+| [GW-002](https://github.com/DubluD3/GoldWise/issues/2) | `READY_FOR_REVIEW` | Blizzard sources reviewed and the smoke-test boundaries documented. Owner policy review is pending. [Review commit](https://github.com/DubluD3/GoldWise/commit/81daf60749a8df51ab9e923cbacc1ff2f7d24c04) |
+| [GW-003](https://github.com/DubluD3/GoldWise/issues/3) | `IN_REVIEW` | Audited local recipe and browse observations and seven external sources. External imports remain excluded. Review the source decision before GW-013 builds on the verified local recipe fields. [Audit PR](https://github.com/DubluD3/GoldWise/pull/29) |
+| [GW-004](https://github.com/DubluD3/GoldWise/issues/4) | `READY_FOR_REVIEW` | Bootstrap passed 8 offline checks. Owner confirmed startup on login and `/reload` on build `70862`. [Verification commit](https://github.com/DubluD3/GoldWise/commit/3cf8c375bd195f32e0a22ef8614a3d0d6d129624) |
+| [GW-005](https://github.com/DubluD3/GoldWise/issues/5) | `READY_FOR_REVIEW` | Owner confirmed schema v1 was created on first login and restored after reload, character-selection relog, and full restart. Migration and rejected data were tested offline. [Verification commit](https://github.com/DubluD3/GoldWise/commit/4796811962458fcb797d73297cdbb321962483d4) |
+| [GW-006](https://github.com/DubluD3/GoldWise/issues/6) | `READY_FOR_REVIEW` | All 26 Lua checks passed locally and in GitHub Actions. [Implementation](https://github.com/DubluD3/GoldWise/commit/a8da2ff064b3e9e969961b938e29d2bf01165533) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42600890124) |
+| [GW-007](https://github.com/DubluD3/GoldWise/issues/7) | `READY_FOR_REVIEW` | Owner confirmed product capture on login and `/reload` on build `70862`. The live probe distinguished two characters, and all 38 offline checks passed in CI. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-007-character-snapshot/docs/research/API_EVIDENCE.md#api-008--gw-007-character-context) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42604760991) |
+| [GW-008](https://github.com/DubluD3/GoldWise/issues/8) | `READY_FOR_REVIEW` | Owner confirmed the installed manual scan matched the probe's complete six-bag result and sample counts on build `70862`. All 48 offline checks passed in CI. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-008-bag-inventory/docs/research/API_EVIDENCE.md#api-003--gw-008-carried-bag-inventory) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42607693130) |
+| [GW-009](https://github.com/DubluD3/GoldWise/issues/9) | `READY_FOR_REVIEW` | Owner confirmed the installed manual scan matched the open crafting window on build `70862`. All 59 offline checks passed in CI. Closed-window handling passed offline and has no separate live result. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-009-profession-snapshot/docs/research/API_EVIDENCE.md#api-005--gw-009-profession-context) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42628542851) |
+| [GW-010](https://github.com/DubluD3/GoldWise/issues/10) | `READY_FOR_REVIEW` | Owner confirmed correct data from the installed manual cache observation on `70862`. The probe read 128 of 154 rows, and all 70 offline checks passed in CI. Review covers cache observation after a native search. Addon-originated queries remain blocked. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-010-ah-observation/docs/research/API_EVIDENCE.md#api-006--gw-010-auction-house-browse-cache) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42635947850) |
+| [GW-011](https://github.com/DubluD3/GoldWise/issues/11) | `BLOCKED` | The bounded history model passed offline checks for scope isolation, stale reads, and reopening. Verify a discriminator tied to the active Forever auction market before enabling SavedVariables writes and testing a full client restart. [API-012 evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-011-market-retention/docs/research/API_EVIDENCE.md#api-012--gw-011-market-scope) |
 
 | Capability | Feature | Stories | Delivery |
 |---|---|---|---|
@@ -14,7 +32,7 @@ Status key: `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `IN_REVIEW`, `DONE`. 
 | CAP-08 Quality & Delivery | F-08 testing, UX, release | GW-023, GW-024, GW-025 | G6-G7 |
 
 ## Stories (each entry is an independently testable issue)
-Format: **Story — priority — dependency — acceptance**. Stories must not be self-marked DONE without actual test evidence.
+Each entry lists the story, priority, dependencies, and acceptance criteria.
 
 ### CAP-01 / F-01 — Trust & Compliance
 - **GW-001 — P0 — none:** Build Forever API evidence register and safe in-client discovery probe. Accept: real client version recorded; symbols + signatures cited; unknowns blocked; no transactions.

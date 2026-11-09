@@ -1,5 +1,5 @@
 # Roadmap (dependencies, not promises)
-Baseline: 2026-11-09. Work is **not started** except documentation scaffolding.
+Baseline date is 2026-11-09. See the [backlog](BACKLOG.md#current-progress) for current story status and verification evidence.
 
 | Gate | Objective | Target effort (indicative) | Required exit |
 |---|---|---|---|

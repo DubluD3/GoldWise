@@ -1,3 +1,5 @@
+local ForeverClient = dofile("tests/fixtures/ForeverClient.lua")
+
 local entries = {}
 local savedVariable
 for line in io.lines("GoldWise.toc") do
@@ -11,35 +13,19 @@ assert(savedVariable == "GoldWiseDB", "unexpected SavedVariables declaration")
 
 local function loadAddon(build, saved, registration)
     local addon = {}
-    local output = {}
-    local onLoaded
-    local env = setmetatable({
-        GetBuildInfo = function() return "1.60.1", build, "test date", 16001 end,
-        print = function(message) output[#output + 1] = message end,
-    }, { __index = _G })
-    if registration ~= "missing" then
-        env.EventUtil = {
-            RegisterOnceFrameEventAndCallback = function(event, callback, name)
-                assert(event == "ADDON_LOADED" and name == "GoldWise")
-                if registration == "fails" then
-                    error("registration unavailable")
-                end
-                assert(onLoaded == nil, "duplicate registration")
-                onLoaded = callback
-            end,
-        }
-    end
+    local client = ForeverClient.new(ForeverClient.build("1.60.1", build, 16001), registration)
 
     for _, entry in ipairs(entries) do
-        setfenv(assert(loadfile(entry)), env)("GoldWise", addon)
+        client:load(entry, "GoldWise", addon)
     end
-    assert(env.GoldWiseDB == nil and addon.storageState == nil, "storage touched before ADDON_LOADED")
+    local globals = client.globals
+    assert(globals.GoldWiseDB == nil and addon.storageState == nil, "storage touched before ADDON_LOADED")
 
-    env.GoldWiseDB = saved
-    if onLoaded then
-        onLoaded("GoldWise", false)
-    end
-    return env.GoldWiseDB, addon.storageState, output, onLoaded ~= nil
+    globals.GoldWiseDB = saved
+    assert(not client:fireAddonLoaded("OtherAddon"), "storage must wait for GoldWise")
+    local registered = client:fireAddonLoaded("GoldWise")
+    assert(not client:fireAddonLoaded("GoldWise"), "storage callback should run once")
+    return globals.GoldWiseDB, addon.storageState, client.output, registered
 end
 
 local saved, state, messages, registered = loadAddon("70862")

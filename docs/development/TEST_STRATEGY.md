@@ -3,6 +3,12 @@
 Status as of 2026-11-09: GW-004 startup and GW-005 schema initialization and restoration passed offline and in the live client. The repo has no bundled Lua runtime.
 
 ## Offline tests
+
+Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The runner checks for Lua 5.1 and stops at the first failure. Set `GOLDWISE_LUA` to an absolute interpreter path when needed. The GitHub Actions smoke job uses the same command.
+
+- `tests/fixtures/ForeverClient.lua` supplies `GetBuildInfo`, local output, and one-shot `ADDON_LOADED` registration to real adapter chunks in an isolated environment. Tests set the SavedVariables global after loading the TOC files, then dispatch the event. The fixture can omit the build API or event helper and simulate a registration error.
+- `data/Storage.lua` is the current pure-Lua boundary. Its unit suite permits only the standard Lua globals the module needs. `Storage.open(saved)` takes a table from the caller, and the SavedVariables adapter owns the game global and uses the returned state only after a successful open.
+
 - Fast unit tests for pure domain math: copper rounding, item quantities, availability, recipe dependency graph, resource reservations, goal constraints, confidence/abstain.
 - Contract mocks for WoW adapters. Tests must model nil API, cache misses, unavailable profession frames, partial scan, throttled scan, stale snapshot, unsupported build and secret values where relevant.
 - Schema tests: deterministic encode/decode, old-version upgrades, corrupt/truncated data recovery, market isolation.
@@ -30,6 +36,7 @@ Status as of 2026-11-09: GW-004 startup and GW-005 schema initialization and res
 | GW-005 in-game persistence probe | [Disposable marker procedure](STORAGE_PROBE.md#in-game-procedure) | Owner observed marker at `ADDON_LOADED` after `/reload` and full restart on `70862`. Character-selection relog was not reported. | PASS for reload and full restart |
 | GW-005 offline adapter | `lua tests/saved_variables.lua` with Lua 5.1.5 | 8 cases passed, including TOC load order, initialization, restore, migration, and preservation of rejected data | PASS |
 | GW-005 in-game product storage | Owner installed GoldWise `0.1.1-dev` on build `70862` on 2026-11-09 | First login printed `created (schema 1)`. Reload, character-selection relog, and full restart each printed `current (schema 1)`. | PASS |
+| GW-006 offline runner | `sh scripts/test.sh` with Lua 5.1.5 | 26 checks passed across four suites. Domain isolation and TOC adapter tests passed. | PASS |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

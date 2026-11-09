@@ -1,4 +1,12 @@
-local Storage = dofile("data/Storage.lua")
+local domainGlobals = setmetatable({ pairs = pairs, table = table, type = type }, {
+    __index = function(_, key)
+        error("storage read an unexpected global: " .. key)
+    end,
+    __newindex = function(_, key)
+        error("storage wrote an unexpected global: " .. key)
+    end,
+})
+local Storage = setfenv(assert(loadfile("data/Storage.lua")), domainGlobals)()
 
 local function expectFailure(value, reason, expected)
     assert(not value and reason == expected, "expected " .. expected .. ", got " .. tostring(reason))

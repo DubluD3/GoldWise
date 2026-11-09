@@ -1,3 +1,5 @@
+local ForeverClient = dofile("tests/fixtures/ForeverClient.lua")
+
 local probePath = "tests/probes/GoldWiseStorageProbe/Probe.lua"
 local probeName = "GoldWiseStorageProbe"
 local cases = {
@@ -9,32 +11,18 @@ local cases = {
 }
 
 for _, case in ipairs(cases) do
-    local output = {}
-    local onLoaded
-    local env = {
-        pcall = pcall,
-        type = type,
-        print = function(message) output[#output + 1] = message end,
-        GetBuildInfo = function() return "1.60.1", case.build or "70862", "test date", 16001 end,
-    }
-    if not case.noEvent then
-        env.EventUtil = {
-            RegisterOnceFrameEventAndCallback = function(event, callback, name)
-                assert(event == "ADDON_LOADED" and name == probeName)
-                onLoaded = callback
-            end,
-        }
-    end
-
-    setfenv(assert(loadfile(probePath)), env)(probeName)
+    local readBuild = ForeverClient.build("1.60.1", case.build or "70862", 16001)
+    local client = ForeverClient.new(readBuild, case.noEvent and "missing" or nil)
+    client:load(probePath, probeName)
+    local output = client.output
     if case.noEvent or case.build then
-        assert(onLoaded == nil)
+        assert(not client:fireAddonLoaded(probeName))
     else
         assert(#output == 0, "probe should wait for ADDON_LOADED")
-        env.GoldWiseStorageProbeMarker = case.marker
-        assert(onLoaded)()
+        client.globals.GoldWiseStorageProbeMarker = case.marker
+        assert(client:fireAddonLoaded(probeName))
     end
     assert(#output == 1 and output[1] == "GoldWise storage probe: " .. case.message, case.name)
-    assert(env.GoldWiseStorageProbeMarker == case.marker, "probe must leave the marker unchanged")
+    assert(client.globals.GoldWiseStorageProbeMarker == case.marker, "probe must leave the marker unchanged")
     print("PASS " .. case.name)
 end

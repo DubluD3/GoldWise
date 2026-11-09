@@ -11,9 +11,13 @@ GoldWise is a planned **free, open-source, local-first, read-only economic and p
 3. Start Forever, enable GoldWise in the AddOns list, and log in. On build `70862` the expected startup message begins `GoldWise 0.1.1-dev: loaded on Forever build 70862`. A fresh install then prints `GoldWise local storage created (schema 1).`
 4. Run `/reload`, log out to character selection and back in, then quit normally and fully reopen WoW. At each load, look for `GoldWise local storage current (schema 1).` Report the build, actual messages, and any Lua error.
 
-Disable GoldWise in the AddOns list or remove its addon folder to undo the install. Leave the client-managed SavedVariables file in place if you want to keep the local schema. From the repo root, run `lua5.1 tests/bootstrap.lua` and `lua5.1 tests/saved_variables.lua` for the offline checks.
+Disable GoldWise in the AddOns list or remove its addon folder to undo the install. Leave the client-managed SavedVariables file in place if you want to keep the local schema.
 
 The separate [GW-005 storage probe](docs/development/STORAGE_PROBE.md) tests client persistence with a disposable marker.
+
+## Run the offline checks
+
+With Lua 5.1 installed, run `sh scripts/test.sh`. Set `GOLDWISE_LUA` to an absolute path if your interpreter is named differently. [Test strategy](docs/development/TEST_STRATEGY.md)
 
 ## Start here
 - [Codex instructions](AGENTS.md)

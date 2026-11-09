@@ -1,6 +1,6 @@
 # Verification strategy / quality gates
 
-Status: planning, 2026-11-09. No tests have run; no Lua runtime is configured in this repo.
+Status as of 2026-11-09. The GW-013 offline checks use a local Lua 5.1.5 interpreter. This branch does not bundle the interpreter.
 
 ## Offline tests
 - Fast unit tests for pure domain math: copper rounding, item quantities, availability, recipe dependency graph, resource reservations, goal constraints, confidence/abstain.
@@ -21,6 +21,9 @@ Status: planning, 2026-11-09. No tests have run; no Lua runtime is configured in
 ## Acceptance reporting table
 | Check | Command or in-game steps | Actual output | Status |
 |---|---|---|---|
+| GW-013 catalog | `lua tests/recipe_catalog.lua` with Lua 5.1.5 | Four groups passed for provenance, known/unknown/unavailable status, freshness and scope gates, and malformed or oversized snapshots. | PASS |
+| GW-013 GW-009 snapshot contract and regression | Overlay the catalog and its suite on the pinned [GW-011 code revision](https://github.com/DubluD3/GoldWise/commit/3dfb4d78a1747678f35fc80c75de540d95e07643), then run `sh scripts/test.sh` and exercise `ProfessionSnapshot.capture` with mocked reader callbacks | 80 checks passed across 15 suites. The separate contract check returned known and unknown recipes from an actual GW-009 partial snapshot produced with mocks. | PASS |
+| GW-013 trainer and catalog integration | Verify the visible trainer requirement and its association with the matching recipe on the target client | NOT RUN. The offline catalog does not load in WoW. The earlier [GW-009 observations](../research/API_EVIDENCE.md#gw-013-recipe-catalog-and-trainer-requirements) cover the local crafting window. | BLOCKED |
 | Lua format/lint | TBD once toolchain chosen | NOT RUN | BLOCKED |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |

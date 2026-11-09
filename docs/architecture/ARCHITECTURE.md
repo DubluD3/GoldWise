@@ -39,6 +39,7 @@ docs/           # product, planning, policy, architecture, research
 - `MarketObservation`: item key, source, retrievedAt, realm/faction/ruleset, ask price, quantity, optional scan completeness and version; no implied sale.
 - `CharacterSnapshot`: locally scoped character, timestamp, profession state, inventory locations + availability.
 - `Recipe`: id, skill gating, profession, materials, outputs, unlock source, provenance, validated build, license.
+- `RecipeCatalog` (GW-013, offline): schema v1 wraps one verified local crafting snapshot. Reads match build, character and profession and require a caller-supplied freshness limit. A present learned row is known, a missing row in a filtered or partial view is unknown, and a missing recipe list is unavailable. Trainer requirements are unavailable. The catalog stores up to 1,024 observed rows, attributes them to Blizzard's local crafting view, and records redistribution as unverified. [Evidence and limits](../research/API_EVIDENCE.md#gw-013-recipe-catalog-and-trainer-requirements)
 - `Reservation`: goal id, item key, quantity; never allocate the same unit twice.
 - `Recommendation`: candidate options, assumptions, inputs, uncertainties, reasons, optional abstain; immutable record for audit.
 - `LedgerEntry`: observed delta or verified transaction, classification confidence, timestamp, manual correction support.

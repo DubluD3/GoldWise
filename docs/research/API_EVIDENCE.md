@@ -16,7 +16,7 @@
 | API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product schema | YES for `ADDON_LOADED` and GW-005 initialization and restoration on `70862` | GW-005 live smoke test passed |
 | API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
-| API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage | NO | BLOCKED-API-VERIFICATION |
+| API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME open-window probe | YES for the manual open-window path on `70862` | GW-009 product adapter awaiting live smoke test |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
 | API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product capture | YES for readable player fields and entry callbacks on `70862` | GW-007 live smoke test passed |
@@ -124,7 +124,11 @@ These signatures and call sites are `CLIENT-EXTRACTED` from Forever build `70658
 | `C_TradeSkillUI.IsRecipeInSkillLine` | `(recipeID: number, skillLineID: number) → result: bool`. Check the active skill line before inspecting a recipe. |
 | `C_TradeSkillUI.GetRecipeInfo` | `(recipeSpellID: number, recipeLevel?: luaIndex) → recipeInfo?: TradeSkillRecipeInfo`. Read `recipeID` and `learned`; optional `name` is used for one local sample. A missing row or a mismatched ID supplies no recipe evidence. |
 
-The [disposable probe](../development/PROFESSION_PROBE.md) runs on manual request in the player's open crafting window on build `70862`. It uses the verified `issecretvalue` guard and `GetServerTime`. It opens no frame, changes no filters, and initiates no crafting. It captures only recipes present in the filtered view and explicitly marked learned. A recipe absent from the list remains unknown. Live verification is `NOT RUN` and product capture is `BLOCKED-API-VERIFICATION`.
+The [disposable probe](../development/PROFESSION_PROBE.md) runs on manual request in the player's open crafting window on build `70862`. It uses the verified `issecretvalue` guard and `GetServerTime`. It opens no frame, changes no filters, and initiates no crafting. It captures only recipes present in the filtered view and explicitly marked learned. A recipe absent from the list remains unknown.
+
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The probe returned Leatherworking skill `87/150`, `recipes=filtered`, `observed learned=35`, and Camp Tent as a learned sample. The closed-window result was not reported. The base-profession fallback and external-view rejection were exercised offline.
+
+Decision: `VERIFIED` for the reported manual read of an open local crafting window on `70862`. GoldWise reuses the guarded probe reader after character capture. The installed-addon open and closed-window checks are pending.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

@@ -2,7 +2,7 @@
 
 The disposable probe checks [API-005](../research/API_EVIDENCE.md#api-005--gw-009-profession-context) on Forever build `70862`. It reads the player's open crafting profession on manual request. It prints the current skill and cap, the number of learned recipes it observed under the current filters, and one learned sample if available. The probe has no SavedVariables and sends no data.
 
-1. Close WoW and extract the profession probe ZIP into Forever's `Interface/AddOns` folder. Its manifest belongs at `Interface/AddOns/GoldWiseProfessionProbe/GoldWiseProfessionProbe.toc`. To install from source, copy `tests/probes/GoldWiseProfessionProbe` and put `data/ProfessionSnapshot.lua` alongside the manifest.
+1. Close WoW and extract the profession probe ZIP into Forever's `Interface/AddOns` folder. Its manifest belongs at `Interface/AddOns/GoldWiseProfessionProbe/GoldWiseProfessionProbe.toc`. To install from source, copy `tests/probes/GoldWiseProfessionProbe` and put copies of `data/ProfessionSnapshot.lua` and `adapters/ProfessionCapture.lua` alongside the manifest.
 2. Enable **GoldWise Profession Probe** and log in. Open one of your own crafting profession windows and wait for its recipe list to appear. Clear any search text if you want to compare a larger recipe list. The probe leaves the filters as they are.
 3. Paste this command into chat:
 
@@ -17,4 +17,6 @@ If the probe reports that the window, mode, or APIs are unavailable, share that 
 
 ## Snapshot contract
 
-`data/ProfessionSnapshot.lua` records a timestamp, character scope, skill-line ID, skill and cap, and only recipe IDs confirmed as learned. `filtered` describes the list visible under current filters. `partial` means some rows could not be checked or the 1,024-row project limit was reached. `unavailable` means the probe could not establish a usable list. A recipe absent from the snapshot is unknown. The product adapter waits for live verification on the target build.
+`data/ProfessionSnapshot.lua` records a timestamp, character scope, skill-line ID, skill and cap, and only recipes confirmed as learned. `filtered` describes the list visible under current filters. `partial` means some rows could not be checked or the 1,024-row project limit was reached. `unavailable` means the reader could not establish a usable list. A recipe absent from the snapshot is unknown.
+
+The owner reported skill `87/150` and 35 observed learned recipes from an open Leatherworking window on `70862`. The [installed addon](../../README.md#test-the-startup-build) reuses the reader in a manual scan scoped to the active character. Its chat summary describes the source and filtered state, and it omits the learned count if enumeration is unavailable. The snapshot stays in memory. The installed-addon open and closed-window checks are pending.

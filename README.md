@@ -2,15 +2,16 @@
 
 GoldWise is a planned **free, open-source, local-first, read-only economic and profession advisor** for World of Warcraft: Forever.
 
-> **Status: development smoke test.** This build checks the client, opens versioned local storage, captures character context, and supports a manual carried-bag scan on build `70862`.
+> **Status: development smoke test.** This build checks the client, opens versioned local storage, captures character context, and supports manual bag and profession observations on build `70862`.
 
 ## Test the startup build
 
 1. Close WoW: Forever. Open the Forever installation folder from Battle.net.
-2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc`, `adapters`, and `data` into `GoldWise`, or extract the GW-008 product ZIP into `Interface/AddOns`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
-3. Start Forever, enable GoldWise in the AddOns list, and log in. On build `70862` the expected startup message begins `GoldWise 0.1.3-dev: loaded on Forever build 70862`. A fresh install prints `GoldWise local storage created (schema 1).` A previously initialized install prints `GoldWise local storage current (schema 1).`
+2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc`, `adapters`, and `data` into `GoldWise`, or extract the GW-009 product ZIP into `Interface/AddOns`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
+3. Start Forever, enable GoldWise in the AddOns list, and log in. On build `70862` the expected startup message begins `GoldWise 0.1.4-dev: loaded on Forever build 70862`. A fresh install prints `GoldWise local storage created (schema 1).` A previously initialized install prints `GoldWise local storage current (schema 1).`
 4. Look for `GoldWise character snapshot ready.` on login and after `/reload`. If you have another character available, look for the same status when you log in on it. Report the status messages and any Lua error. The snapshot stays in memory for the session.
 5. Open your bags and run `/run GoldWiseInventoryScan()`. Compare the sample stack and carried total with the visible bags. A complete read reports `bags=complete, bank=unobserved, alts=unobserved`. A partial read labels the sample total as observed. Run the command again after bag changes to take a new observation.
+6. Open your own crafting window and run `/run GoldWiseProfessionScan()`. Compare the skill, cap, and learned sample with the window under its current filters. Close the window and repeat the command. It should report `crafting window unavailable`. The scan keeps the latest observation in memory and clears it on a failed refresh.
 
 Disable GoldWise in the AddOns list or remove its addon folder to undo the install. Leave the client-managed SavedVariables file in place if you want to keep the local schema.
 

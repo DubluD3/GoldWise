@@ -4,4 +4,5 @@
 ## Notes: Disposable GW-009 open profession check.
 
 ProfessionSnapshot.lua
+ProfessionCapture.lua
 Probe.lua

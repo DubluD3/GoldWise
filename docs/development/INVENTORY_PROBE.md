@@ -19,4 +19,4 @@ Share whether the counts matched and any error or unavailable bag. Keep item nam
 
 The timestamp describes one observation. The reader does not subscribe to bag events or poll. The capture limit of 128 slots per bag is a project bound.
 
-The owner reported complete probe results for all six carried bags on `70862`. The [installed addon](../../README.md#test-the-startup-build) uses the same guarded reader after character capture. It keeps inventory in memory, and a failed refresh clears the previous snapshot. A partial read retains only the observed stacks and labels the sample total accordingly.
+The owner reported complete probe results for all six carried bags on `70862` and confirmed the same result and sample counts from the [installed addon](../../README.md#test-the-startup-build). The addon uses the guarded reader after character capture. It keeps inventory in memory, and a failed refresh clears the previous snapshot. A partial read retains only the observed stacks and labels the sample total accordingly.

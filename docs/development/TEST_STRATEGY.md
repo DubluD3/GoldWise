@@ -42,7 +42,7 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-007 in-game product capture | Owner installed GoldWise `0.1.2-dev` on build `70862` on 2026-11-09 | Both login and `/reload` displayed `GoldWise character snapshot ready.` | PASS |
 | GW-008 bag snapshot model, probe, and product scan | `sh scripts/test.sh` with Lua 5.1.5 | 48 checks across nine suites passed. Coverage includes aggregation, partial reads, character scope, unavailable refresh, and unverified builds. | PASS |
 | GW-008 live bag probe | [Disposable probe](INVENTORY_PROBE.md) | Owner reported all six carried bags complete on `70862`, with a sample stack and carried total of `1`. | PASS for API reads |
-| GW-008 installed addon counts | [Install and test GoldWise](../../README.md#test-the-startup-build) | NOT RUN | PENDING |
+| GW-008 installed addon counts | Owner ran `/run GoldWiseInventoryScan()` in GoldWise `0.1.3-dev` on build `70862` on 2026-11-09 | Confirmed the same complete six-bag result and sample stack and carried total of `1`. Bank and alts were unobserved. | PASS |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

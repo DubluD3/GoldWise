@@ -14,7 +14,7 @@
 |---|---|---|---|---|
 | API-001 | `GetBuildInfo` / TOC interface | CLIENT-EXTRACTED signature; OBSERVED-IN-GAME first four returns | YES for build metadata on `70862` | Use observed interface `16001` for the GW-004 load test |
 | API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product schema | YES for `ADDON_LOADED` and GW-005 initialization and restoration on `70862` | GW-005 live smoke test passed |
-| API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME manual probe | YES for the carried-bag probe on `70862` | GW-008 product adapter awaiting live smoke test |
+| API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
@@ -107,7 +107,9 @@ The [disposable probe](../development/INVENTORY_PROBE.md) runs on manual request
 
 `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. On build `70862` the probe reported `bags=complete`, with all six carried bags individually `complete` and bank and alts `unobserved`. The sample in backpack slot 1 reported stack `1` and carried total `1`. A separate comparison to the visible bags was not reported. The sample item name is omitted here.
 
-Decision: `VERIFIED` for the manual carried-bag read path on `70862`. Product capture reuses the guarded probe reader with the active character scope. Verify the installed addon and compare the displayed sample with the visible bags. Inventory is an in-memory observation with a timestamp, and a failed refresh clears the previous observation.
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The installed GoldWise `0.1.3-dev` manual scan produced the same complete six-bag result and sample stack and carried total of `1`. Bank and alts were reported as unobserved.
+
+Decision: `VERIFIED` for the manual carried-bag read path in the probe and installed addon on `70862`. Aggregation across multiple stacks and partial or unavailable refreshes were exercised offline. Inventory is an in-memory observation with a timestamp, and a failed refresh clears the previous observation.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

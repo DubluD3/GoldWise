@@ -23,6 +23,10 @@
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
 | API-010 | AH deposit/cut by auction type | UNKNOWN live behavior | NO | BLOCKED |
 
+## GW-003 dataset scope
+
+GW-003 introduces no WoW API calls. For the actual target build and verified local observations, the [source audit](DATA_PROVENANCE.md#local-observations) links the pinned GW-001, GW-009, and GW-010 evidence, including exact call signatures and owner reports. The audit also records excluded web and client-extract sources. Web endpoint reports establish no in-client market identity.
+
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:
 - Purpose / story:

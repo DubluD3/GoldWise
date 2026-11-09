@@ -50,6 +50,8 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-010 Auction House cache model, probe, and product observer | `sh scripts/test.sh` with Lua 5.1.5 | 70 checks passed across 13 suites. Tests cover readiness, close, failure, expiry, restricted rows, the cap, and character-scoped in-memory capture. | PASS |
 | GW-010 live browse-cache probe | [One native search and local cache read](AUCTION_PROBE.md) | Owner confirmed readiness before and after a native search, a browse update, and `cache=partial` with 154 cache rows and 128 observed rows on `70862`. | PASS for the observed read path |
 | GW-010 installed addon cache observation | Owner ran the GoldWise `0.1.5-dev` manual observation on build `70862` on 2026-11-09 | Owner confirmed correct data. The installed addon's cache status, row counts, and sample were not separately reported. | PASS for the reported read |
+| GW-011 market history model | `sh scripts/test.sh` with Lua 5.1.5 | 76 checks passed across 14 suites, including six groups for required scope, exact market isolation, provenance, staleness, retention limits, reopening, and invalid data. | PASS |
+| GW-011 live market isolation and restart | Verify the active market ID against the visible browse cache, then validate retained snapshots across scopes and a full client restart | NOT RUN. The market discriminator is unverified and production persistence is disabled. [API-012](../research/API_EVIDENCE.md#api-012--gw-011-market-scope) | BLOCKED |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

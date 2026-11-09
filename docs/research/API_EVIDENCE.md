@@ -23,6 +23,7 @@
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
 | API-010 | AH deposit/cut by auction type | UNKNOWN live behavior | NO | BLOCKED |
 | API-011 | TOC Lua loading and local startup status | CLIENT-EXTRACTED manifest and namespace; OBSERVED-IN-GAME startup status | YES on login and `/reload` on `70862` | GW-004 live smoke test passed |
+| API-012 | active Auction House market discriminator | CLIENT-EXTRACTED game-mode candidate; market identity UNKNOWN | NO | BLOCKED-API-VERIFICATION |
 
 ## GW-001 startup evidence
 
@@ -154,6 +155,13 @@ The [disposable probe](../development/AUCTION_PROBE.md) checks readiness, the ob
 Decision: `VERIFIED` for the observed manual cache-read path on `70862`. The addon keeps a single character-scoped, timestamped observation in memory. Closed, failed, expired, and throttled paths passed offline checks.
 
 `C_AuctionHouse.SendBrowseQuery(query: AuctionHouseBrowseQuery)` and `C_AuctionHouse.RequestMoreBrowseResults()` are documented candidates. Exact query attribution, addon-originated request behavior, and cooldown duration remain unverified. Addon-originated querying remains `BLOCKED-API-VERIFICATION` and requires the applicable [policy review](../compliance/BLIZZARD_POLICY.md). The official policy and EULA were rechecked November 9, 2026.
+
+### API-012 · GW-011 market scope
+
+- `OBSERVED-IN-GAME` on `70862` under API-008 and API-006. The addon has readable character region, reported realm, and player faction, and can read the visible browse cache. Those observations do not identify the auction market that returned the cache.
+- `CLIENT-EXTRACTED` from build `70658`, accessed November 9, 2026. `C_GameRules.GetCurrentGameModeRecordID()` takes no arguments and returns `gameModeRecordID: number`, declared non-nil in the export. It is a candidate for recording mode context. Its behavior on `70862` and its relationship to an auction market are unverified. The pinned export search identified no read-only current market ID in `C_AuctionHouse`. [GameRules declaration](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/GameRulesDocumentation.lua) · [Function index](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/functions.txt)
+- `COMMUNITY-REPORTED`, accessed November 9, 2026. A forum participant reported multiple auction-house IDs and overlapping results between rulesets in an external API. This is a research lead about why mode or faction alone may be insufficient. It does not map an in-client browse cache to a house ID. [Community report](https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-what-works-so-far-plus-a-ts-client/60334/3)
+- Decision: `BLOCKED-API-VERIFICATION` for production retention. Require a supported discriminator tied to the visible browse context and evidence it stays stable within the same market and differs across separate markets. Keep the GW-010 in-memory observation until then. No new client call, external lookup, or SavedVariables write is used for GW-011. The offline history model takes an explicit market scope supplied by its caller.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

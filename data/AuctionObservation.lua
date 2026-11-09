@@ -52,6 +52,50 @@ function AuctionObservation.capture(observedAt, reader)
     return observation
 end
 
+function AuctionObservation.copyForHistory(observation)
+    if type(observation) ~= "table" or observation.source ~= "wow-ah-browse-cache"
+        or not integer(observation.observedAt, 1) or not integer(observation.reportedRows, 0)
+        or (observation.status ~= "partial" and observation.status ~= "complete")
+        or type(observation.rows) ~= "table" then
+        return nil
+    end
+
+    local rows = observation.rows
+    local count = #rows
+    if count > MAX_ROWS or count > observation.reportedRows
+        or (observation.status == "complete" and count ~= observation.reportedRows) then
+        return nil
+    end
+    for index in pairs(rows) do
+        if not integer(index, 1) or index > count then
+            return nil
+        end
+    end
+
+    local copy = {
+        source = observation.source,
+        observedAt = observation.observedAt,
+        reportedRows = observation.reportedRows,
+        status = observation.status,
+        rows = {},
+    }
+    for index = 1, count do
+        local row = rows[index]
+        if not usable(row) then
+            return nil
+        end
+        copy.rows[index] = {
+            itemId = row.itemId,
+            itemLevel = row.itemLevel,
+            itemSuffix = row.itemSuffix,
+            battlePetSpeciesId = row.battlePetSpeciesId,
+            minimumCopper = row.minimumCopper,
+            reportedQuantity = row.reportedQuantity,
+        }
+    end
+    return copy
+end
+
 local _, addon = ...
 if addon then
     addon.auctionObservationModel = AuctionObservation

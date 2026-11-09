@@ -19,3 +19,11 @@ Report the readiness and cache summary, including `cache=complete` or `cache=par
 The event signals a browse update during the observation window. It carries no request ID, so the probe cannot attribute it to a specific query. `cache=complete` describes the client-reported result set and readable rows within the 128-row project limit. Partial data is explicitly labelled. The sample is the browse minimum in copper and the client-reported quantity. No sale, unit-price basis, or recommendation is inferred.
 
 The owner confirmed a ready state, a browse update, and a correct partial result with 154 cache rows and 128 observed rows on `70862`. The owner also confirmed the [installed addon](../../README.md#test-the-startup-build) returned correct data. The installed addon retains one timestamped result in memory for the active character and sends zero Auction House queries. Query attribution, addon-originated requests, and cooldown duration need separate evidence and policy review.
+
+## GW-011 offline retention
+
+The history model requires build, region, reported realm, player faction, game-mode record ID, and an explicit active market ID. The fixture supplies synthetic scope values. The model stores up to eight scopes with three observations per scope and 128 rows per observation. A newer observation can prune the oldest record in its own scope. A new scope at capacity and duplicate or out-of-order timestamps are rejected.
+
+The model copies only approved scope fields, source, timestamp, completeness, reported row count, and the validated numeric item and browse fields. Each lookup requires an exact scope and a caller-supplied maximum age. A stale lookup returns its age and status without rows. These observations represent the browsed results at a point in time. They provide no measure of market-wide coverage or demand.
+
+The model reopens a versioned table in offline tests. Integration and restart verification are blocked pending a [verified active-market discriminator](../research/API_EVIDENCE.md#api-012--gw-011-market-scope). The model is outside the addon manifest and introduces no SavedVariables migration. Reverting the model and tests requires no data cleanup.

@@ -4,7 +4,20 @@ Status as of 2026-11-09: GW-004 startup and GW-005 schema initialization and res
 
 ## Offline tests
 
-Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The runner checks for Lua 5.1 and stops at the first failure. Set `GOLDWISE_LUA` to an absolute interpreter path when needed. The GitHub Actions smoke job uses the same command.
+Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The runner checks for Lua 5.1 and stops at the first failure. Set `GOLDWISE_LUA` or `GOLDWISE_LUAC` to an absolute tool path when needed. The GitHub Actions regression matrix runs the three checks independently.
+
+| Mode | Scope | Local result |
+|---|---|---|
+| `sh scripts/test.sh syntax` | Parse Lua sources under `adapters/`, `data/`, and `tests/` without executing them, including nested probes and fixtures. Check the runner with `sh -n`. | 37 Lua files and the shell runner passed |
+| `sh scripts/test.sh unit` | Pure data models, with isolated Lua environments and synthetic inputs. | 30 checks across seven suites passed |
+| `sh scripts/test.sh contract` | Adapters, addon load order, and disposable probes under mocked client APIs. | 50 checks across eight suites passed |
+
+### Fixture policy
+
+- Keep pure model tests separate from game adapters. Register new top-level suites in the runner. A new `*_probe.lua` suite is classified as a contract test. An unclassified suite fails the check.
+- Use synthetic identifiers, timestamps, quantities, and copper values. Keep character names, live SavedVariables, and copied game or provider datasets out of fixtures.
+- Document the API signature, build, and source in [API evidence](../research/API_EVIDENCE.md) before adding a new client mock. Use distinct fixtures for missing, partial, stale, restricted, and unsupported data where they affect behavior. A mocked call exercises the addon contract only.
+- Run live client QA manually. Record the build, steps, and actual observations, or write `NOT RUN`. The CI matrix runs entirely offline.
 
 - `tests/fixtures/ForeverClient.lua` supplies `GetBuildInfo`, local output, and one-shot event registration to adapter and probe chunks in an isolated environment. Storage tests set the SavedVariables global after loading the TOC files and then dispatch `ADDON_LOADED`. The character probe tests dispatch `PLAYER_ENTERING_WORLD` with explicit login and reload flags. The fixture can omit the build API or event helper and simulate a registration error.
 - `data/Storage.lua` is the current pure-Lua boundary. Its unit suite permits only the standard Lua globals the module needs. `Storage.open(saved)` takes a table from the caller, and the SavedVariables adapter owns the game global and uses the returned state only after a successful open.
@@ -30,7 +43,10 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-003 source audit | Review [sources and exclusions](../research/DATA_PROVENANCE.md), run `git diff --check`, and resolve repository links and headings | Six repository links verified and whitespace check passed. The audit changed only Markdown. | PASS |
 | GW-003 existing fallback evidence | Run `sh scripts/test.sh` with Lua 5.1.5 from the pinned [GW-011 code revision](https://github.com/DubluD3/GoldWise/commit/3dfb4d78a1747678f35fc80c75de540d95e07643) | 76 checks passed across 14 suites. Covered learned rows, missing profession data, empty versus unavailable browse cache, mismatched build and scope, and stale reads. | PASS |
 | GW-003 new client checks | Documentation-only audit of existing observations | NOT RUN. Prior owner reports on build `70862` are linked in the audit. | N/A |
-| Lua format/lint | TBD once toolchain chosen | NOT RUN | BLOCKED |
+| GW-023 regression matrix | `sh scripts/test.sh syntax`, `unit`, `contract`, and default mode with Lua 5.1.5 | Syntax passed. Unit and contract selections cover all 15 suites exactly once, with 80 checks total. Default and `all` produced identical output. | PASS |
+| GW-023 runner failure paths | Run in an isolated copy with an invalid mode, missing compiler, malformed nested Lua file, and unclassified top-level suite | All four cases exited with an error and identified the cause. | PASS |
+| Lua formatting and semantic lint | No formatter or semantic linter configured | NOT RUN. The syntax gate uses Lua's compiler. | NOT RUN |
+| GW-023 live client QA | Offline tooling story | NOT RUN. Prior game observations remain listed below. | N/A |
 | GW-004 Lua syntax | `luac -p adapters/Bootstrap.lua tests/bootstrap.lua` with Lua 5.1.5 | Parsed both files | PASS |
 | GW-004 offline bootstrap | `lua tests/bootstrap.lua` with Lua 5.1.5 | 8 cases passed, including missing API, failed call, and a changed build with the same interface | PASS |
 | GW-004 in-game load and reload | Owner logged in and ran `/reload` on Forever build `70862` on 2026-11-09 | Both displayed the expected GoldWise `0.1.0-dev` startup message with gameplay features disabled | PASS |

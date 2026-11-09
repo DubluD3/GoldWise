@@ -35,7 +35,7 @@ Date reviewed: 2026-11-09. **Internal interpretation, not legal advice or Blizza
 
 GoldWise's scope decisions above are `INFERRED` from the official sources and the project's stricter read-only design. The GW-004 smoke test is limited to reading build metadata and displaying startup status. It uses no protected actions, persistent data, external connections, or dependencies. Block any ambiguous behavior before implementation. Leave optional data providers and companion software for separate review if proposed.
 
-The policy check is a document review. Client QA for the bootstrap belongs to GW-004. Project owner review is pending before merge.
+The policy check is a document review. Client QA for the bootstrap belongs to GW-004. The project owner approved merging this documented scope. Addon-originated Auction House queries and other gated behaviors still require separate review.
 
 ## Feature compliance gate for every PR
 - [ ] What game actions does feature read or initiate?

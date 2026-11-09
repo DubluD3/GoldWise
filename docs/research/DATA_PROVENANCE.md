@@ -36,7 +36,7 @@ Publisher statements below establish what each publisher declares. Coverage or r
 
 ### Approval and rollback
 
-Owner review covers the local-only source decision and the exclusions. Keep external sources blocked until permission for the specific files and transformations, compatible attribution, and current-build coverage are documented. When a publisher's terms are unclear, resolve the question with the rights holder before use. Recheck on the next client patch or a change to provider terms or data. This audit changes documentation only and can be reverted without data cleanup.
+The project owner approved merging the local-only source decision and the exclusions. Keep external sources blocked until permission for the specific files and transformations, compatible attribution, and current-build coverage are documented. When a publisher's terms are unclear, resolve the question with the rights holder before use. Recheck on the next client patch or a change to provider terms or data. This audit changes documentation only and can be reverted without data cleanup.
 
 Each external dataset needs:
 - Dataset name/author, canonical URL and retrieval timestamp.

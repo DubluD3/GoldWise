@@ -19,7 +19,7 @@
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
-| API-008 | realm/faction/character context | UNKNOWN live behavior | NO | BLOCKED |
+| API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; live behavior UNKNOWN | NO | BLOCKED-API-VERIFICATION |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
 | API-010 | AH deposit/cut by auction type | UNKNOWN live behavior | NO | BLOCKED |
 | API-011 | TOC Lua loading and local startup status | CLIENT-EXTRACTED manifest and namespace; OBSERVED-IN-GAME startup status | YES on login and `/reload` on `70862` | GW-004 live smoke test passed |
@@ -67,6 +67,24 @@ Offline verification on 2026-11-09 used the exact Lua from the chat command and 
 - `OBSERVED-IN-GAME` on `70862` after login. The API-001 probe successfully used `GetBuildInfo()` followed by local `print(...)` with display arguments. The bootstrap calls `GetBuildInfo()` once via `pcall` and uses `print(message: string)` once for local status. It does not consume a return value from `print`.
 - `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. Both login and `/reload` displayed `GoldWise 0.1.0-dev: loaded on Forever build 70862. Gameplay features disabled`. The message comes from the TOC-loaded Lua file after it initializes the private table and checks the build.
 - Decision: `VERIFIED` for this bootstrap's startup path on login and `/reload` on `70862`. Missing, failing, and mismatched build checks passed with offline stubs. Lifecycle events, metadata lookup, and SavedVariables still require separate evidence.
+
+### API-008 · GW-007 character context
+
+The following candidates are `CLIENT-EXTRACTED` from Forever build `70658`, accessed November 9, 2026. [Function index](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/functions.txt) · [Event index](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/events.txt)
+
+| Call or event | Exported signature and probe usage |
+|---|---|
+| `UnitGUID` | `UnitGUID(unit: UnitTokenPvPRestrictedForAddOns) → result?: WOWGUID`. The export flags identity-restricted results as secret. Probe passes only `player` and treats a readable result as opaque. |
+| `GetRealmName` | `GetRealmName() → realmName: cstring`. Probe records availability and compares the reported context across a reload. The returned value's scope is unverified. |
+| `UnitFactionGroup` | `UnitFactionGroup(unitName: cstring, checkDisplayRace: bool = false) → factionGroupTag: cstring, localized: cstring`. Probe passes `player` and checks the first return. |
+| `GetCurrentRegion` | `GetCurrentRegion() → region: number`. Probe checks for a positive integer without mapping it to a region label. |
+| `GetServerTime` | `GetServerTime() → time: number`. Probe checks for a positive integer and uses the client value as a timestamp candidate. |
+| `issecretvalue` | `issecretvalue(value: LuaValueReference) → isSecret: bool`. Probe calls it before checking or formatting a candidate value. A failed check suppresses that value. |
+| `PLAYER_ENTERING_WORLD` | Synchronous event with `isInitialLogin: bool` and `isReloadingUi: bool`. The disposable addon subscribes once through the source-backed helper in API-002. This event path requires live verification. |
+
+The [disposable probe](../development/CHARACTER_PROBE.md) is local and read-only. It queries the player once per load and prints availability and local comparison tags. It neither stores nor sends player identifiers. A missing, secret, or invalid field leaves the candidate unavailable. The pure snapshot model requires complete context and falls back to no snapshot. Product capture is `BLOCKED-API-VERIFICATION` pending a probe result on `70862`.
+
+One `COMMUNITY-REPORTED` launch diagnostic describes a different value for `GetRealmName` than the second return from `UnitFullName`. Treat the observed realm as client context. Market or realm-wide identity semantics need separate evidence. [Launch diagnostic](https://eu.forums.blizzard.com/en/wow/t/wow-forever-1601-addon-communication-stopped-working-after-launch-invalidchannel-7/640089)
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

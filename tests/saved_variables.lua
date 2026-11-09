@@ -22,9 +22,9 @@ local function loadAddon(build, saved, registration)
     assert(globals.GoldWiseDB == nil and addon.storageState == nil, "storage touched before ADDON_LOADED")
 
     globals.GoldWiseDB = saved
-    assert(not client:fireAddonLoaded("OtherAddon"), "storage must wait for GoldWise")
-    local registered = client:fireAddonLoaded("GoldWise")
-    assert(not client:fireAddonLoaded("GoldWise"), "storage callback should run once")
+    assert(not client:fire("ADDON_LOADED", "OtherAddon", false), "storage must wait for GoldWise")
+    local registered = client:fire("ADDON_LOADED", "GoldWise", false)
+    assert(not client:fire("ADDON_LOADED", "GoldWise", false), "storage callback should run once")
     return globals.GoldWiseDB, addon.storageState, client.output, registered
 end
 

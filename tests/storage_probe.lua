@@ -16,11 +16,11 @@ for _, case in ipairs(cases) do
     client:load(probePath, probeName)
     local output = client.output
     if case.noEvent or case.build then
-        assert(not client:fireAddonLoaded(probeName))
+        assert(not client:fire("ADDON_LOADED", probeName, false))
     else
         assert(#output == 0, "probe should wait for ADDON_LOADED")
         client.globals.GoldWiseStorageProbeMarker = case.marker
-        assert(client:fireAddonLoaded(probeName))
+        assert(client:fire("ADDON_LOADED", probeName, false))
     end
     assert(#output == 1 and output[1] == "GoldWise storage probe: " .. case.message, case.name)
     assert(client.globals.GoldWiseStorageProbeMarker == case.marker, "probe must leave the marker unchanged")

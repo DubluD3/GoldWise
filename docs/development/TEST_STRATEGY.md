@@ -6,7 +6,7 @@ Status as of 2026-11-09: GW-004 startup and GW-005 schema initialization and res
 
 Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The runner checks for Lua 5.1 and stops at the first failure. Set `GOLDWISE_LUA` to an absolute interpreter path when needed. The GitHub Actions smoke job uses the same command.
 
-- `tests/fixtures/ForeverClient.lua` supplies `GetBuildInfo`, local output, and one-shot `ADDON_LOADED` registration to real adapter chunks in an isolated environment. Tests set the SavedVariables global after loading the TOC files, then dispatch the event. The fixture can omit the build API or event helper and simulate a registration error.
+- `tests/fixtures/ForeverClient.lua` supplies `GetBuildInfo`, local output, and one-shot event registration to adapter and probe chunks in an isolated environment. Storage tests set the SavedVariables global after loading the TOC files and then dispatch `ADDON_LOADED`. The character probe tests dispatch `PLAYER_ENTERING_WORLD` with explicit login and reload flags. The fixture can omit the build API or event helper and simulate a registration error.
 - `data/Storage.lua` is the current pure-Lua boundary. Its unit suite permits only the standard Lua globals the module needs. `Storage.open(saved)` takes a table from the caller, and the SavedVariables adapter owns the game global and uses the returned state only after a successful open.
 
 - Fast unit tests for pure domain math: copper rounding, item quantities, availability, recipe dependency graph, resource reservations, goal constraints, confidence/abstain.
@@ -37,6 +37,8 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-005 offline adapter | `lua tests/saved_variables.lua` with Lua 5.1.5 | 8 cases passed, including TOC load order, initialization, restore, migration, and preservation of rejected data | PASS |
 | GW-005 in-game product storage | Owner installed GoldWise `0.1.1-dev` on build `70862` on 2026-11-09 | First login printed `created (schema 1)`. Reload, character-selection relog, and full restart each printed `current (schema 1)`. | PASS |
 | GW-006 offline runner | `sh scripts/test.sh` with Lua 5.1.5 | 26 checks passed across four suites. Domain isolation and TOC adapter tests passed. | PASS |
+| GW-007 snapshot model and probe | `sh scripts/test.sh` with Lua 5.1.5 | 32 checks passed across six suites, including two-character scope, missing data, and restricted values | PASS |
+| GW-007 live character context | [Disposable probe](CHARACTER_PROBE.md#gw-007-character-context-verification) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

@@ -8,11 +8,13 @@ end
 
 function ForeverClient.new(readBuild, registration)
     local client = { output = {}, buildReads = 0 }
-    local onLoaded
-    local expectedName
+    local eventCallback
+    local registeredEvent
+    local expectedArgument
     local globals = {
         pairs = pairs,
         pcall = pcall,
+        string = string,
         table = table,
         type = type,
         print = function(message)
@@ -29,14 +31,15 @@ function ForeverClient.new(readBuild, registration)
     end
     if registration ~= "missing" then
         globals.EventUtil = {
-            RegisterOnceFrameEventAndCallback = function(event, callback, addonName)
-                assert(event == "ADDON_LOADED", "unexpected fixture event: " .. tostring(event))
+            RegisterOnceFrameEventAndCallback = function(event, callback, argument)
+                assert(event == "ADDON_LOADED" or event == "PLAYER_ENTERING_WORLD", "unexpected fixture event")
                 if registration == "fails" then
                     error("registration unavailable")
                 end
-                assert(onLoaded == nil, "duplicate ADDON_LOADED registration")
-                onLoaded = callback
-                expectedName = addonName
+                assert(eventCallback == nil, "duplicate fixture event registration")
+                eventCallback = callback
+                registeredEvent = event
+                expectedArgument = argument
             end,
         }
     end
@@ -45,14 +48,17 @@ function ForeverClient.new(readBuild, registration)
         setfenv(assert(loadfile(path)), globals)(addonName, namespace)
     end
 
-    function client:fireAddonLoaded(addonName)
-        if onLoaded == nil or expectedName ~= addonName then
+    function client:fire(event, ...)
+        if eventCallback == nil or event ~= registeredEvent then
+            return false
+        end
+        if expectedArgument ~= nil and expectedArgument ~= select(1, ...) then
             return false
         end
 
-        local callback = onLoaded
-        onLoaded = nil
-        callback(addonName, false)
+        local callback = eventCallback
+        eventCallback = nil
+        callback(...)
         return true
     end
 

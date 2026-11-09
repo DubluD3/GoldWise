@@ -45,6 +45,15 @@
 - Prefer scope-limited UI changes; do not redesign existing working screens opportunistically unless the assigned story explicitly calls for it.
 - If a UI design conflicts with game restrictions or evidence, documented client behavior and safety requirements win.
 
+## Blizzard UI/security/privacy rules for design
+- Read [docs/design/BLIZZARD_UI_COMPLIANCE.md](docs/design/BLIZZARD_UI_COMPLIANCE.md) before editing any WoW frame, overlay, tooltip, secure interaction, data capture, or visual asset.
+- Distinguish Blizzard's **official addon policy** from community secure-frame/taint documentation and GoldWise's own accessibility/privacy standards. Never present our preferences as Blizzard mandates.
+- Use standalone non-protected informational UI by default; no protected-frame/secure-action manipulation, secret-value inspection, combat-lockdown workarounds, or taint-inducing global modifications.
+- No disruptive popups, repeated animations, expensive per-frame work or hidden background AH queries. Capture performance and combat UI behavior in manual test evidence.
+- Never collect credentials or unrelated private data; no implicit upload, analytics or telemetry. No paid features, ads, donation prompts or unlicensed art.
+- Competitor screenshots are **references only**, not permission to copy code, visuals, icons, or datasets. Recheck addons and source licenses before integrating.
+- Include addon-interoperability and client-version checks in UI QA; do not claim compatibility until manually verified.
+
 ## Required story sequence
 1. Read `docs/development/WORKFLOW.md` and referenced `GW-###` entry.
 2. Record evidence/unknowns; propose smallest change and rollback.

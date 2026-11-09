@@ -6,8 +6,7 @@ for line in io.lines("GoldWise.toc") do
         version = line:match("^## Version: (.+)$")
     elseif line:match("^## Interface: ") then
         interface = line:match("^## Interface: (.+)$")
-    elseif line:match("^[^#%s]") then
-        assert(entry == nil, "the smoke test should have one runtime entry")
+    elseif line == "adapters\\Bootstrap.lua" then
         entry = line:gsub("\\", "/")
     end
 end

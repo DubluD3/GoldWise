@@ -1,6 +1,8 @@
 # GW-005 storage verification
 
-The product addon stays on its verified GW-004 startup path. This separate probe tests whether Forever build `70862` restores one disposable account-wide SavedVariables marker before the probe's `ADDON_LOADED` callback. It reads the marker once per load. The only write is the manual test command below.
+This separate probe tests whether Forever build `70862` restores one disposable account-wide SavedVariables marker before the probe's `ADDON_LOADED` callback. It reads the marker once per load. The only write is the manual test command below.
+
+On 2026-11-09 the owner reported `marker present at ADDON_LOADED` after `/reload` and a full quit and reopen. A separate character-selection relog was not reported. The [product smoke test](../../README.md#test-the-startup-build) covers the integrated `GoldWiseDB` path.
 
 ## In-game procedure
 
@@ -16,7 +18,7 @@ The product addon stays on its verified GW-004 startup path. This separate probe
 5. Log out to character selection and log back in. Record the message again.
 6. Quit WoW normally, fully reopen it, and log in again. Record the message a third time. Leave the marker alone between the three checks.
 
-If the probe prints `client build unverified`, record the build and stop. If it prints `ADDON_LOADED registration unavailable`, prints nothing, or fails to restore the marker, record that result and any Lua error. Product persistence stays disabled until the lifecycle is verified. Remove or disable the probe addon when done. The marker is a test string specific to the probe.
+If the probe prints `client build unverified`, record the build and stop. If it prints `ADDON_LOADED registration unavailable`, prints nothing, or fails to restore the marker, record that result and any Lua error. Remove or disable the probe addon when done. The marker is a test string specific to the probe.
 
 ## Offline storage contract
 

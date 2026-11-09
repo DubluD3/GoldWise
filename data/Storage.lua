@@ -1,3 +1,4 @@
+local _, addon = ...
 local Storage = {}
 
 local MAX_SCOPES = 64
@@ -89,6 +90,10 @@ function Storage.observe(state, key, timestamp)
 
     timestamps[key] = timestamp
     return true
+end
+
+if addon then
+    addon.storage = Storage
 end
 
 return Storage

@@ -1,6 +1,6 @@
 local _, addon = ...
 
-addon.version = "0.1.0-dev"
+addon.version = "0.1.1-dev"
 addon.features = {
     inventory = false,
     professions = false,

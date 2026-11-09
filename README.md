@@ -2,16 +2,16 @@
 
 GoldWise is a planned **free, open-source, local-first, read-only economic and profession advisor** for World of Warcraft: Forever.
 
-> **Status: development smoke test.** This build checks the client build and displays startup status. Gameplay features are disabled while their APIs are being validated.
+> **Status: development smoke test.** This build checks the client build and opens versioned local storage on build `70862`. Gameplay features are disabled while their APIs are being validated.
 
 ## Test the startup build
 
 1. Close WoW: Forever. Open the Forever installation folder from Battle.net.
-2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc` and the `adapters` directory into `GoldWise`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
-3. Start Forever, enable GoldWise in the AddOns list, and log in. On build `70862` the expected local message is `GoldWise 0.1.0-dev: loaded on Forever build 70862. Gameplay features disabled.` Run `/reload` and check for the same message once after the reload.
-4. Record the build, whether GoldWise appeared in the AddOns list, the actual message, and any Lua error. If the client reports a different build, record that separately. The expected fallback on a build where the manifest still loads is `GoldWise 0.1.0-dev: client build unverified. Gameplay features disabled.`
+2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc`, `adapters`, and `data` into `GoldWise`, or extract the GW-005 product ZIP into `Interface/AddOns`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
+3. Start Forever, enable GoldWise in the AddOns list, and log in. On build `70862` the expected startup message begins `GoldWise 0.1.1-dev: loaded on Forever build 70862`. A fresh install then prints `GoldWise local storage created (schema 1).`
+4. Run `/reload`, log out to character selection and back in, then quit normally and fully reopen WoW. At each load, look for `GoldWise local storage current (schema 1).` Report the build, actual messages, and any Lua error.
 
-Disable GoldWise in the AddOns list or remove its folder to undo the install. The smoke test uses no SavedVariables. From the repo root, run `lua5.1 tests/bootstrap.lua` with Lua 5.1 for the offline checks.
+Disable GoldWise in the AddOns list or remove its addon folder to undo the install. Leave the client-managed SavedVariables file in place if you want to keep the local schema. From the repo root, run `lua5.1 tests/bootstrap.lua` and `lua5.1 tests/saved_variables.lua` for the offline checks.
 
 The separate [GW-005 storage probe](docs/development/STORAGE_PROBE.md) tests client persistence with a disposable marker.
 

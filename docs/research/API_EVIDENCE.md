@@ -13,7 +13,7 @@
 | ID | Candidate namespace / behavior | Evidence class | Current build verified? | Implementation status |
 |---|---|---|---|---|
 | API-001 | `GetBuildInfo` / TOC interface | CLIENT-EXTRACTED signature; OBSERVED-IN-GAME first four returns | YES for build metadata on `70862` | Use observed interface `16001` for the GW-004 load test |
-| API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED for signatures; UNKNOWN for live lifecycle | NO | BLOCKED-API-VERIFICATION |
+| API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME disposable marker | YES for the probe after `/reload` and full restart on `70862` | GW-005 product adapter ready for live smoke test |
 | API-003 | `C_Container` bag slots, item info and quantity | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
@@ -51,14 +51,14 @@ Select **World of Warcraft: Forever** in Battle.net, log in on a character in a 
 
 Offline verification on 2026-11-09 used the exact Lua from the chat command and a stubbed `GetBuildInfo` in Lua 5.1.5. All seven cases passed: complete result, missing function, thrown error, missing interface, empty build, wrong interface type, and zero interface.
 
-### API-002 · Lifecycle event and persistence candidates
+### API-002 · Lifecycle events and persistence
 
 - Source class and access: `CLIENT-EXTRACTED`, 2026-11-09 09:50 UTC. [AddOnsDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/AddOnsDocumentation.lua) · [SystemDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/SystemDocumentation.lua)
 - The export declares synchronous `ADDON_LOADED(addOnName: cstring, containsBindings: bool)`, `PLAYER_LOGIN()`, and `PLAYER_LOGOUT()`. It declares `C_AddOns.GetAddOnMetadata(name: uiAddon, variable: cstring) -> value: cstring` with `SecretArguments = AllowedWhenUntainted`.
-- Observed in game: `NOT RUN`. Decision: `UNVERIFIED`. See API-011 for the GW-004 load test. Before using any event or metadata lookup, verify its behavior separately. For GW-005, verify when SavedVariables become available and that they survive reload and restart.
 - `CLIENT-EXTRACTED`, accessed 2026-11-09. The `70658` export contains the account-wide `## SavedVariables: <global>` declaration and `EventUtil.RegisterOnceFrameEventAndCallback(frameEvent, callback, ...)`. The Lua function filters event payload values against the supplied arguments, unregisters on the first match, and forwards the payload to the callback. It returns no value. The GW-005 probe uses `ADDON_LOADED` and filters on its own addon name. [Manifest example](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_AuctionHouseUI/Blizzard_AuctionHouseUI.toc) · [EventUtil.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_SharedXML/EventUtil.lua#L71)
-- `COMMUNITY-REPORTED`, accessed 2026-11-09. Beta players reported saved values disappearing at cold launch. The report concerns beta builds. The probe records what actually happens on `70862`. [Beta report](https://us.forums.blizzard.com/en/wow/t/wowf-beta-addon-savedvariables-appear-to-write-correctly-to-disk-but-are-not-restored-at-startup/2356559)
-- The disposable [GW-005 probe](../development/STORAGE_PROBE.md) uses one local test string and no player data. Missing event support or a missing marker leaves product persistence `BLOCKED-API-VERIFICATION`. There is no client workaround or external file access in the probe.
+- `COMMUNITY-REPORTED`, accessed 2026-11-09. Beta players reported saved values disappearing at cold launch. The report concerns beta builds. [Beta report](https://us.forums.blizzard.com/en/wow/t/wowf-beta-addon-savedvariables-appear-to-write-correctly-to-disk-but-are-not-restored-at-startup/2356559)
+- `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The [GW-005 probe](../development/STORAGE_PROBE.md) reported the marker present at `ADDON_LOADED` after `/reload` and after quitting and reopening Forever build `70862`. A separate relog via character selection was `NOT RUN` for the probe.
+- Decision: `VERIFIED` for the observed probe path and build. The product adapter uses the same one-shot `ADDON_LOADED` registration and its own account-wide `GoldWiseDB`. The adapter requires build `70862` and leaves saved data untouched if registration, validation, or migration fails. Product smoke testing is pending. `PLAYER_LOGIN`, `PLAYER_LOGOUT`, and metadata lookup still require their own evidence before use.
 
 ### API-011 · GW-004 manifest and startup output
 

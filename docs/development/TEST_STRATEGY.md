@@ -27,7 +27,9 @@ Status as of 2026-11-09: GW-004 startup passed offline and in the live client. G
 | GW-004 in-game load and reload | Owner logged in and ran `/reload` on Forever build `70862` on 2026-11-09 | Both displayed the expected GoldWise `0.1.0-dev` startup message with gameplay features disabled | PASS |
 | GW-005 storage table and migration | `lua tests/storage.lua` with Lua 5.1.5 | 5 groups passed, covering scope isolation, round trip, migration, corrupt/future data, and capacity | PASS |
 | GW-005 probe callback | `lua tests/storage_probe.lua` with Lua 5.1.5 | 5 cases passed, covering marker states, unavailable event helper, and changed build | PASS |
-| GW-005 in-game persistence | [Reload, relog, and full restart](STORAGE_PROBE.md#in-game-procedure) | NOT RUN | PENDING |
+| GW-005 in-game persistence probe | [Disposable marker procedure](STORAGE_PROBE.md#in-game-procedure) | Owner observed marker at `ADDON_LOADED` after `/reload` and full restart on `70862`. Character-selection relog was not reported. | PASS for reload and full restart |
+| GW-005 offline adapter | `lua tests/saved_variables.lua` with Lua 5.1.5 | 8 cases passed, including TOC load order, initialization, restore, migration, and preservation of rejected data | PASS |
+| GW-005 in-game product storage | [Install and test GoldWise](../../README.md#test-the-startup-build) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

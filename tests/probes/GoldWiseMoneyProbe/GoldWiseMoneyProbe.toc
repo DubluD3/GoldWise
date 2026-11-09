@@ -1,0 +1,6 @@
+## Interface: 16001
+## Title: GoldWise Money Probe
+## Version: 1
+## Notes: Disposable GW-021 character balance API check.
+
+Probe.lua

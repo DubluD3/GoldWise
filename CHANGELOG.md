@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- 2026-11-09: Added the GW-021 offline ledger and disposable character balance probe. Manual categorization preserves user attribution. Live balance verification is pending.
 - 2026-11-09: Split GW-023 offline regression checks into Lua and shell syntax, unit, and adapter contract jobs. Documented fixture and manual verification requirements.
 - 2026-11-09: Added the GW-013 offline recipe catalog for verified local profession snapshots. Trainer requirements remain unavailable pending live evidence.
 - 2026-11-09: Audited recipe and market sources for GW-003. Documented verified local observations, external dataset exclusions, and fallback rules.

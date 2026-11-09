@@ -1,0 +1,41 @@
+name: GoldWise story
+description: Implement a verified GW story from the backlog
+title: "[GW-###] "
+body:
+  - type: input
+    id: parent
+    attributes:
+      label: Parent capability / feature
+      placeholder: "CAP-## / F-##"
+    validations:
+      required: true
+  - type: input
+    id: dependencies
+    attributes:
+      label: Dependencies
+      placeholder: "GW-### or none"
+  - type: textarea
+    id: user_story
+    attributes:
+      label: User story and scope
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria including failure handling
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: API evidence, version/build, licenses and compliance risk
+      description: State UNKNOWN explicitly instead of inventing.
+    validations:
+      required: true
+  - type: textarea
+    id: test
+    attributes:
+      label: Offline and manual in-game test plan
+    validations:
+      required: true

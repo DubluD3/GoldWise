@@ -1,0 +1,14 @@
+# Release gate
+- [ ] Blizzard policy rechecked against official source on release date.
+- [ ] Current client build/interface and exact addon TOC verified.
+- [ ] Runtime API evidence in current build attached.
+- [ ] No automatic trade, crafting, movement, simulated input or circumventing restrictions.
+- [ ] Manual AH scan rate/cooldown behavior proven.
+- [ ] No ads, in-addon donation solicitation, paywalls, opaque Lua.
+- [ ] All bundled code/assets/data licenses reviewed.
+- [ ] No required accounts/network/telemetry; privacy disclosures match actual behavior.
+- [ ] Installation, reload, logout, restart and migration manual QA passed.
+- [ ] Safe degraded behavior if prices/recipes/APIs unavailable.
+- [ ] Domain and adapter offline tests passed.
+- [ ] Accessible UI, low-data mode and performance measurements recorded.
+- [ ] Documentation and changelog updated; owner signed off.

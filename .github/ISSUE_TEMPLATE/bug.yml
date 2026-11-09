@@ -1,0 +1,22 @@
+name: Bug report
+description: Reproducible GoldWise bug, no sensitive account data
+title: "[BUG] "
+body:
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps and expected vs actual
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: WoW Forever build / GoldWise version
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence, logs and affected features
+  - type: textarea
+    id: risks
+    attributes:
+      label: Data, privacy, gameplay and compliance impact

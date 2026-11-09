@@ -48,9 +48,10 @@ function ForeverClient.new(readBuild, registration)
     end
 
     function client:loadToc(path, addonName, namespace)
+        local directory = path:match("^(.*/)") or ""
         for line in io.lines(path) do
             if line:match("^[^#%s]") then
-                self:load(line:gsub("\\", "/"), addonName, namespace)
+                self:load(directory .. line:gsub("\\", "/"), addonName, namespace)
             end
         end
     end

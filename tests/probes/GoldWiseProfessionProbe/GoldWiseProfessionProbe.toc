@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: GoldWise Profession Probe
+## Version: 1
+## Notes: Disposable GW-009 open profession check.
+
+ProfessionSnapshot.lua
+Probe.lua

@@ -15,8 +15,9 @@ Last updated November 9, 2026. `READY_FOR_REVIEW` means the work is pushed and r
 | [GW-006](https://github.com/DubluD3/GoldWise/issues/6) | `READY_FOR_REVIEW` | All 26 Lua checks passed locally and in GitHub Actions. [Implementation](https://github.com/DubluD3/GoldWise/commit/a8da2ff064b3e9e969961b938e29d2bf01165533) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42600890124) |
 | [GW-007](https://github.com/DubluD3/GoldWise/issues/7) | `READY_FOR_REVIEW` | Owner confirmed product capture on login and `/reload` on build `70862`. The live probe distinguished two characters, and all 38 offline checks passed in CI. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-007-character-snapshot/docs/research/API_EVIDENCE.md#api-008--gw-007-character-context) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42604760991) |
 | [GW-008](https://github.com/DubluD3/GoldWise/issues/8) | `READY_FOR_REVIEW` | Owner confirmed the installed manual scan matched the probe's complete six-bag result and sample counts on build `70862`. All 48 offline checks passed in CI. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-008-bag-inventory/docs/research/API_EVIDENCE.md#api-003--gw-008-carried-bag-inventory) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42607693130) |
+| [GW-009](https://github.com/DubluD3/GoldWise/issues/9) | `BLOCKED` | Offline profession model and probe passed checks. Compare the probe's skill, cap, and sample learned recipe with the player's open crafting window on `70862`. [Probe procedure](https://github.com/DubluD3/GoldWise/blob/feature/GW-009-profession-snapshot/docs/development/PROFESSION_PROBE.md) |
 
-Next implementation story is [GW-009](https://github.com/DubluD3/GoldWise/issues/9), starting with profession API evidence. The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
+The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
 
 | Capability | Feature | Stories | Delivery |
 |---|---|---|---|

@@ -16,7 +16,7 @@
 | API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product schema | YES for `ADDON_LOADED` and GW-005 initialization and restoration on `70862` | GW-005 live smoke test passed |
 | API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
-| API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
+| API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage | NO | BLOCKED-API-VERIFICATION |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
 | API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product capture | YES for readable player fields and entry callbacks on `70862` | GW-007 live smoke test passed |
@@ -110,6 +110,21 @@ The [disposable probe](../development/INVENTORY_PROBE.md) runs on manual request
 `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The installed GoldWise `0.1.3-dev` manual scan produced the same complete six-bag result and sample stack and carried total of `1`. Bank and alts were reported as unobserved.
 
 Decision: `VERIFIED` for the manual carried-bag read path in the probe and installed addon on `70862`. Aggregation across multiple stacks and partial or unavailable refreshes were exercised offline. Inventory is an in-memory observation with a timestamp, and a failed refresh clears the previous observation.
+
+### API-005 · GW-009 profession context
+
+These signatures and call sites are `CLIENT-EXTRACTED` from Forever build `70658`, accessed November 9, 2026. [Functions](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/functions.txt) · [Structures](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/structures.txt) · [Profession UI source](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_ProfessionsTemplates/Blizzard_Professions.lua)
+
+| Candidate | Signature and probe usage |
+|---|---|
+| `ProfessionsFrame.CraftingPage:IsVisible()` | Frame method `IsVisible() → isVisible: bool`. The probe requires the crafting page to be visible. The UI also checks this in `ProfessionsCraftingPageMixin:Refresh`. |
+| `Professions.InLocalCraftingMode()` | `() → bool`, from shipped Lua. The helper rejects NPC crafting and external linked, guild, or guild-member lists. |
+| `C_TradeSkillUI.GetChildProfessionInfo` and `GetBaseProfessionInfo` | Both take no arguments and return `ProfessionInfo`. Read `professionID`, `professionName`, `skillLevel`, and `maxSkillLevel`. Follow the shipped UI's base fallback when the child ID is zero. The probe uses the reported skill level without applying a modifier. |
+| `C_TradeSkillUI.GetFilteredRecipeIDs` | The shipped Lua calls it with no arguments and iterates the result with `ipairs`. The return shape is inferred from that call site as an array of recipe IDs. The probe leaves the player's filters in place. |
+| `C_TradeSkillUI.IsRecipeInSkillLine` | `(recipeID: number, skillLineID: number) → result: bool`. Check the active skill line before inspecting a recipe. |
+| `C_TradeSkillUI.GetRecipeInfo` | `(recipeSpellID: number, recipeLevel?: luaIndex) → recipeInfo?: TradeSkillRecipeInfo`. Read `recipeID` and `learned`; optional `name` is used for one local sample. A missing row or a mismatched ID supplies no recipe evidence. |
+
+The [disposable probe](../development/PROFESSION_PROBE.md) runs on manual request in the player's open crafting window on build `70862`. It uses the verified `issecretvalue` guard and `GetServerTime`. It opens no frame, changes no filters, and initiates no crafting. It captures only recipes present in the filtered view and explicitly marked learned. A recipe absent from the list remains unknown. Live verification is `NOT RUN` and product capture is `BLOCKED-API-VERIFICATION`.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

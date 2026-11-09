@@ -38,7 +38,7 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-005 in-game product storage | Owner installed GoldWise `0.1.1-dev` on build `70862` on 2026-11-09 | First login printed `created (schema 1)`. Reload, character-selection relog, and full restart each printed `current (schema 1)`. | PASS |
 | GW-006 offline runner | `sh scripts/test.sh` with Lua 5.1.5 | 26 checks passed across four suites. Domain isolation and TOC adapter tests passed. | PASS |
 | GW-007 snapshot model and probe | `sh scripts/test.sh` with Lua 5.1.5 | 33 checks passed across six suites, including two-character scope, restricted values, and the manual check without event delivery | PASS |
-| GW-007 live character context | [Disposable probe](CHARACTER_PROBE.md#gw-007-character-context-verification) | Owner saw no chat output from v1. Awaiting v2 startup or manual result. | BLOCKED |
+| GW-007 live character context | [Disposable probe](CHARACTER_PROBE.md#gw-007-character-context-verification) | Owner confirmed different tags for two characters in v2. Entry path, field availability, and same-character reload still need confirmation. | PARTIAL |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

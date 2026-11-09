@@ -77,7 +77,8 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-021 ledger and probe | `sh scripts/test.sh syntax`, `unit`, `contract`, and `all` with Lua 5.1.5 | Syntax passed for 41 Lua files. All 88 checks passed across 17 suites, including four ledger and four probe cases. | PASS |
 | GW-021 manual balance read | [Compare one local probe result with the purse](MONEY_PROBE.md) on Forever build `70862` | On November 9, 2026 the owner confirmed the copper result matched and `timestamp readable` appeared. Amount omitted. | PASS for the manual probe |
 | GW-021 installed ledger contract | `sh scripts/test.sh syntax` and `sh scripts/test.sh` with Lua 5.1.5 | 43 Lua files parsed. All 92 checks passed across 18 suites. Installed command tests covered manual sampling, categorization, restricted values, clock and scope changes, and preservation of SavedVariables. | PASS |
-| GW-021 installed ledger client test | [Sample and categorize in GoldWise 0.1.6-dev](MONEY_PROBE.md#installed-addon-check) | NOT RUN. The disposable probe verified the underlying read. | PENDING live evidence |
+| GW-021 installed ledger sampling | [Sample in GoldWise 0.1.6-dev](MONEY_PROBE.md#installed-addon-check) | Owner reported that a positive net change matched a quest reward and appeared as `unclassified`. Entry ID omitted. | PASS for the reported change |
+| GW-021 installed manual categorization | [Label and clear an entry in GoldWise 0.1.6-dev](MONEY_PROBE.md#installed-addon-check) | No live result reported. Categorization and clearing passed offline. | PENDING live evidence |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

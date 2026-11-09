@@ -22,6 +22,7 @@
 | API-008 | realm/faction/character context | UNKNOWN live behavior | NO | BLOCKED |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
 | API-010 | AH deposit/cut by auction type | UNKNOWN live behavior | NO | BLOCKED |
+| API-011 | TOC Lua loading and local startup status | CLIENT-EXTRACTED manifest and namespace; OBSERVED-IN-GAME local output after login | NO at addon load | GW-004 smoke test awaiting client QA |
 
 ## GW-001 startup evidence
 
@@ -55,6 +56,12 @@ Offline verification on 2026-11-09 used the exact Lua from the chat command and 
 - Source class and access: `CLIENT-EXTRACTED`, 2026-11-09 09:50 UTC. [AddOnsDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/AddOnsDocumentation.lua) · [SystemDocumentation.lua](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_APIDocumentationGenerated/SystemDocumentation.lua)
 - The export declares synchronous `ADDON_LOADED(addOnName: cstring, containsBindings: bool)`, `PLAYER_LOGIN()`, and `PLAYER_LOGOUT()`. It declares `C_AddOns.GetAddOnMetadata(name: uiAddon, variable: cstring) -> value: cstring` with `SecretArguments = AllowedWhenUntainted`.
 - Observed in game: `NOT RUN`. Decision: `UNVERIFIED`. The build probe does not exercise this row. For GW-004, separately verify actual addon load, event payloads, and any metadata lookup on the recorded build. For GW-005, verify when SavedVariables become available and that they survive reload and restart. Keep each integration disabled until its behavior is confirmed.
+
+### API-011 · GW-004 manifest and startup output
+
+- `CLIENT-EXTRACTED`, accessed 2026-11-09. The Forever `70658` export uses `.toc` file entries to load Lua and passes a private addon table as the second top-level argument. [Manifest](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_ChatFrameBase/Blizzard_ChatFrameBase.toc) · [Lua entry example](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_ChatFrameBase/Shared/ChatFrameUtil.lua#L1)
+- `OBSERVED-IN-GAME` on `70862` after login. The API-001 probe successfully used `GetBuildInfo()` followed by local `print(...)` with display arguments. The bootstrap calls `GetBuildInfo()` once via `pcall` and uses `print(message: string)` once for local status. It does not consume a return value from `print`.
+- GW-004 startup behavior is `UNVERIFIED`. Verify manifest loading, the private table, and message visibility on login and `/reload`. A missing, failing, or mismatched build check leaves the client unverified and all gameplay flags disabled. Events and metadata lookup are outside this test.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

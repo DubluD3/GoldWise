@@ -1,6 +1,6 @@
 # Verification strategy / quality gates
 
-Status: planning, 2026-11-09. No tests have run; no Lua runtime is configured in this repo.
+Status as of 2026-11-09: GW-004 offline smoke test passed with Lua 5.1.5. Run `lua5.1 tests/bootstrap.lua` from the repo root. The repo has no bundled Lua runtime.
 
 ## Offline tests
 - Fast unit tests for pure domain math: copper rounding, item quantities, availability, recipe dependency graph, resource reservations, goal constraints, confidence/abstain.
@@ -22,6 +22,9 @@ Status: planning, 2026-11-09. No tests have run; no Lua runtime is configured in
 | Check | Command or in-game steps | Actual output | Status |
 |---|---|---|---|
 | Lua format/lint | TBD once toolchain chosen | NOT RUN | BLOCKED |
+| GW-004 Lua syntax | `luac -p adapters/Bootstrap.lua tests/bootstrap.lua` with Lua 5.1.5 | Parsed both files | PASS |
+| GW-004 offline bootstrap | `lua tests/bootstrap.lua` with Lua 5.1.5 | 8 cases passed, including missing API, failed call, and a changed build with the same interface | PASS |
+| GW-004 in-game load and reload | Manual procedure in [README](../../README.md#test-the-startup-build) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

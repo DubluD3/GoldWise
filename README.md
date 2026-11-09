@@ -2,7 +2,16 @@
 
 GoldWise is a planned **free, open-source, local-first, read-only economic and profession advisor** for World of Warcraft: Forever.
 
-> **Status: planning / API discovery.** No gameplay or Auction House integration has been validated against the live client yet. Proposed functionality is not implemented.
+> **Status: development smoke test.** This build checks the client build and displays startup status. Gameplay features are disabled while their APIs are being validated.
+
+## Test the startup build
+
+1. Close WoW: Forever. Open the Forever installation folder from Battle.net.
+2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc` and the `adapters` directory into `GoldWise`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
+3. Start Forever, enable GoldWise in the AddOns list, and log in. On build `70862` the expected local message is `GoldWise 0.1.0-dev: loaded on Forever build 70862. Gameplay features disabled.` Run `/reload` and check for the same message once after the reload.
+4. Record the build, whether GoldWise appeared in the AddOns list, the actual message, and any Lua error. If the client reports a different build, record that separately. The expected fallback on a build where the manifest still loads is `GoldWise 0.1.0-dev: client build unverified. Gameplay features disabled.`
+
+Disable GoldWise in the AddOns list or remove its folder to undo the install. The smoke test uses no SavedVariables. From the repo root, run `lua5.1 tests/bootstrap.lua` with Lua 5.1 for the offline checks.
 
 ## Start here
 - [Codex instructions](AGENTS.md)

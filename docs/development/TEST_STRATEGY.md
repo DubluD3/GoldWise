@@ -49,7 +49,7 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-009 installed closed-window fallback | [Close the crafting window and repeat the scan](../../README.md#test-the-startup-build) | Live result not separately reported. The offline product test verified the unavailable message and cleared snapshot. | PENDING live evidence |
 | GW-010 Auction House cache model, probe, and product observer | `sh scripts/test.sh` with Lua 5.1.5 | 70 checks passed across 13 suites. Tests cover readiness, close, failure, expiry, restricted rows, the cap, and character-scoped in-memory capture. | PASS |
 | GW-010 live browse-cache probe | [One native search and local cache read](AUCTION_PROBE.md) | Owner confirmed readiness before and after a native search, a browse update, and `cache=partial` with 154 cache rows and 128 observed rows on `70862`. | PASS for the observed read path |
-| GW-010 installed addon cache observation | [Install and test GoldWise](../../README.md#test-the-startup-build) | NOT RUN | PENDING |
+| GW-010 installed addon cache observation | Owner ran the GoldWise `0.1.5-dev` manual observation on build `70862` on 2026-11-09 | Owner confirmed correct data. The installed addon's cache status, row counts, and sample were not separately reported. | PASS for the reported read |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

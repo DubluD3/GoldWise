@@ -17,7 +17,7 @@
 | API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe and product scan | YES for the manual open-window path on `70862` | GW-009 open-window smoke test passed |
-| API-006 | AH readiness, browse cache, and result events | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe | YES for the reported ready and browse update/cache path on `70862` | Product cache observation awaiting live smoke test |
+| API-006 | AH readiness, browse cache, and result events | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe and product read | YES for the reported ready and browse update/cache path on `70862` | Manual cache observation passed live smoke testing |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
 | API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product capture | YES for readable player fields and entry callbacks on `70862` | GW-007 live smoke test passed |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
@@ -149,7 +149,9 @@ The [disposable probe](../development/AUCTION_PROBE.md) checks readiness, the ob
 
 `OBSERVED-IN-GAME`, owner-reported on 2026-11-09. On build `70862` the probe armed with `ready=yes`. The owner used Blizzard's Search button and saw a browse update. The second manual command reported `ready=yes`, `cache=partial`, 154 cache rows, 128 observed rows, and a sample the owner confirmed was correct. The 128-row limit was reached. The result does not establish the client's full-results flag or a cooldown duration. Item and price details are omitted.
 
-Decision: `VERIFIED` for the observed manual ready/update/cache path on `70862`. The installed addon reuses that path and keeps a single character-scoped, timestamped observation in memory. Installed-addon verification is pending. Closed, failed, expired, and throttled paths passed offline checks.
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. The installed GoldWise `0.1.5-dev` manual observation returned correct data on build `70862`. Cache status, row counts, and sample details were not separately reported for the installed addon.
+
+Decision: `VERIFIED` for the observed manual cache-read path on `70862`. The addon keeps a single character-scoped, timestamped observation in memory. Closed, failed, expired, and throttled paths passed offline checks.
 
 `C_AuctionHouse.SendBrowseQuery(query: AuctionHouseBrowseQuery)` and `C_AuctionHouse.RequestMoreBrowseResults()` are documented candidates. Exact query attribution, addon-originated request behavior, and cooldown duration remain unverified. Addon-originated querying remains `BLOCKED-API-VERIFICATION` and requires the applicable [policy review](../compliance/BLIZZARD_POLICY.md). The official policy and EULA were rechecked November 9, 2026.
 

@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-- 2026-11-09: Added GW-010 manual Auction House browse-cache observation to GoldWise after the live probe reported readable partial results. The installed-addon smoke test is pending and addon-originated queries remain blocked.
+- 2026-11-09: Added GW-010 manual Auction House browse-cache observation. The owner confirmed the installed addon returned correct data on build `70862`. Addon-originated queries remain blocked.
 - 2026-11-09: Added GW-009 manual profession capture. The owner confirmed the installed addon matched the open crafting window on build `70862`.
 - 2026-11-09: Added GW-008 manual carried-bag capture. The owner confirmed the installed addon matched the disposable probe's complete six-bag read and sample counts on build `70862`.
 - 2026-11-09: Added the GW-007 character snapshot model and capture adapter. The owner confirmed GoldWise captured character context on login and `/reload` on build `70862`.

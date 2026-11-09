@@ -4,4 +4,5 @@
 ## Notes: Disposable GW-010 read of the local Auction House browse cache.
 
 AuctionObservation.lua
+AuctionCapture.lua
 Probe.lua

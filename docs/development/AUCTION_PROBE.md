@@ -2,7 +2,7 @@
 
 This disposable addon checks [API-006](../research/API_EVIDENCE.md#api-006--gw-010-auction-house-browse-cache) on Forever build `70862`. It observes browse events and reads the locally cached rows only when you explicitly ask. You initiate one search in Blizzard's Auction House interface. The probe has no SavedVariables, sends no requests, and sends no data elsewhere.
 
-1. Close WoW, extract the probe ZIP into Forever's `Interface/AddOns` folder, and enable **GoldWise Auction Probe**. The manifest belongs at `Interface/AddOns/GoldWiseAuctionProbe/GoldWiseAuctionProbe.toc`. To install from source, copy `tests/probes/GoldWiseAuctionProbe` and put `data/AuctionObservation.lua` beside its manifest.
+1. Close WoW, extract the probe ZIP into Forever's `Interface/AddOns` folder, and enable **GoldWise Auction Probe**. The manifest belongs at `Interface/AddOns/GoldWiseAuctionProbe/GoldWiseAuctionProbe.toc`. To install from source, copy `tests/probes/GoldWiseAuctionProbe` and put copies of `data/AuctionObservation.lua` and `adapters/AuctionCapture.lua` beside its manifest.
 2. Open the Auction House on its **Buy** browse view. Wait for the normal Search button to be ready, then paste this into chat:
 
    ```text
@@ -18,4 +18,4 @@ Report the readiness and cache summary, including `cache=complete` or `cache=par
 
 The event signals a browse update during the observation window. It carries no request ID, so the probe cannot attribute it to a specific query. `cache=complete` describes the client-reported result set and readable rows within the 128-row project limit. Partial data is explicitly labelled. The sample is the browse minimum in copper and the client-reported quantity. No sale, unit-price basis, or recommendation is inferred.
 
-The probe supplies no evidence about addon-originated queries or their cooldown limits. Those need separate API evidence and policy review before product use. GoldWise does not load this probe in its production manifest.
+The owner confirmed a ready state, a browse update, and a correct partial result with 154 cache rows and 128 observed rows on `70862`. The [installed addon](../../README.md#test-the-startup-build) uses the same observer and retains one timestamped result in memory for the active character. It sends zero Auction House queries. Query attribution, addon-originated requests, and cooldown duration need separate evidence and policy review. The installed-addon live test is pending.

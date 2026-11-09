@@ -17,7 +17,7 @@
 | API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product scan | YES for the manual carried-bag scan on `70862` | GW-008 live smoke test passed |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | open crafting profession, skill, cap, and observed learned recipes | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe and product scan | YES for the manual open-window path on `70862` | GW-009 open-window smoke test passed |
-| API-006 | AH readiness, browse cache, and result events | CLIENT-EXTRACTED signatures and UI usage | NO | BLOCKED-API-VERIFICATION |
+| API-006 | AH readiness, browse cache, and result events | CLIENT-EXTRACTED signatures and UI usage; OBSERVED-IN-GAME probe | YES for the reported ready and browse update/cache path on `70862` | Product cache observation awaiting live smoke test |
 | API-007 | money events and balance | UNKNOWN live behavior | NO | BLOCKED |
 | API-008 | realm/faction/character context | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product capture | YES for readable player fields and entry callbacks on `70862` | GW-007 live smoke test passed |
 | API-009 | tooltip and safe UI events | UNKNOWN live behavior | NO | BLOCKED |
@@ -145,9 +145,13 @@ These signatures and UI call sites are `CLIENT-EXTRACTED` from Forever build `70
 | `BrowseResultInfo` and `ItemKey` | Read only `itemKey`, `totalQuantity`, and `minPrice`, with key fields `itemID`, `itemLevel`, `itemSuffix`, and `battlePetSpeciesID`. `minPrice` is `BigUInteger` in the export. The model accepts only safe integer values and labels this a browse minimum in copper without inferring a unit basis or completed sale. |
 | `AUCTION_HOUSE_BROWSE_RESULTS_UPDATED`, `AUCTION_HOUSE_BROWSE_FAILURE`, `AUCTION_HOUSE_CLOSED` | Synchronous events with no payload. Subscribe once per event via the API-002 helper. A failure or close cancels the test. An update has no request ID and may also follow item or commodity activity. |
 
-The [disposable probe](../development/AUCTION_PROBE.md) records only readiness, the observed event, and a bounded local cache sample on build `70862`. It uses the existing secret-value guard and `GetServerTime`. The player makes one native search. The probe makes zero requests, never paginates, and does not store or transmit results. The 128-row project limit describes processing capacity, independent of any Blizzard throttle. A stale, restricted, closed, throttled, or unavailable view produces an explicit fallback. In-game verification is `NOT RUN`.
+The [disposable probe](../development/AUCTION_PROBE.md) checks readiness, the observed event, and a bounded local cache sample on build `70862`. It uses the existing secret-value guard and `GetServerTime`. The player makes one native search. The probe makes zero requests and reads at most 128 rows. The cap is a project limit, independent of any Blizzard throttle.
 
-`C_AuctionHouse.SendBrowseQuery(query: AuctionHouseBrowseQuery)` and `C_AuctionHouse.RequestMoreBrowseResults()` are documented candidates and are outside the probe. Exact query attribution, addon-originated request behavior, and any cooldown limit remain unverified. Product integration and addon-originated querying remain blocked pending evidence and the applicable [policy review](../compliance/BLIZZARD_POLICY.md). The official policy and EULA were rechecked November 9, 2026.
+`OBSERVED-IN-GAME`, owner-reported on 2026-11-09. On build `70862` the probe armed with `ready=yes`. The owner used Blizzard's Search button and saw a browse update. The second manual command reported `ready=yes`, `cache=partial`, 154 cache rows, 128 observed rows, and a sample the owner confirmed was correct. The 128-row limit was reached. The result does not establish the client's full-results flag or a cooldown duration. Item and price details are omitted.
+
+Decision: `VERIFIED` for the observed manual ready/update/cache path on `70862`. The installed addon reuses that path and keeps a single character-scoped, timestamped observation in memory. Installed-addon verification is pending. Closed, failed, expired, and throttled paths passed offline checks.
+
+`C_AuctionHouse.SendBrowseQuery(query: AuctionHouseBrowseQuery)` and `C_AuctionHouse.RequestMoreBrowseResults()` are documented candidates. Exact query attribution, addon-originated request behavior, and cooldown duration remain unverified. Addon-originated querying remains `BLOCKED-API-VERIFICATION` and requires the applicable [policy review](../compliance/BLIZZARD_POLICY.md). The official policy and EULA were rechecked November 9, 2026.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

@@ -21,7 +21,7 @@ Date reviewed: 2026-11-09. **Internal interpretation, not legal advice or Blizza
 |---|---|
 | Display addon version and read local client build metadata | In scope for the GW-004 smoke test. Read once on load and display one local status message. |
 | Read inventory and professions via supported UI APIs | Candidate. Require per-call evidence on the target build and a fallback for missing or restricted data. |
-| Read Auction House results already returned to the visible browse window | In scope for a manual GW-010 discovery probe. Bound reads and keep the data local. |
+| Read Auction House results already returned to the visible browse window | In scope for GW-010 manual cache observation on the verified client build. Use the native search, bound reads, and keep the data local. |
 | Issue addon-originated Auction House queries | Blocked pending verified trigger, readiness, throttling, and result lifecycle, plus owner policy review. |
 | Local historical price analysis | Candidate |
 | Suggest listing price, item strategy, profession path | In scope |

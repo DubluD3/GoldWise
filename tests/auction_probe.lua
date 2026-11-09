@@ -4,12 +4,16 @@ local update = "AUCTION_HOUSE_BROWSE_RESULTS_UPDATED"
 local closed = "AUCTION_HOUSE_CLOSED"
 local failed = "AUCTION_HOUSE_BROWSE_FAILURE"
 
-local function fixture(build, registration)
+local function fixture(build, registration, product)
     local client = ForeverClient.new(ForeverClient.build("1.60.1", build or "70862", 16001), registration)
     local globals = client.globals
     local state = { visible = false, ready = true, now = 1794220000, reads = 0 }
     globals.issecretvalue = function(value) return value == "restricted fixture value" end
     globals.GetServerTime = function() return state.now end
+    globals.UnitGUID = function() return "fixture:one" end
+    globals.GetRealmName = function() return "Fixture Realm" end
+    globals.UnitFactionGroup = function() return "Fixture Faction" end
+    globals.GetCurrentRegion = function() return 3 end
     local function visible() return state.visible end
     globals.AuctionHouseFrame = { IsVisible = visible, BrowseResultsFrame = { IsVisible = visible } }
     globals.C_AuctionHouse = {
@@ -26,10 +30,16 @@ local function fixture(build, registration)
         end,
     }
     local addon = {}
-    client:load("data/AuctionObservation.lua", "GoldWiseAuctionProbe", addon)
-    client:load(probe, "GoldWiseAuctionProbe", addon)
+    if product then
+        client:loadToc("GoldWise.toc", "GoldWise", addon)
+    else
+        client:load("data/AuctionObservation.lua", "GoldWiseAuctionProbe", addon)
+        client:load("adapters/AuctionCapture.lua", "GoldWiseAuctionProbe", addon)
+        client:load(probe, "GoldWiseAuctionProbe", addon)
+    end
     assert(#client.output == 1 and state.reads == 0)
-    return client, state, globals.GoldWiseAuctionProbe_Run
+    local run = product and globals.GoldWiseAuctionObserve or globals.GoldWiseAuctionProbe_Run
+    return client, state, run, addon
 end
 
 local client, state, run = fixture()
@@ -90,3 +100,34 @@ missingState.visible = true
 missingRun()
 assert(missingState.reads == 0 and missing.output[#missing.output]:match("browse event registration unavailable"))
 print("PASS unsupported builds and missing event helper cannot read")
+
+local product, productState, observe, addon = fixture(nil, nil, true)
+productState.visible = true
+observe()
+assert(product.output[#product.output]:match("character snapshot unavailable") and not product:fire(update))
+assert(product:fire("ADDON_LOADED", "GoldWise", false))
+assert(product:fire("PLAYER_ENTERING_WORLD", true, false))
+assert(productState.reads == 0 and addon.auctionObservation == nil)
+observe()
+assert(product:fire(update))
+assert(productState.reads == 0 and addon.auctionObservation == nil)
+observe()
+local observation = assert(addon.auctionObservation)
+assert(observation.characterScope == addon.characterSnapshot.scopeKey)
+assert(observation.observedAt == productState.now and observation.source == "wow-ah-browse-cache")
+assert(observation.status == "partial" and not addon.features.auctionHouse and #observation.rows == 1)
+assert(next(product.globals.GoldWiseDB.lastObservedAt) == nil)
+observe()
+assert(productState.reads == 1 and addon.auctionObservation == observation)
+print("PASS product keeps one manual observation scoped to the active character in memory")
+
+local switched, switchedState, switchedRun, switchedAddon = fixture(nil, nil, true)
+switchedState.visible = true
+assert(switched:fire("PLAYER_ENTERING_WORLD", true, false))
+switchedRun()
+assert(switched:fire(update))
+switchedAddon.characterSnapshot.scopeKey = "different fixture scope"
+switchedRun()
+assert(switchedState.reads == 0 and switchedAddon.auctionObservation == nil)
+assert(switched.output[#switched.output]:match("character scope changed"))
+print("PASS changing the character scope cancels before reading the cache")

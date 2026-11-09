@@ -27,6 +27,9 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 ## Acceptance reporting table
 | Check | Command or in-game steps | Actual output | Status |
 |---|---|---|---|
+| GW-003 source audit | Review [sources and exclusions](../research/DATA_PROVENANCE.md), run `git diff --check`, and resolve repository links and headings | Six repository links verified and whitespace check passed. The audit changed only Markdown. | PASS |
+| GW-003 existing fallback evidence | Run `sh scripts/test.sh` with Lua 5.1.5 from the pinned [GW-011 code revision](https://github.com/DubluD3/GoldWise/commit/3dfb4d78a1747678f35fc80c75de540d95e07643) | 76 checks passed across 14 suites. Covered learned rows, missing profession data, empty versus unavailable browse cache, mismatched build and scope, and stale reads. | PASS |
+| GW-003 new client checks | Documentation-only audit of existing observations | NOT RUN. Prior owner reports on build `70862` are linked in the audit. | N/A |
 | Lua format/lint | TBD once toolchain chosen | NOT RUN | BLOCKED |
 | GW-004 Lua syntax | `luac -p adapters/Bootstrap.lua tests/bootstrap.lua` with Lua 5.1.5 | Parsed both files | PASS |
 | GW-004 offline bootstrap | `lua tests/bootstrap.lua` with Lua 5.1.5 | 8 cases passed, including missing API, failed call, and a changed build with the same interface | PASS |

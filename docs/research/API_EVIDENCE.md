@@ -163,6 +163,10 @@ Decision: `VERIFIED` for the observed manual cache-read path on `70862`. The add
 - `COMMUNITY-REPORTED`, accessed November 9, 2026. A forum participant reported multiple auction-house IDs and overlapping results between rulesets in an external API. This is a research lead about why mode or faction alone may be insufficient. It does not map an in-client browse cache to a house ID. [Community report](https://us.forums.blizzard.com/en/blizzard/t/wow-forever-api-what-works-so-far-plus-a-ts-client/60334/3)
 - Decision: `BLOCKED-API-VERIFICATION` for production retention. Require a supported discriminator tied to the visible browse context and evidence it stays stable within the same market and differs across separate markets. Keep the GW-010 in-memory observation until then. No new client call, external lookup, or SavedVariables write is used for GW-011. The offline history model takes an explicit market scope supplied by its caller.
 
+## GW-003 dataset scope
+
+GW-003 introduces no WoW API calls. For the actual target build and verified local observations, the [source audit](DATA_PROVENANCE.md#local-observations) links the pinned GW-001, GW-009, and GW-010 evidence, including exact call signatures and owner reports. The audit also records excluded web and client-extract sources. Web endpoint reports establish no in-client market identity.
+
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:
 - Purpose / story:

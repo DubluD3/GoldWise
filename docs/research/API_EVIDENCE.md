@@ -14,7 +14,7 @@
 |---|---|---|---|---|
 | API-001 | `GetBuildInfo` / TOC interface | CLIENT-EXTRACTED signature; OBSERVED-IN-GAME first four returns | YES for build metadata on `70862` | Use observed interface `16001` for the GW-004 load test |
 | API-002 | addon lifecycle events and SavedVariables | CLIENT-EXTRACTED signatures; OBSERVED-IN-GAME probe and product schema | YES for `ADDON_LOADED` and GW-005 initialization and restoration on `70862` | GW-005 live smoke test passed |
-| API-003 | `C_Container` bag slots, item info and quantity | CLIENT-EXTRACTED | NO | BLOCKED |
+| API-003 | `C_Container` bag slots, occupancy, and stack quantity | CLIENT-EXTRACTED | NO | BLOCKED-API-VERIFICATION |
 | API-004 | `C_Item` item details/cache behavior | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-005 | profession/skill and known recipe API (`C_TradeSkillUI` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
 | API-006 | AH scan readiness, query and result flow (`C_AuctionHouse` candidate) | CLIENT-EXTRACTED | NO | BLOCKED |
@@ -91,6 +91,19 @@ The [disposable probe](../development/CHARACTER_PROBE.md) is local and read-only
 Decision: `VERIFIED` for readable player context and product capture on the two observed entry paths on build `70862`. The snapshot is scoped to the reported realm context and stays in memory for the session. Same-character scope stability was exercised offline.
 
 One `COMMUNITY-REPORTED` launch diagnostic describes a different value for `GetRealmName` than the second return from `UnitFullName`. Treat the observed realm as client context. Market or realm-wide identity semantics need separate evidence. [Launch diagnostic](https://eu.forums.blizzard.com/en/wow/t/wow-forever-1601-addon-communication-stopped-working-after-launch-invalidchannel-7/640089)
+
+### API-003 · GW-008 carried bag inventory
+
+These declarations are `CLIENT-EXTRACTED` from Forever build `70658`, accessed November 9, 2026. [Functions](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/functions.txt) · [Enums](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/enums.txt) · [Structures](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/index/Forever/structures.txt)
+
+| Candidate | Signature and probe usage |
+|---|---|
+| `C_Container.GetContainerNumSlots` | `(containerIndex: BagIndex) → numSlots: number`. Read once per carried bag. |
+| `C_Container.HasContainerItem` | `(containerIndex: BagIndex, slotIndex: luaIndex) → hasItem: bool`. Distinguish an observed empty slot from unavailable item information. |
+| `C_Container.GetContainerItemInfo` | `(containerIndex: BagIndex, slotIndex: luaIndex) → containerInfo: ContainerItemInfo`, may return nothing. Read only occupied slots. The export lists `itemID: number`, `stackCount: number`, and `itemName: string`. The last is optional for the probe's local sample display. |
+| `Enum.BagIndex` | `Backpack=0`, `Bag_1=1`, `Bag_2=2`, `Bag_3=3`, `Bag_4=4`, `ReagentBag=5`. The probe resolves these by name. Bank containers, keyring, and alts are out of this probe's scope. |
+
+The calls above are candidate read-only UI APIs. The probe runs on manual request on build `70862`, checks results with the verified `issecretvalue` predicate, and uses the verified `GetServerTime` timestamp. The model caps work at 128 slots per bag as a project limit. Missing or restricted values produce partial or unavailable observations. Bank and alt inventory are unobserved. The probe stores and sends no inventory data. No bag-update event, item-cache call, or inventory action is used. Product inventory capture is `BLOCKED-API-VERIFICATION` pending the owner comparison of the [disposable probe](../development/INVENTORY_PROBE.md) with visible bag counts.
 
 ## Evidence record template (copy per symbol)
 - Symbol and exact namespace:

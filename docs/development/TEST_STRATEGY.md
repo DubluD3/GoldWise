@@ -40,6 +40,8 @@ Run `sh scripts/test.sh` to execute every top-level Lua suite in `tests/`. The r
 | GW-007 snapshot model, probe, and product adapter | `sh scripts/test.sh` with Lua 5.1.5 | 38 checks passed across seven suites, including TOC load order, two-character scope, reload stability, and restricted or unavailable inputs | PASS |
 | GW-007 live character context | [Disposable probe](CHARACTER_PROBE.md#gw-007-character-context-verification) | Owner confirmed login, reload, and manual output on `70862`, all fields available, and different tags for two characters. Same-character tag comparison was not reported. | PASS for observed paths |
 | GW-007 in-game product capture | Owner installed GoldWise `0.1.2-dev` on build `70862` on 2026-11-09 | Both login and `/reload` displayed `GoldWise character snapshot ready.` | PASS |
+| GW-008 bag snapshot model and probe | `sh scripts/test.sh` with Lua 5.1.5 | 45 checks across nine suites passed. Fixtures cover carried stack totals, empty slots, unreadable data, and bounded bag reads. | PASS |
+| GW-008 live bag counts | [Disposable probe](INVENTORY_PROBE.md) | NOT RUN | PENDING |
 | Domain unit tests | TBD once harness installed | NOT RUN | BLOCKED |
 | API adapter mock tests | TBD | NOT RUN | BLOCKED |
 | Forever live client QA | Manual owner-run | NOT RUN | BLOCKED |

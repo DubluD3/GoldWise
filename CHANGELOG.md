@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- 2026-11-09: Added the GW-008 offline bag snapshot model and disposable inventory probe. The product adapter awaits live API verification.
 - 2026-11-09: Added the GW-007 character snapshot model and capture adapter. The owner confirmed GoldWise captured character context on login and `/reload` on build `70862`.
 - 2026-11-09: Added the GW-006 Lua 5.1 test runner, shared Forever client fixture, and GitHub Actions smoke workflow.
 - 2026-11-09: Added GW-005 schema v1 and the `GoldWiseDB` adapter. The owner verified initialization and restoration after reload, character-selection relog, and full restart on build `70862`.

@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: GoldWise Inventory Probe
+## Version: 1
+## Notes: Disposable GW-008 carried-bag check.
+
+InventorySnapshot.lua
+Probe.lua

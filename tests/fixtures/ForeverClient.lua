@@ -10,6 +10,7 @@ function ForeverClient.new(readBuild, registration)
     local client = { output = {}, buildReads = 0 }
     local subscriptions = {}
     local globals = {
+        ipairs = ipairs,
         pairs = pairs,
         pcall = pcall,
         string = string,

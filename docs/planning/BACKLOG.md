@@ -14,8 +14,9 @@ Last updated November 9, 2026. `READY_FOR_REVIEW` means the work is pushed and r
 | [GW-005](https://github.com/DubluD3/GoldWise/issues/5) | `READY_FOR_REVIEW` | Owner confirmed schema v1 was created on first login and restored after reload, character-selection relog, and full restart. Migration and rejected data were tested offline. [Verification commit](https://github.com/DubluD3/GoldWise/commit/4796811962458fcb797d73297cdbb321962483d4) |
 | [GW-006](https://github.com/DubluD3/GoldWise/issues/6) | `READY_FOR_REVIEW` | All 26 Lua checks passed locally and in GitHub Actions. [Implementation](https://github.com/DubluD3/GoldWise/commit/a8da2ff064b3e9e969961b938e29d2bf01165533) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42600890124) |
 | [GW-007](https://github.com/DubluD3/GoldWise/issues/7) | `READY_FOR_REVIEW` | Owner confirmed product capture on login and `/reload` on build `70862`. The live probe distinguished two characters, and all 38 offline checks passed in CI. [Live evidence](https://github.com/DubluD3/GoldWise/blob/feature/GW-007-character-snapshot/docs/research/API_EVIDENCE.md#api-008--gw-007-character-context) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42604760991) |
+| [GW-008](https://github.com/DubluD3/GoldWise/issues/8) | `BLOCKED` | Bag snapshot model and disposable probe passed offline checks. Compare the probe sample with the visible bags on build `70862` before connecting live inventory. [Probe procedure](https://github.com/DubluD3/GoldWise/blob/feature/GW-008-bag-inventory/docs/development/INVENTORY_PROBE.md) |
 
-Next implementation story is [GW-008](https://github.com/DubluD3/GoldWise/issues/8), starting with inventory API evidence. The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
+The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
 
 | Capability | Feature | Stories | Delivery |
 |---|---|---|---|

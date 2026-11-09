@@ -4,7 +4,7 @@
 
 ## Context and scope
 - Project: GoldWise, free, open-source, privacy-preserving WoW Forever economic/professions advisor.
-- Status: planning only. NEVER say code is implemented or API behavior verified until tested.
+- Current story status lives in `docs/planning/BACKLOG.md`. Claim implementation and API verification only to the extent shown by actual tests.
 - Primary docs: `docs/product/PRODUCT.md`, `docs/planning/BACKLOG.md`, `docs/research/API_EVIDENCE.md`, `docs/compliance/BLIZZARD_POLICY.md`, `docs/architecture/ARCHITECTURE.md`.
 - Read the complete story before touching files. One focused story/PR. Do not implement future phases speculatively.
 
@@ -38,7 +38,7 @@
 2. Record evidence/unknowns; propose smallest change and rollback.
 3. Implement only accepted scope; add failure-path and normal-path tests.
 4. Run checks from `docs/development/TEST_STRATEGY.md`; disclose missing tooling.
-5. Update appropriate docs, changelog, and evidence register; make acceptance mapping explicit.
+5. Update the backlog before every story handoff using `docs/development/WORKFLOW.md`. Update the relevant docs, changelog, and evidence register, and map the acceptance criteria to their proof.
 6. In PR response provide: scope, facts/evidence, files, tests + output, blocked items, policy impact, data/migration impact, risks and follow-up stories.
 
 ## Stop-the-line triggers

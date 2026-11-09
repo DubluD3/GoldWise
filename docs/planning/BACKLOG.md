@@ -1,6 +1,20 @@
 # Jira-style hierarchy: Capability → Feature → Story
 
-Status key: `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `IN_REVIEW`, `DONE`. All entries below start **PROPOSED**, pending G0. IDs are stable even if GitHub issue numbers differ. Priority P0=blocking MVP, P1=release B, P2=later. GitHub issues are execution records; this file is the taxonomy.
+Statuses are `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `READY_FOR_REVIEW`, `IN_REVIEW`, and `DONE`. Stories without a progress row are `PROPOSED`. IDs are stable even if GitHub issue numbers differ. P0 blocks the MVP, P1 targets release B, and P2 is later. GitHub issues hold story scope and acceptance criteria.
+
+## Current progress
+
+Last updated November 9, 2026. `READY_FOR_REVIEW` means the work is pushed and ready for owner review. Use `IN_REVIEW` when a story PR is open and `DONE` after owner acceptance, required evidence, and merge.
+
+| Story | Status | Evidence and next action |
+|---|---|---|
+| [GW-001](https://github.com/DubluD3/GoldWise/issues/1) | `READY_FOR_REVIEW` | Owner confirmed Forever `1.60.1`, build `70862`, interface `16001`. Review the scoped API evidence and remaining unknowns. [Evidence commit](https://github.com/DubluD3/GoldWise/commit/cc1bdfc27321724077543c8d03dea001edcb3312) |
+| [GW-002](https://github.com/DubluD3/GoldWise/issues/2) | `READY_FOR_REVIEW` | Blizzard sources reviewed and the smoke-test boundaries documented. Owner policy review is pending. [Review commit](https://github.com/DubluD3/GoldWise/commit/81daf60749a8df51ab9e923cbacc1ff2f7d24c04) |
+| [GW-004](https://github.com/DubluD3/GoldWise/issues/4) | `READY_FOR_REVIEW` | Bootstrap passed 8 offline checks. Owner confirmed startup on login and `/reload` on build `70862`. [Verification commit](https://github.com/DubluD3/GoldWise/commit/3cf8c375bd195f32e0a22ef8614a3d0d6d129624) |
+| [GW-005](https://github.com/DubluD3/GoldWise/issues/5) | `READY_FOR_REVIEW` | Owner confirmed schema v1 was created on first login and restored after reload, character-selection relog, and full restart. Migration and rejected data were tested offline. [Verification commit](https://github.com/DubluD3/GoldWise/commit/4796811962458fcb797d73297cdbb321962483d4) |
+| [GW-006](https://github.com/DubluD3/GoldWise/issues/6) | `READY_FOR_REVIEW` | All 26 Lua checks passed locally and in GitHub Actions. [Implementation](https://github.com/DubluD3/GoldWise/commit/a8da2ff064b3e9e969961b938e29d2bf01165533) · [CI run](https://github.com/DubluD3/GoldWise/actions/runs/42600890124) |
+
+Next implementation story is [GW-007](https://github.com/DubluD3/GoldWise/issues/7), starting with character identity API evidence. The [GW-003 dataset audit](https://github.com/DubluD3/GoldWise/issues/3) is also outstanding.
 
 | Capability | Feature | Stories | Delivery |
 |---|---|---|---|
@@ -14,7 +28,7 @@ Status key: `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `IN_REVIEW`, `DONE`. 
 | CAP-08 Quality & Delivery | F-08 testing, UX, release | GW-023, GW-024, GW-025 | G6-G7 |
 
 ## Stories (each entry is an independently testable issue)
-Format: **Story — priority — dependency — acceptance**. Stories must not be self-marked DONE without actual test evidence.
+Each entry lists the story, priority, dependencies, and acceptance criteria.
 
 ### CAP-01 / F-01 — Trust & Compliance
 - **GW-001 — P0 — none:** Build Forever API evidence register and safe in-client discovery probe. Accept: real client version recorded; symbols + signatures cited; unknowns blocked; no transactions.

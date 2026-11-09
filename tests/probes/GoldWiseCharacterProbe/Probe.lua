@@ -1,13 +1,5 @@
 local ok, version, build, _, interface = pcall(GetBuildInfo)
-if not ok or version ~= "1.60.1" or build ~= "70862" or interface ~= 16001 then
-    print("GoldWise character probe: client build unverified")
-    return
-end
-
-if type(issecretvalue) ~= "function" then
-    print("GoldWise character probe: secret-value guard unavailable")
-    return
-end
+local supportedBuild = ok and version == "1.60.1" and build == "70862" and interface == 16001
 
 local function read(api, ...)
     local succeeded, value = pcall(api, ...)
@@ -42,14 +34,13 @@ local function integerStatus(value)
     return "unavailable"
 end
 
-local function report(initialLogin, reloading)
-    local entry
-    if initialLogin then
-        entry = "login"
-    elseif reloading then
-        entry = "reload"
-    else
-        print("GoldWise character probe: unexpected entry event")
+local function report(entry)
+    if not supportedBuild then
+        print("GoldWise character probe: client build unverified")
+        return
+    end
+    if type(issecretvalue) ~= "function" then
+        print("GoldWise character probe: secret-value guard unavailable")
         return
     end
 
@@ -63,8 +54,28 @@ local function report(initialLogin, reloading)
         .. " faction=" .. faction .. " region=" .. region .. " time=" .. timestamp)
 end
 
+function GoldWiseCharacterProbe_Run()
+    report("manual")
+end
+
+print("GoldWise character probe v2 loaded. Manual check: /run GoldWiseCharacterProbe_Run()")
+if not supportedBuild or type(issecretvalue) ~= "function" then
+    report("load")
+    return
+end
+
+local function onEnteringWorld(initialLogin, reloading)
+    if initialLogin then
+        report("login")
+    elseif reloading then
+        report("reload")
+    else
+        print("GoldWise character probe: unexpected entry event")
+    end
+end
+
 local registered = type(EventUtil) == "table"
-    and pcall(EventUtil.RegisterOnceFrameEventAndCallback, "PLAYER_ENTERING_WORLD", report)
+    and pcall(EventUtil.RegisterOnceFrameEventAndCallback, "PLAYER_ENTERING_WORLD", onEnteringWorld)
 if not registered then
     print("GoldWise character probe: entry event registration unavailable")
 end

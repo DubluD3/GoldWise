@@ -22,11 +22,11 @@ end
 
 local function run(client, initial, reload)
     client:load(path, "GoldWiseCharacterProbe")
-    assert(#client.output == 0)
+    assert(#client.output == 1 and client.output[1]:match("v2 loaded"))
     assert(client:fire("PLAYER_ENTERING_WORLD", initial, reload))
     assert(not client:fire("PLAYER_ENTERING_WORLD", initial, reload))
-    assert(#client.output == 1)
-    return client.output[1]
+    assert(#client.output == 2)
+    return client.output[2]
 end
 
 local first = run(clientWithIdentity("fixture:one"), true, false)
@@ -53,6 +53,18 @@ local guarded = clientWithIdentity("fixture:one")
 guarded.globals.issecretvalue = nil
 guarded:load(path, "GoldWiseCharacterProbe")
 assert(not guarded:fire("PLAYER_ENTERING_WORLD", true, false))
-assert(guarded.output[1] == "GoldWise character probe: secret-value guard unavailable")
+assert(guarded.output[2] == "GoldWise character probe: secret-value guard unavailable")
+guarded.globals.GoldWiseCharacterProbe_Run()
+assert(guarded.output[3] == guarded.output[2])
 assert(run(clientWithIdentity("fixture:one"), false, false) == "GoldWise character probe: unexpected entry event")
 print("PASS missing secret guard and unexpected entry fail closed")
+
+local manual = clientWithIdentity("fixture:one")
+manual.globals.EventUtil = nil
+manual:load(path, "GoldWiseCharacterProbe")
+assert(manual.output[2] == "GoldWise character probe: entry event registration unavailable")
+assert(not manual:fire("PLAYER_ENTERING_WORLD", true, false))
+manual.globals.GoldWiseCharacterProbe_Run()
+assert(manual.output[3]:match("entry=manual .* faction=ok region=ok time=ok$"))
+assert(tag == manual.output[3]:match("character=(%x+)"))
+print("PASS manual check works without an entry event")

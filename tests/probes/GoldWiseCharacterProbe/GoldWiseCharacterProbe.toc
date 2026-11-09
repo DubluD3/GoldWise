@@ -1,0 +1,6 @@
+## Interface: 16001
+## Title: GoldWise Character Probe
+## Version: 2
+## Notes: Disposable GW-007 player identity API check.
+
+Probe.lua

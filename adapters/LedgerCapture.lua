@@ -3,6 +3,14 @@ local prefix = "GoldWise ledger: "
 local MAX_SAMPLE_INTERVAL = 300
 local ledger
 
+function addon.ledgerView()
+    local character = addon.characterSnapshot
+    if addon.supportedClient and ledger and character and ledger.characterScope == character.scopeKey
+        and ledger.build == addon.clientBuild then
+        return ledger
+    end
+end
+
 local sampleMessages = {
     baseline = "baseline recorded.",
     unchanged = "balance unchanged.",

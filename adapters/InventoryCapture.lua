@@ -19,6 +19,7 @@ function GoldWiseInventoryScan()
     end
 
     if snapshot.status ~= "unavailable" then
+        snapshot.labels = labelsOrReason
         addon.inventorySnapshot = snapshot
     end
     addon.features.inventory = snapshot.status == "complete"

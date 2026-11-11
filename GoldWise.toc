@@ -18,6 +18,9 @@ data\RecipeCatalog.lua
 adapters\ProfessionScan.lua
 adapters\TrainerCapture.lua
 adapters\TrainerObserve.lua
+data\RecipeMaterials.lua
+adapters\RecipeSchematic.lua
+adapters\RecipePlan.lua
 data\AuctionObservation.lua
 adapters\AuctionCapture.lua
 adapters\AuctionObserve.lua

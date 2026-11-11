@@ -1,8 +1,8 @@
 local Fixture = dofile("tests/fixtures/ForeverClient.lua")
 local manifest = "tests/probes/GoldWiseTrainerProbe/GoldWiseTrainerProbe.toc"
 
-local function fixture(build)
-    local client = Fixture.new(Fixture.build("1.60.1", build or "70862", 16001), "missing")
+local function fixture(build, interface)
+    local client = Fixture.new(Fixture.build("1.60.1", build or "70862", interface or 16001), "missing")
     local globals = client.globals
     local state = {
         trainer = false, crafting = false, localMode = true,
@@ -66,7 +66,7 @@ print("PASS trainer probe reads no services in closed, non-profession, or out-of
 client, globals, state = fixture()
 state.trainer = true
 globals.GoldWiseTrainerProbe_Sample()
-assert(client.output[1]:find("Fixture recipe requires Fixture profession 35", 1, true))
+assert(client.output[2]:find("Fixture recipe requires Fixture profession 35", 1, true))
 assert(last(client):find("spell candidate ready", 1, true) and state.trainerReads == 1)
 state.trainer, state.crafting, state.localMode = false, true, false
 globals.GoldWiseTrainerProbe_Match()
@@ -106,8 +106,22 @@ globals.GoldWiseTrainerProbe_Match()
 assert(last(client):find("could not be verified", 1, true) and state.recipeReads == 1)
 print("PASS expired and mismatched trainer samples cannot establish a recipe identity")
 
-client, globals, state = fixture("70863")
+client, globals, state = fixture("70888")
+state.trainer = true
+globals.GoldWiseTrainerProbe_Sample()
+assert(client.output[1]:find("testing build 70888 (interface 16001)", 1, true))
+assert(last(client):find("spell candidate ready", 1, true) and state.trainerReads == 1)
+state.trainer, state.crafting = false, true
+globals.GoldWiseTrainerProbe_Match()
+assert(last(client):find("matched a recipe", 1, true) and state.recipeReads == 1)
+print("PASS trainer probe reports the 70888 target build and exercises both guarded commands")
+
+client, globals, state = fixture("70889")
 state.trainer = true
 globals.GoldWiseTrainerProbe_Sample()
 assert(last(client):find("client build unverified", 1, true) and state.trainerReads == 0)
-print("PASS trainer probe leaves unverified client builds disabled")
+client, globals, state = fixture("70888", 16002)
+state.trainer = true
+globals.GoldWiseTrainerProbe_Sample()
+assert(last(client):find("client build unverified", 1, true) and state.trainerReads == 0)
+print("PASS trainer probe rejects unexpected builds and interfaces")

@@ -1,5 +1,6 @@
 local prefix = "GoldWise trainer probe: "
 local maxAge = 300
+local probeBuilds = { ["70862"] = true, ["70888"] = true }
 local pending
 
 local function readable(value)
@@ -26,7 +27,7 @@ end
 
 local function supported()
     local ok, version, build, _, interface = pcall(GetBuildInfo)
-    if not ok or version ~= "1.60.1" or build ~= "70862" or interface ~= 16001 then
+    if not ok or version ~= "1.60.1" or not probeBuilds[build] or interface ~= 16001 then
         print(prefix .. "client build unverified.")
         return false
     end
@@ -34,7 +35,7 @@ local function supported()
         print(prefix .. "secret-value guard unavailable.")
         return false
     end
-    return true
+    return build
 end
 
 local function spellCandidate(index)
@@ -53,9 +54,11 @@ end
 
 function GoldWiseTrainerProbe_Sample()
     pending = nil
-    if not supported() then
+    local build = supported()
+    if not build then
         return
     end
+    print(prefix .. "testing build " .. build .. " (interface 16001).")
     local visible = read(function()
         local frame = readable(ClassTrainerFrame)
         return frame and frame:IsVisible()

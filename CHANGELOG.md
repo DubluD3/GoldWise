@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- 2026-11-11: Added bounded reagent plans for learned recipes with fixed output and supported item reagents.
 - 2026-11-11: Added Forever build `70888` as a target for the disposable GW-013 trainer probe. The owner verified one selected trainer requirement and its matching recipe on that build.
 - 2026-11-09: Added a disposable GW-013 probe for a selected trainer service's skill requirement and candidate recipe identity. Live verification is pending.
 - 2026-11-09: Added GW-021 manual balance sampling and categorization in GoldWise `0.1.6-dev`. The owner confirmed the balance probe, an installed unclassified net change, and manual labeling and clearing on build `70862`.

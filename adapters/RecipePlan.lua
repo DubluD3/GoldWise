@@ -19,6 +19,7 @@ function GoldWisePlanRecipe(recipeId, crafts)
     local ok, now = pcall(GetServerTime)
     local checked, secret = pcall(issecretvalue, now)
     if not ok or not checked or secret ~= false or type(now) ~= "number"
+        or now < 1 or now >= 2 ^ 53 or now % 1 ~= 0
         or now < inventory.observedAt or now - inventory.observedAt > MAX_AGE then
         return "Bag counts are stale or unavailable. Scan your bags again."
     end

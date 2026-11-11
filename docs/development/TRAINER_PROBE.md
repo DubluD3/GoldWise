@@ -19,4 +19,4 @@ This disposable addon tests one skill requirement on Forever `1.60.1` builds `70
 
 The probe only reads the selected service and compares one candidate. It does not train, change filters or selection, or store data across reloads. A match supports the specific observed recipe and skill requirement. It leaves complete trainer coverage and other prerequisites unknown. A missing or mismatched ID leaves trainer-to-recipe association unavailable.
 
-Live trainer verification is `NOT RUN` on both builds. Production support for `70888` requires its own live checks.
+On November 11, 2026, the owner reported that the probe on build `70888`, interface `16001`, read a Leatherworking requirement of 95 for Toughened Leather Armor. The second command reported that the selected trainer service matched a recipe in the open profession. This verifies the selected service and its association on `70888`. Trainer verification on `70862` is `NOT RUN`.

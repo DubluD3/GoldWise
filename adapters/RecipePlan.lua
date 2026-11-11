@@ -51,14 +51,15 @@ function GoldWisePlanRecipe(recipeId, crafts)
             end
         end
     end
-    local plan, failure = addon.recipeMaterials.plan(recipe, crafts or 1, inventory.totals, producers)
+    local free = addon.materialReservations.available(addon.reservationsFor(inventory), inventory.totals, recipeId)
+    local plan, failure = addon.recipeMaterials.plan(recipe, crafts or 1, free, producers)
     if not plan then
         return failure
     end
     plan.recipeId = recipeId
     plan.characterScope = scope
     plan.observedAt = now
-    plan.inventoryAt = inventory.observedAt
+    plan.inventory = inventory
     addon.recipePlan = plan
     return "Reagent plan ready."
 end

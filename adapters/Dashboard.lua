@@ -121,18 +121,23 @@ local function state()
             return result
         end
         local _, planFresh = age(plan, time, snapshotAge)
-        local needed = planFresh and plan.inventoryAt == inventory.observedAt and plan.used[id]
+        local needed = planFresh and plan.inventory == inventory and plan.used[id]
         if needed and needed > 0 then
             rows[4] = string.format("Keep %.0f for My Plan · The current reagent plan uses these items.", needed)
         else
             rows[4] = "Plan use unknown · Review the item before selling."
         end
-        if vendor and vendor.id == id and vendor.at == inventory.observedAt then
+        if vendor and vendor.id == id and vendor.inventory == inventory then
             rows[5] = vendor.copper and string.format("Base vendor reference · %.0f copper · Item info", vendor.copper)
                 or "Base vendor reference unavailable."
         end
+        local free = addon.materialReservations.available(addon.reservationsFor(inventory), inventory.totals)
+        local reserved = inventory.totals[id] - (free[id] or 0)
+        if reserved > 0 then
+            rows[#rows + 1] = string.format("%.0f reserved across session plans", reserved)
+        end
         actions[2] = { "Check vendor value", function()
-            vendor = { id = id, at = inventory.observedAt, copper = addon.vendorReference(id) }
+            vendor = { id = id, inventory = inventory, copper = addon.vendorReference(id) }
         end }
     elseif tab == 3 then
         actions[1] = { "Scan profession", function()
@@ -219,7 +224,7 @@ local function state()
         end
         local recency, fresh = age(plan, time, snapshotAge)
         rows[1] = "Reagent plan · " .. recency
-        if not fresh or not inventory or inventory.observedAt ~= plan.inventoryAt then
+        if not fresh or not inventory or inventory ~= plan.inventory then
             rows[2] = "Bag data changed or expired. Recalculate the plan."
             return result
         end
@@ -234,6 +239,25 @@ local function state()
         end
         for _, step in ipairs(plan.crafts) do
             steps[#steps + 1] = string.format("Craft %.0f × %s", step.count, step.name)
+        end
+        local byRecipe = addon.reservationsFor(inventory)
+        if byRecipe[plan.recipeId] then
+            rows[#rows + 1] = "This recipe has a session reservation."
+        end
+        for _, quantity in pairs(plan.used) do
+            if quantity > 0 then
+                actions[1] = { "Reserve carried reagents", function()
+                    local _, current = age(plan, now(), snapshotAge)
+                    if not current or not scoped(plan) then
+                        return "Plan expired. Refresh your bags and recalculate."
+                    end
+                    return addon.reserveRecipePlan(plan)
+                end }
+                break
+            end
+        end
+        if next(byRecipe) then
+            actions[2] = { "Clear reservations", addon.clearReservations }
         end
         result.previous, result.next = showRows(rows, #steps, function(index) return steps[index] end)
     end

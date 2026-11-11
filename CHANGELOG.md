@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- 2026-11-11: Added session reagent reservations for competing recipe plans in `0.2.0-test2`.
 - 2026-11-11: Added the GoldWise native dashboard, session reagent planning, and base vendor references in `0.2.0-test1`. The combined client test is pending.
 - 2026-11-11: Added bounded reagent plans for learned recipes with fixed output and supported item reagents.
 - 2026-11-11: Added Forever build `70888` as a target for the disposable GW-013 trainer probe. The owner verified one selected trainer requirement and its matching recipe on that build.

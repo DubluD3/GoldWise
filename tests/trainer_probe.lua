@@ -1,5 +1,4 @@
 local Fixture = dofile("tests/fixtures/ForeverClient.lua")
-local manifest = "tests/probes/GoldWiseTrainerProbe/GoldWiseTrainerProbe.toc"
 
 local function fixture(build, interface)
     local client = Fixture.new(Fixture.build("1.60.1", build or "70862", interface or 16001), "missing")
@@ -42,7 +41,9 @@ local function fixture(build, interface)
             return { recipeID = id, name = state.recipeName }
         end,
     }
-    client:loadToc(manifest, "GoldWiseTrainerProbe", {})
+    local addon = {}
+    client:load("adapters/TrainerCapture.lua", "GoldWiseTrainerProbe", addon)
+    client:load("tests/probes/GoldWiseTrainerProbe/Probe.lua", "GoldWiseTrainerProbe", addon)
     assert(#client.output == 0 and state.trainerReads == 0 and state.recipeReads == 0)
     return client, globals, state
 end

@@ -3,6 +3,7 @@ local prefix = "GoldWise profession: "
 
 function GoldWiseProfessionScan()
     addon.professionSnapshot = nil
+    addon.recipeCatalog = nil
     addon.features.professions = false
     if not addon.supportedClient then
         print(prefix .. "client build unverified.")
@@ -20,6 +21,7 @@ function GoldWiseProfessionScan()
     end
 
     addon.professionSnapshot = snapshot
+    addon.recipeCatalog = addon.recipeCatalogModel.fromSnapshot(addon.clientBuild, snapshot)
     addon.features.professions = snapshot.recipeStatus == "filtered"
     addon.professionCapture.report(prefix, snapshot)
 end

@@ -1,6 +1,6 @@
 local RecipeCatalog = {}
 local SCHEMA_VERSION = 1
-local VERIFIED_BUILD = "70862"
+local VERIFIED_BUILDS = { ["70862"] = true, ["70888"] = true }
 local MAX_RECIPES = 1024 -- Matches the GW-009 snapshot's collection bound.
 
 local function integer(value, minimum)
@@ -26,7 +26,7 @@ end
 ---@param build string
 ---@param snapshot ProfessionSnapshotInput?
 function RecipeCatalog.fromSnapshot(build, snapshot)
-    if build ~= VERIFIED_BUILD then
+    if not VERIFIED_BUILDS[build] then
         return nil, "unsupported-build"
     end
     if type(snapshot) ~= "table" or snapshot.source ~= "wow-client"
@@ -85,11 +85,11 @@ end
 
 -- Read a catalog produced by fromSnapshot. Time limits are supplied by the consumer.
 ---@param query RecipeCatalogQuery
-function RecipeCatalog.read(catalog, query)
+function RecipeCatalog.read(catalog, query, requirement)
     if type(catalog) ~= "table" or catalog.schemaVersion ~= SCHEMA_VERSION then
         return nil, "unavailable"
     end
-    if type(query) ~= "table" or query.build ~= VERIFIED_BUILD or query.build ~= catalog.build
+    if type(query) ~= "table" or not VERIFIED_BUILDS[query.build] or query.build ~= catalog.build
         or query.characterScope ~= catalog.characterScope or query.professionId ~= catalog.professionId
         or not integer(query.recipeId, 1) then
         return nil, "scope-unavailable"
@@ -106,6 +106,18 @@ function RecipeCatalog.read(catalog, query)
     if row then
         status = "known"
     end
+    local trainer
+    if type(requirement) == "table" and requirement.source == "wow-trainer-service"
+        and requirement.build == query.build and requirement.characterScope == query.characterScope
+        and requirement.professionId == query.professionId and requirement.recipeId == query.recipeId
+        and integer(requirement.requiredSkill, 1) and integer(requirement.observedAt, 1)
+        and requirement.observedAt <= query.now and query.now - requirement.observedAt <= query.maxAge then
+        trainer = {
+            requiredSkill = requirement.requiredSkill,
+            observedAt = requirement.observedAt,
+            source = requirement.source,
+        }
+    end
     return {
         recipe = row and { id = row.id, name = row.name } or nil,
         recipeStatus = status,
@@ -120,8 +132,14 @@ function RecipeCatalog.read(catalog, query)
         source = "wow-client",
         attribution = "Blizzard local crafting view",
         licenseStatus = "redistribution-unverified",
-        trainerStatus = "unavailable",
+        trainerStatus = trainer and "observed" or "unavailable",
+        trainer = trainer,
     }
+end
+
+local _, addon = ...
+if addon then
+    addon.recipeCatalogModel = RecipeCatalog
 end
 
 return RecipeCatalog

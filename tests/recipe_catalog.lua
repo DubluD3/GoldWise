@@ -95,3 +95,17 @@ input.knownRecipes[1025] = { id = 1025 }
 result, reason = Catalog.fromSnapshot("70862", input)
 assert(result == nil and reason == "invalid-recipes")
 print("PASS malformed snapshots and recipe rows are rejected at the collection boundary")
+
+local patched = assert(Catalog.fromSnapshot("70888", snapshot()))
+local request = query({ build = "70888" })
+local requirement = {
+    build = "70888", characterScope = request.characterScope, professionId = request.professionId,
+    recipeId = request.recipeId, observedAt = 105, requiredSkill = 19, source = "wow-trainer-service",
+}
+view = assert(Catalog.read(patched, request, requirement))
+assert(view.trainerStatus == "observed" and view.trainer.requiredSkill == 19)
+requirement.recipeId = 602
+assert(Catalog.read(patched, request, requirement).trainerStatus == "unavailable")
+requirement.recipeId, requirement.observedAt = 601, 99
+assert(Catalog.read(patched, request, requirement).trainerStatus == "unavailable")
+print("PASS trainer requirements are scoped to the matching recipe and freshness interval")

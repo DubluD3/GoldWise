@@ -175,7 +175,9 @@ GW-003 introduces no WoW API calls. For the actual target build and verified loc
 
 ### Selected trainer service probe
 
-Blizzard's version service listed Forever `1.60.1.70888` for US and EU on November 11, 2026, and `1.60.1.70862` for CN and KR. This is `OFFICIAL` distribution metadata. The trainer probe can attempt its manual checks on either exact build when the running client reports interface `16001`. The owner observed interface `16001` on build `70888` in the trainer probe. Production GoldWise's broader runtime evidence applies to `70862`. [Blizzard version service](https://us.version.battle.net/v2/products/wowf/versions)
+Blizzard's version service listed Forever `1.60.1.70888` for US and EU on November 11, 2026, and `1.60.1.70862` for CN and KR. This is `OFFICIAL` distribution metadata. The owner observed interface `16001` on build `70888`. [Blizzard version service](https://us.version.battle.net/v2/products/wowf/versions)
+
+`OBSERVED-IN-GAME`, owner-reported November 11, 2026. The owner reported that all checks in the disposable `0.1.6-qa70888` build passed. The checklist covered startup, storage, character context, bags, professions, manually observed Auction House browse results, and ledger sampling. The test copy used isolated SavedVariables. The report did not itemize individual restart paths. This supports enabling the existing feature adapters on exact build `70888`.
 
 These are `CLIENT-EXTRACTED` candidates from Forever build `70658`, reviewed November 9, 2026. Legacy globals below come from Blizzard's shipped Lua call sites. Their exact declared types are unavailable in the generated index. The probe validates only the fields it uses and falls back to unavailable on any mismatch. [Trainer window definition](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_TrainerUI/Mainline/Blizzard_TrainerUI.xml) · [Trainer read call sites](https://github.com/reckhou/WoWBlzCode/blob/7245053a9f2cab5ea5e1ac5221489329d28b320c/Forever/BlizzardInterfaceCode/Interface/AddOns/Blizzard_TrainerUI/Mainline/Blizzard_TrainerUI.lua)
 
@@ -190,7 +192,7 @@ These are `CLIENT-EXTRACTED` candidates from Forever build `70658`, reviewed Nov
 
 The disposable probe reads one selected service after a player command. A second command compares a spell candidate within five minutes against API-005 in the player's visible local crafting view. It requires matching profession name, recipe ID, recipe name and skill-line membership.
 
-`OBSERVED-IN-GAME`, owner-reported November 11, 2026 on build `70888`, interface `16001`. The trainer read reported Toughened Leather Armor requires Leatherworking 95. The spell candidate matched the recipe in the open profession. This verifies the selected-service path for that row. Other trainer rows, wrapper spell IDs and profession ranks remain unknown. Production trainer integration awaits revalidation of the installed addon on `70888`. [Live trainer result](../development/TRAINER_PROBE.md)
+`OBSERVED-IN-GAME`, owner-reported November 11, 2026 on build `70888`, interface `16001`. The trainer read reported Toughened Leather Armor requires Leatherworking 95. The spell candidate matched the recipe in the open profession. This verifies the selected-service path for that row. Other trainer rows, wrapper spell IDs and profession ranks remain unknown. [Live trainer result](../development/TRAINER_PROBE.md)
 
 ### API-007 · GW-021 character balance
 

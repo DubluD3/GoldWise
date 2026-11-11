@@ -24,7 +24,7 @@ local function last(client)
     return client.output[#client.output]
 end
 
-local client, globals, sample, addon = load("70862")
+local client, globals, sample, addon = load("70888")
 assert(client:fire("ADDON_LOADED", "GoldWise"))
 local saved = globals.GoldWiseDB
 assert(saved.schemaVersion == 1 and next(saved.lastObservedAt) == nil)

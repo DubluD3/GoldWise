@@ -44,12 +44,18 @@ end
 
 local function create(frame)
     local tab = control(frame, "GoldWise", 90, 10, -36, function()
-        if attached.panel:IsShown() then attached.panel:Hide() else attached.panel:Show() end
+        if attached.panel:IsShown() then
+            attached.panel:Hide()
+        else
+            -- Refresh only on a player click, never by polling the game.
+            if not addon.professionCompanion.refresh() then return end
+            attached.panel:Show()
+        end
     end)
     -- Position relative to the native window. Never reparent, move or resize
     -- Blizzard's protected frames. Users may hide this optional companion.
     local panel = CreateFrameWithOptions({ frameType = "Frame", parent = frame, hidden = true })
-    panel:SetSize(244, 176)
+    panel:SetSize(268, 208)
     panel:SetPoint("TOPLEFT", frame, "TOPRIGHT", 8, -38)
     local backing = panel:CreateTexture(nil, "BACKGROUND")
     backing:SetAllPoints(panel)
@@ -62,10 +68,10 @@ local function create(frame)
     details:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -46)
     details:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -12, 65)
     details:SetWordWrap(true)
-    local open = control(panel, "Open GoldWise", 126, 10, -140, function()
+    local open = control(panel, "Open GoldWise", 126, 10, -172, function()
         if type(GoldWiseOpen) == "function" then GoldWiseOpen("profession") end
     end)
-    local close = control(panel, "Hide", 82, 150, -140, function() panel:Hide() end)
+    local close = control(panel, "Hide", 82, 174, -172, function() panel:Hide() end)
     return { frame = frame, tab = tab, panel = panel, details = details, open = open, close = close }
 end
 
@@ -93,9 +99,37 @@ function Companion.show(snapshot)
         attached = created
     end
     lastSnapshot = snapshot
-    local count = type(snapshot.knownRecipes) == "table" and #snapshot.knownRecipes or 0
-    local text = string.format("%s  |  %.0f / %.0f skill\n%.0f learned recipes in the scanned view.\nSnapshot only; rescan after changes.",
-        snapshot.professionName, snapshot.skill, snapshot.cap, count)
+    -- A newly scanned profession remains accessible even if another source
+    -- is unknown; a plan is displayed only when all snapshots agree.
+    return Companion.refresh()
+end
+
+function Companion.refresh()
+    if not attached or not lastSnapshot or not current(lastSnapshot) then
+        if attached then attached.panel:Hide() end
+        return false
+    end
+    if allowedFrame() ~= attached.frame then
+        attached.panel:Hide()
+        return false
+    end
+    if type(GetServerTime) ~= "function" or type(issecretvalue) ~= "function" then
+        attached.panel:Hide()
+        return false
+    end
+    local okTime, time = pcall(GetServerTime)
+    local guardOk, secret = pcall(issecretvalue, time)
+    if not okTime or not guardOk or secret ~= false then
+        attached.panel:Hide()
+        return false
+    end
+    local text = addon.professionCompanionSummary.evaluate(lastSnapshot,
+        addon.inventorySnapshot, addon.recipePlan, addon.characterSnapshot,
+        addon.clientBuild, time)
+    if not text then
+        attached.panel:Hide()
+        return false
+    end
     local ok = pcall(function() attached.details:SetText(text) end)
     return ok
 end

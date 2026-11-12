@@ -50,3 +50,9 @@
 - [ ] **Open GoldWise** must show the existing Professions dashboard; **Hide** must dismiss just the companion. Confirm native profession controls still function and the game produces no protected-action or taint errors, including in combat.
 - [ ] A failed or changed manual scan must dismiss stale companion details. Closing the native panel should hide its child controls. No automatic scan, polling, AH query, crafting or item movement may occur.
 - [ ] If the profession frame or widget API is unavailable/restricted, the addon must gracefully leave the standalone `/goldwise` dashboard usable. Record real build/interface and test status; currently **NOT RUN**.
+
+## GW-028 current plan status in the profession companion — NOT RUN in client
+- [ ] Open the existing native crafting window and manually scan that profession. Open **GoldWise** in its companion. Before planning, it must show **Plan: unavailable** rather than pretending materials are known.
+- [ ] Manually scan complete bags and plan a current fixed-output recipe using the GoldWise dashboard. Reopen the companion via its GoldWise toggle: it should display the currently computed **missing carried units / item count** (or no observed shortages) without a new scan or craft.
+- [ ] Rescan the same profession, refresh bags, switch characters, or let observations expire. The previously displayed plan must no longer appear current. If the frame is restricted/unavailable, retain standalone `/goldwise` fallback.
+- [ ] Check panel positioning at normal and reduced scale, ensure no native control is blocked, and watch for Lua/taint errors. CI covers scoped numeric states but **actual native game test remains NOT RUN**.

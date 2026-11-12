@@ -73,3 +73,8 @@
 - [ ] If a visible and readable AuctionHouseFrame/BrowseResultsFrame exists, confirm **GoldWise Market** appears. Clicking it should show at most three previously observed cache rows (item ID, minimum asking price in copper, reported quantity) with strong disclosures: not sales, fees, profit or per-unit price. Click **Market details** to navigate to the standalone GoldWise Market tab, and **Hide** to dismiss the companion.
 - [ ] Confirm partial results are labeled partial, stale/wrong-character/corrupt data are not presented as current, and missing/restricted native AH UI does not break the existing dashboard.
 - [ ] Test at different UI scales, window positions, client build, in and out of combat. Inspect overlap with Blizzard's Buy/Post UI and protected-action errors. Native attachment is **NOT RUN/UNVERIFIED** until owner reports actual game evidence.
+
+## GW-032 shared companion chrome — in-game verification NOT RUN
+- [ ] Compare profession, inventory and market companions side-by-side at multiple UI scales: gold-toned titles and control labels, dark panel background, consistent control height, readable details, and no clipping.
+- [ ] Verify toggling each panel cannot accidentally click Blizzard's underlying native buttons. Report screenshots, UI scale, layout and protected-action errors if any. These native placement behaviors are **not validated** by the offline widget fixture.
+- [ ] Confirm all three context panels still navigate to the correct standalone GoldWise tab and that missing native frames never crash or hide the dashboard. Verify the candidate ZIP includes `ui/CompanionChrome.lua`.

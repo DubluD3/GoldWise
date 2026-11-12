@@ -27,7 +27,7 @@ unzip -Z -1 "$archive" | grep -Fqx 'GoldWise/QA_CANDIDATE_NOT_FOR_PUBLIC_RELEASE
 unzip -Z -1 "$archive" | grep -Fqx 'GoldWise/QA_INSTALL_AND_TEST.txt'
 unzip -p "$archive" GoldWise/QA_INSTALL_AND_TEST.txt | grep -Fq 'PASS in automated CI does NOT mean PASS in the actual game client.'
 unzip -p "$archive" GoldWise/QA_INSTALL_AND_TEST.txt | grep -Fq 'Only version 1.60.1 build 70862 or 70888'
-unzip -p "$archive" GoldWise/QA_INSTALL_AND_TEST.txt | grep -Fq 'no public release'
+unzip -p "$archive" GoldWise/QA_INSTALL_AND_TEST.txt | grep -Fq 'No public release'
 
 if unzip -Z -1 "$archive" | grep -Eq '(^|/)(tests|scripts|WTF|\.git)/'; then
     echo 'FAIL QA candidate includes non-addon files' >&2

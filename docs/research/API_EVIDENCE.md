@@ -284,3 +284,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 
 ## GW-014 profession-scoped producer cache (2026-11-12)
 `INFERRED/OFFLINE TESTED`: `adapters/RecipePlan.lua` now keys its session producer cache by character scope, current client build, and exact `professionSnapshot` object identity. Profession observations must be current within the 900-second source window before schematic capture. `adapters/Dashboard.lua` declines to render plans from a replaced profession snapshot. The change adds no WoW client API calls; no unseen recipe is claimed learned. **Actual in-game client E2E: NOT RUN**.
+
+## GW-017 action-time reservation revalidation (2026-11-12)
+The reservation action now reads the existing **GetServerTime** source through a pcall/secret-value guard at player click time; this is not a new API. It refuses a superseded current plan, replaced profession observation, changed character/build, replaced/incomplete bags, future/stale evidence or restricted/unreadable time. Pure Lua and fixture contract tests are not evidence of installed-client success. In-game status: **NOT RUN**.

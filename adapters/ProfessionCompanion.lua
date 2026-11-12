@@ -18,32 +18,10 @@ local function allowedFrame()
     return frame
 end
 
-local function label(parent, style, r, g, b)
-    local text = parent:CreateFontString(nil, "OVERLAY", style)
-    text:SetTextColor(r, g, b)
-    text:SetJustifyH("LEFT")
-    text:SetJustifyV("MIDDLE")
-    return text
-end
-
-local function control(parent, caption, width, x, y, onClick)
-    local button = CreateFrameWithOptions({ frameType = "Button", parent = parent })
-    button:SetSize(width, 26)
-    button:SetPoint("TOPLEFT", parent, "TOPLEFT", x, y)
-    local background = button:CreateTexture(nil, "BACKGROUND")
-    background:SetAllPoints(button)
-    background:SetColorTexture(0.22, 0.26, 0.32, 1)
-    local title = label(button, "GameFontNormalSmall", 0.91, 0.77, 0.37)
-    title:SetAllPoints(button)
-    title:SetJustifyH("CENTER")
-    title:SetText(caption)
-    button.label = title
-    button:SetScript("OnClick", onClick)
-    return button
-end
+local chrome = addon.companionChrome
 
 local function create(frame)
-    local tab = control(frame, "GoldWise", 90, 10, -36, function()
+    local tab = chrome.button(frame, "GoldWise", 90, 10, -36, function()
         if attached.panel:IsShown() then
             attached.panel:Hide()
         else
@@ -54,24 +32,19 @@ local function create(frame)
     end)
     -- Position relative to the native window. Never reparent, move or resize
     -- Blizzard's protected frames. Users may hide this optional companion.
-    local panel = CreateFrameWithOptions({ frameType = "Frame", parent = frame, hidden = true })
-    panel:SetSize(288, 288)
-    panel:SetPoint("TOPLEFT", frame, "TOPRIGHT", 8, -38)
-    local backing = panel:CreateTexture(nil, "BACKGROUND")
-    backing:SetAllPoints(panel)
-    backing:SetColorTexture(0.09, 0.12, 0.17, 0.97)
-    local header = label(panel, "GameFontNormal", 0.91, 0.77, 0.37)
+    local panel = chrome.panel(frame, 288, 288, "TOPLEFT", "TOPRIGHT", 8, -38)
+    local header = chrome.label(panel, "GameFontNormal", "gold")
     header:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -12)
     header:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", -8, -36)
     header:SetText("GoldWise | Profession")
-    local details = label(panel, "GameFontNormalSmall", 0.92, 0.92, 0.90)
+    local details = chrome.label(panel, "GameFontNormalSmall", "text")
     details:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -46)
     details:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -12, 65)
     details:SetWordWrap(true)
-    local open = control(panel, "Open GoldWise", 126, 10, -252, function()
+    local open = chrome.button(panel, "Open GoldWise", 126, 10, -252, function()
         if type(GoldWiseOpen) == "function" then GoldWiseOpen("profession") end
     end)
-    local close = control(panel, "Hide", 82, 194, -252, function() panel:Hide() end)
+    local close = chrome.button(panel, "Hide", 82, 194, -252, function() panel:Hide() end)
     return { frame = frame, tab = tab, panel = panel, details = details, open = open, close = close }
 end
 

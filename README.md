@@ -105,3 +105,6 @@ After an explicit manual bag scan, GoldWise may offer a **GoldWise Bags** button
 
 ### GW-031 optional native Auction House observation (draft)
 After the player manually arms a browse observation, performs one native Auction House search and explicitly reads back the cache, GoldWise may add a **GoldWise Market** button to the already visible Auction House window. The player-toggled companion displays up to three validated cache rows and labels all amounts as **minimum asking prices in copper**, not confirmed revenue, profit or per-unit rates. No addon-originated searches, refreshes, purchases or postings. The native panel is optional, not yet tested for placement/taint on a live Forever client; the standalone Market page remains the fallback.
+
+### GW-032 shared presentation foundation (draft)
+Profession, carried-bag and market companions now share a consistent small set of dark/gold-toned button, label and panel primitives. This removes duplicated style definitions without adding automatic UI hooks or modifying protected Blizzard controls. The visual fit and actual frame positions remain unverified in the client and are release-blocking QA items; use the standalone dashboard if a native companion cannot attach.

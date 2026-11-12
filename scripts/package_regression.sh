@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT HUP INT TERM
 mkdir -p "$work/base"
-cp -R GoldWise.toc README.md CHANGELOG.md PRIVACY.md adapters data domain scripts "$work/base/"
+cp -R GoldWise.toc README.md CHANGELOG.md PRIVACY.md adapters data domain ui scripts "$work/base/"
 case_number=0
 fresh_case() {
     case_number=$((case_number + 1))

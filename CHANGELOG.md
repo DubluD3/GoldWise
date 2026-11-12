@@ -1,3 +1,9 @@
+## Unreleased — GW-035 guided recovery and reduced navigation (2026-11-12)
+- The standalone dashboard now explicitly tells the player what manual action to take when carried bags, profession data or an exact reagent plan are missing or stale.
+- My Plan has a **Go to Professions** shortcut when no plan exists, and **Go to Inventory / Go to Professions** shortcuts when its bag evidence changed or expired. These are navigation-only: no implicit reads, crafting, searches or item actions.
+- Stale Auction House browse cache explains the existing one-shot observation reset requirement (`/reload`, then a new native search); the addon does not silently attempt an unauthorized retry.
+- Added UI contract checks for missing-plan recovery and stale-bag instructions. Native contextual attachments still require real-client UI/taint acceptance.
+
 ## Unreleased — GW-034 native companion lifecycle hardening (2026-11-12)
 - Companion panel entry buttons now appear only after all required widget creation and current observation validation succeed. Invalidating a manual profession or inventory scan, or the market observation, also hides the old entry button, not just its panel.
 - Rescanning restores an entry button only with a validated fresh current observation. Replacing a profession native parent hides the orphaned button. Recapturing character context invalidates all three companions.

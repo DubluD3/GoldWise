@@ -128,7 +128,7 @@ click("Exit guide")
 assert(hasText("GoldWise  /  Overview"))
 globals.SlashCmdList.GOLDWISE("guide")
 assert(hasText("Scan & Setup Guide"))
-for _ = 1, 8 do click("Next step") end
+for _ = addon.guidePreferences.step, 8 do click("Next step") end
 assert(hasText("Recipe plans and reservations"))
 click("Finish guide")
 assert(addon.guidePreferences.finished and hasText("GoldWise  /  Overview"))

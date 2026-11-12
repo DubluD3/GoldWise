@@ -87,3 +87,6 @@ The manual RecipePlan adapter attaches the captured fixed-output recipe to its e
 
 ## GW-014 cache/plan evidence boundary (2026-11-12)
 The ephemeral recipe-producer cache is tied to the exact manually scanned profession snapshot identity, character scope and verified game build. Every scan transition clears cached schematics, even if the profession ID and timestamp appear identical. A captured root schema is tagged with the current profession ID and character scope. The dashboard checks the plan's `professionSnapshot` identity against the current scan before rendering; a previous plan is never treated as current after an observed profession transition. No change to SavedVariables schema or public API surface.
+
+## GW-017 reservation action boundary (2026-11-12)
+An active plan has an ephemeral build and exact profession-snapshot identity in addition to its existing bag snapshot and character scope. `reserveRecipePlan` validates all these at action time with freshly sampled server time; rejects before calling `materialReservations.reserve` or mutating session reservations. The same snapshot-bound reservations remain session-only and isolated on bag refresh, with no SavedVariables migration.

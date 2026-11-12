@@ -81,3 +81,6 @@ After a manual fixed-output recipe plan, choose **My Plan → Direct capacity** 
 
 ### Recipe producer cache isolation (GW-014)
 Nested reagent plans use only schematics captured during the **same manual profession scan**, for the same character and client build. Switching professions, rescanning a profession, switching characters, or changing a verified build invalidates the temporary producer cache. The dashboard also stops showing a plan if its creating profession scan is no longer current. Refresh your profession scan, bags and recipe plan after changing context. No background scanning or cross-character crafting is assumed.
+
+### Reservation safety (GW-017)
+A session plan can only reserve carried materials while it is still the **active plan**, the same complete inventory snapshot, the **exact profession scan** that created it, the same character and verified client build, and all observations are fresh (15 minutes). Expired or superseded plans are rejected without changing reservations. Clear or recalculate plans after a scan, relog or client patch. No items are moved or crafted.

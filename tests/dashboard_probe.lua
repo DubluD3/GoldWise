@@ -207,6 +207,7 @@ assert(not hasText("Gold: unknown")) -- cleared prior goal; quick skill action s
 click("Back to plan")
 click("Reserve carried reagents")
 assert(hasText("This recipe has a session reservation."))
+assert(addon.recipePlan.build == addon.clientBuild)
 click("Direct capacity")
 assert(hasText("Up to 1 runs covered by observed direct reagents"))
 click("Back to plan")

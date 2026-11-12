@@ -72,6 +72,7 @@ function GoldWisePlanRecipe(recipeId, crafts)
     end
     recipe.characterScope = scope
     plan.recipeSchematic = recipe
+    plan.build = addon.clientBuild
     plan.professionSnapshot = profession
     plan.professionId = profession.professionId
     plan.recipeId = recipeId

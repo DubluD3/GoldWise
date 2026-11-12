@@ -127,3 +127,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Switch to a different crafting profession (where available), scan and plan. Recipes captured from the previous profession must not be reused as ingredient producers.
 - [ ] Log another character or change client build. Cached sources and previous plan must not carry across contexts. Let a profession scan expire; planning must refuse until it is manually refreshed.
 - [ ] Check that no automatic game actions, background scans or additional client APIs were introduced. Record actual build, screenshot and Lua errors. **Client QA NOT RUN.**
+
+## GW-017 reservation action guard (NOT RUN)
+- [ ] Create a fresh plan and click **Reserve carried reagents**: the action should succeed exactly once while its snapshots are fresh, with no items moved.
+- [ ] Rescan the same profession, then try the old action from any previous context; it must be rejected and leave reservations unchanged. Recompute a fresh plan to reserve again.
+- [ ] Rescan bags, change characters, or wait beyond 15 minutes. Previous plans must not reserve anything. An unavailable server timestamp must refuse the action.
+- [ ] Verify there are no new automatic scans, crafting steps or client API reads beyond a player-triggered timestamp at reservation. Real-client status: **NOT RUN**.

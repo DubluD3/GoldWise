@@ -1,3 +1,8 @@
+## Unreleased - GW-017 reservation context and freshness guard (2026-11-12)
+- Reservation action now rechecks the active plan, exact profession snapshot, scoped character/build, complete bag snapshot and 15-minute freshness at action time—not just when opening the plan.
+- Missing/restricted time and superseded plans fail without modifying any held reagents. Offline contract tests cover transitions and expiration.
+- No new gameplay action or persistent data. Real WoW Forever client QA NOT RUN.
+
 ## Unreleased - GW-014 profession-scoped recipe producer cache (2026-11-12)
 - Manual reagent planner now expires producer recipe evidence when the character, game build or exact profession-scan snapshot changes, including same-profession rescans in the same second.
 - Requires fresh manual profession evidence before reading a recipe; existing bag evidence remains freshness-gated.

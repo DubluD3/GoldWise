@@ -6,6 +6,8 @@ local colors = {
     text = { 243 / 255, 245 / 255, 248 / 255 },
     muted = { 169 / 255, 181 / 255, 199 / 255 },
     gold = { 232 / 255, 193 / 255, 90 / 255 },
+    selected = { 93 / 255, 71 / 255, 37 / 255, 1 },
+    primary = { 64 / 255, 83 / 255, 101 / 255, 1 },
 }
 local pageSize = 6
 local snapshotAge = 900
@@ -724,6 +726,11 @@ local function render()
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
     view.status:SetText(message)
+    -- Selection must be visible; previously every tab used the same color.
+    for index, control in ipairs(view.tabs) do
+        control.background:SetColorTexture(unpack(index == tab and colors.selected or colors.surface))
+        control.label:SetTextColor(unpack(index == tab and colors.gold or colors.text))
+    end
     if content.previous then view.previous:Show() else view.previous:Hide() end
     if content.next then view.next:Show() else view.next:Hide() end
     for index, button in ipairs(view.actions) do
@@ -731,6 +738,9 @@ local function render()
         button.action = action and action[2]
         if action then
             button.label:SetText(action[1])
+            -- Give the first contextual action visual priority without
+            -- introducing unverified button templates or secure actions.
+            button.background:SetColorTexture(unpack(index == 1 and colors.primary or colors.surface))
             button:Show()
         else
             button:Hide()
@@ -742,6 +752,7 @@ local function fill(parent, color)
     local texture = parent:CreateTexture(nil, "BACKGROUND")
     texture:SetAllPoints(parent)
     texture:SetColorTexture(unpack(color))
+    return texture
 end
 
 local function text(parent, template, color, horizontal, vertical)
@@ -757,7 +768,7 @@ local function button(parent, label, width, x, y, action)
     local control = CreateFrameWithOptions({ frameType = "Button", parent = parent })
     control:SetSize(width, 24)
     control:SetPoint("TOPLEFT", parent, "TOPLEFT", x, y)
-    fill(control, colors.surface)
+    control.background = fill(control, colors.surface)
     control.label = text(control, "GameFontNormalSmall", colors.text, "CENTER", "MIDDLE")
     control.label:SetAllPoints(control)
     control.label:SetText(label)
@@ -800,8 +811,9 @@ local function build()
     button(frame, "Close", 56, width - 68, -12, function() frame:Hide() end)
 
     local tabWidth = (width - 48) / #tabs
+    local tabButtons = {}
     for index, label in ipairs(tabs) do
-        button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
+        tabButtons[index] = button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
             guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, testPanel = nil, index, 1, false, false, false, false, false
         end)
     end
@@ -830,7 +842,7 @@ local function build()
         actions[index] = button(frame, "", actionWidth, 16 + column * (actionWidth + 8),
             -(height - 55 + row * 28))
     end
-    return { frame = frame, title = title, body = body, status = status, actions = actions, previous = previous, next = following }
+    return { frame = frame, title = title, body = body, status = status, tabs = tabButtons, actions = actions, previous = previous, next = following }
 end
 
 function GoldWiseOpen(command)

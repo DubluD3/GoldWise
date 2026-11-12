@@ -1,10 +1,10 @@
 # GoldWise UI/UX design system (proposed)
 
-Status: DESIGN GUIDANCE — not a claim that screens or APIs are implemented. Updated 2026-11-09.
+Status: DESIGN GUIDANCE — not a claim that screens or APIs are implemented. Updated 2026-11-12.
 Companion rules in the repository root [AGENTS.md](../../AGENTS.md) are mandatory for Codex.
 
 ## Product feel
-A **clear, restrained economy dashboard native to World of Warcraft**, not a website recreated inside the game. Fantasy identity comes from sparing gold accents, familiar item icons/rarity cues, and subtle frame details. Optimize for fast decisions and long sessions; avoid over-decorated parchment, excessively bright gold, dense tables as the first view, flashy animations and false financial certainty.
+**Warcraft-native GoldWise:** a familiar in-game interface with a framed header, bronze trim, muted stone/leather and parchment-colored inset areas, Blizzard-like tabs and buttons, native-feeling tooltips and item-quality cues. Balance **70% modern Warcraft utility with 30% classic fantasy texture**. This is NOT a banking SaaS dashboard, nor a pixel-for-pixel copy of Blizzard's UI. Prefer supported Blizzard UI assets/templates where explicitly verified; otherwise use original, appropriately licensed artwork. Avoid excessive ornament and dense tables on the first screen.
 
 Hierarchy: **What should I consider doing? → Why? → Evidence / uncertainty → More detail**.
 The addon offers information and never performs trades or crafting.
@@ -12,16 +12,17 @@ The addon offers information and never performs trades or crafting.
 ## Visual tokens (design targets; do not assume every WoW font/UI API supports these values)
 | Role | Hex | Usage |
 |---|---|---|
-| Main background | `#151A22` | main window |
-| Elevated surface | `#252C38` | cards, panels |
-| Subtle border | `#394351` | separation |
-| Primary text | `#F3F1EB` | headings and important data |
-| Secondary text | `#A8B5C5` | descriptive labels |
-| Gold accent | `#E9B956` | brand, selected nav, key highlights |
-| Positive | `#54C79A` | confirmed positive outcomes |
-| Caution | `#E6B85C` | uncertainty, outdated observations |
-| Negative | `#F17678` | costs, loss, critical warnings |
-| Focus | `#91B7F0` | keyboard focus and visible affordances |
+| Main frame stone | `#171613` | outer window and shadowed game frame |
+| Leather surface | `#28251E` | side navigation, inset panels |
+| Parchment inset | `#393226` | information and recipe panels |
+| Bronze border | `#80653B` | framed edges and selected separators |
+| Antique gold | `#D6B46A` | headings, selected tab and emphasis |
+| Primary text | `#EFE4C9` | main legible text |
+| Muted text | `#B2A78F` | subtitles and metadata |
+| Profit | `#83B99A` | verified favorable numbers, also label text |
+| Caution | `#D8AB5F` | uncertainty/stale observations |
+| Risk | `#D98275` | costs/losses and warning, always labeled |
+| Focus | `#A7CCEB` | visible keyboard focus |
 
 ### Color usage
 - Colors are suggestions to be evaluated in the real client for contrast, accessibility, compatibility and legibility; use validated rendering mechanisms.
@@ -29,6 +30,16 @@ The addon offers information and never performs trades or crafting.
 - Preserve player familiarity with WoW item-quality colors, and do not redefine rarity meanings.
 - Positive/negative are for factual net values; a possible margin with uncertain sales is not "confirmed profit".
 - Aim for >=4.5:1 text contrast for normal text and >=3:1 for major graphical controls where feasible; verify, don't assume.
+
+## Warcraft-specific styling rules
+- Use a bounded framed game window with a dark carved/bronze edge, title ornament or emblem, header, footer and familiar close control; preserve compact content.
+- Tabs should resemble WoW's game UI navigation rather than a sidebar copied from a fintech app. Optional sidebar is acceptable on wide screens if game-native styling is preserved.
+- Use fantasy-styled section titles sparingly; main content typography prioritizes legibility and system localization.
+- Item icons, quality colors, reagent counts, profession skill bars and tooltips are primary interaction vocabulary.
+- Buttons need distinct normal, hovered, active, disabled and focused states; bronze-trimmed bevels may be used. Avoid clickable gold text without a control affordance.
+- The data-view may use dark parchment inset backgrounds; do not use textured backgrounds that obscure rows.
+- Never use custom sound effects, Blizzard branding, borrowed textures or proprietary game assets unless their use is documented and verified in the supported client.
+- Keep any game-client UI implementation free of web/HTML dependencies; the browser mockup is a design-only reference.
 
 ## Layout / spacing / typography
 - 8px spacing rhythm with 4px fine adjustments; stable padding: 12–16px per section, 8–12px between related controls. These are target sizes, not engine promises.

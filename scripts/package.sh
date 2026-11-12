@@ -71,7 +71,14 @@ while IFS= read -r original; do
     # Never copy arbitrary bytes through symlinks, including linked addon
     # directory roots. All packaged sources must be repository-owned files.
     test ! -L "$path" || fail "symlink TOC source forbidden: $path"
-    test ! -L "${path%%/*}" || fail "symlink addon source directory forbidden: $path"
+    remaining=$path
+    directory=
+    while [ "$remaining" != "${remaining#*/}" ]; do
+        component=${remaining%%/*}
+        directory=${directory:+$directory/}$component
+        test ! -L "$directory" || fail "symlink addon source directory forbidden: $path"
+        remaining=${remaining#*/}
+    done
     if grep -Fqx "$path" "$work/seen"; then fail "duplicate TOC source: $path"; fi
     printf '%s\n' "$path" >> "$work/seen"
     mkdir -p "$work/GoldWise/$(dirname "$path")"

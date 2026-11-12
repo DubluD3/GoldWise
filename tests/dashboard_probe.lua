@@ -255,6 +255,13 @@ click("My Plan")
 assert(hasText("Choose a learned recipe under Professions"))
 assert(not hasText("Reagent plan ·"))
 print("PASS new manual profession scan invalidates prior plan presentation")
+globals.SlashCmdList.GOLDWISE("guide")
+assert(hasText("Recipe plans and reservations"))
+assert(hasText("State: Pending"))
+assert(hasText("No observation in this session"))
+click("Exit guide")
+print("PASS scan guide never certifies an old plan after a profession rescan")
+
 click("Inventory")
 local held = addon.reservationsFor(addon.inventorySnapshot)
 held[999] = { [999] = 1 }

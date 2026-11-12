@@ -104,9 +104,12 @@ function Companion.show(snapshot)
         if not ok or not created then return false end
         companion = created
     end
-    if companion.toggle then companion.toggle:Show() end
     lastSnapshot = snapshot
-    return Companion.refresh()
+    local ready = Companion.refresh()
+    if companion.toggle then
+        if ready then companion.toggle:Show() else companion.toggle:Hide() end
+    end
+    return ready
 end
 
 addon.inventoryCompanion = Companion

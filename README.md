@@ -4,6 +4,9 @@ GoldWise is a planned **free, open-source, local-first, read-only economic and p
 
 > **Status: integrated test candidate.** Run `/goldwise` to open the native dashboard. The [integrated test guide](docs/development/INTEGRATED_TEST.md) covers the current build and manual feature flows.
 
+## Draft integrated guide (not merged into main)
+The stacked draft PRs #34-#37 contain the five-tab dashboard and session reagent reservations. The follow-on [GW-026 Scan & Setup Guide](docs/development/SCAN_GUIDE_TEST.md) adds a first-run wizard, Guide button and `/goldwise guide`. The guide labels automatic character observation separately from manual bags/professions/AH/ledger, and marks unsupported bank/equipment/alt sources honestly. The new account-local `GoldWiseGuideDB` stores only completion/step/skip preferences; existing `GoldWiseDB` is unchanged. **This is a test candidate, not a released or live-verified implementation.**
+
 ## Test the startup build
 
 1. Close WoW: Forever. Open the Forever installation folder from Battle.net.

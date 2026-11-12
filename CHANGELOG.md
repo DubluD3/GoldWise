@@ -1,3 +1,8 @@
+## Unreleased — GW-028 contextual plan summary (2026-11-12)
+- Extended the opt-in profession-frame sidecar with only the current scoped, fresh reagent-plan shortfall; stale, partial or malformed observations display unavailable instead of misleading counts.
+- Added pure Lua scope/freshness/invalid-count regression suite; no automated crafting, vendor/AH search, or background inventory observation.
+- Native placement/combat safety still requires real Forever testing.
+
 ## Unreleased — GW-028 contextual native profession companion (2026-11-12)
 - Added an optional read-only companion button parented to the already open native profession crafting window after a successful manual scan. Its expandable summary displays scoped scan evidence and links to the existing GoldWise Professions dashboard.
 - Gracefully abstains when the native frame/UI primitives cannot be used. Does not modify Blizzard protected frames, add automated data reads, or initiate gameplay actions. Offline contract tests; installed game-client placement/taint **NOT RUN**.

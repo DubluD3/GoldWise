@@ -27,7 +27,7 @@ print("PASS companion summarizes only current observed plan and reagent shortfal
 
 plan.missing = { [123] = 4 }
 assert(summary(profession, inventory, plan, scope, "70862", 1010):find("Plan: unavailable", 1, true))
-assert(summary(profession, inventory, plan, scope, "70888", 1910):find("Plan: unavailable", 1, true) == nil)
+assert(summary(profession, inventory, plan, scope, "70888", 1910) == nil)
 local laterProfession = {
     characterScope = scope.scopeKey, observedAt = 1020,
     professionName = "Tailoring", skill = 25, cap = 75, knownRecipes = {},

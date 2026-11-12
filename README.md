@@ -4,6 +4,9 @@ GoldWise is a planned **free, open-source, local-first, read-only economic and p
 
 > **Status: integrated test candidate.** Run `/goldwise` to open the native dashboard. The [integrated test guide](docs/development/INTEGRATED_TEST.md) covers the current build and manual feature flows.
 
+## Offline cross-character gear checks (GW-027 foundation)
+`domain/EquipmentAdvisor.lua` is a synthetic-test-only cross-character advisory model. It requires two fresh scoped character snapshots, verified binding/equipment/eligibility fields, and independent observed transfer-route evidence. If all match it says **potential upgrade — review**, never a factual or automatic upgrade. Current Forever equipment, binding and alt transfer APIs are **unverified**, so there is no live UI suggestion, gear capture, automatic mail or automatic equip.
+
 ## Offline item-alternative comparison (GW-018 foundation)
 The `domain/ItemChoices.lua` module runs only on explicitly supplied, validated copper values and recipe inputs. It compares local vendor references against reserved-stock-aware crafting opportunities, and can describe hypothetical Auction House asking prices only when a future adapter supplies verified price basis, market scope, freshness and optionally fees. **No live AH economics or item advice is enabled**: the current client evidence does not support those claims. The 100-cloth scenarios are synthetic tests, not game data.
 

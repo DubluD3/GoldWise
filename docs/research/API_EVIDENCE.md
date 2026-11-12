@@ -253,3 +253,10 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 - `SYNTHETIC`: test item IDs 1001-1004 and fictional cloth/bolt/outfit/bandage conversion ratios, copper prices and auction fees in `tests/item_choices.lua`. They must **never** be loaded or represented as live WoW data.
 - `INFERRED`: vendor delta versus vending inputs is a reference opportunity-cost comparison only; no labor/time/sale-probability model. Material reservations are subtracted before graph planning. Missing inputs, stale or mismatched market data, unknown basis and numeric overflow explicitly abstain.
 - `OBSERVED-IN-GAME`: no new GW-018 observations; all market+value assumptions require owner confirmation on the exact build before UI/adapters or acceptance.
+
+## GW-027 equipment and transfer engine (2026-11-12)
+- `INFERRED`: `domain/EquipmentAdvisor.lua` is pure Lua accepting typed, normalized observations only. Its `OBSERVED-IN-GAME` transfer evidenceClass is a **required input contract**, not a claim the Forever game actually reports a transfer route or permissions.
+- `UNKNOWN / BLOCKED-API-VERIFICATION`: actual Forever 70888 equipped-gear slot reader, item-binding/unique restrictions, class/race/level/proficiency checks, allowed transfer route, snapshots of alt characters across logins, and player role+stat model. No runtime game API introduced or authorized.
+- `SYNTHETIC`: tests use fictional scopes, item ID 101, class/race/level and transfer-record values. No real World of Warcraft equipment or trade restriction is asserted.
+- The model abstains on unobserved or stale snapshots, mismatched source scope/build/realm/faction, non-transferable or unknown bind state and missing restrictions. An eligible fictional scenario yields **potential-upgrade-review**, never a confirmed upgrade. No equip, mail, trade, remote query or sync call.
+- Manual acceptance: actual owner tests after version-specific API probe and verified UI integration; until then `NOT RUN`.

@@ -10,6 +10,7 @@ The owner reported that the `70888` build check passed. The existing feature ada
 
 | Story | Status | Evidence and next action |
 |---|---|---|
+| [GW-027](https://github.com/DubluD3/GoldWise/issues/45) | `BLOCKED` | Pure Lua conservative cross-character gear evaluator added with synthetic fixtures, no live equipment captures/transfer routes. Actual Forever binding, class/race/level/proficiency and alt evidence remain unverified; no live advisory shown. [Issue #45](https://github.com/DubluD3/GoldWise/issues/45) |
 | [GW-025](https://github.com/DubluD3/GoldWise/issues/25) | `BLOCKED` | Reproducible manifest-verified candidate ZIP, privacy disclosure and CI artifact infrastructure; release mode explicitly gated on selected license, signed client QA, compatibility and owner approval. Actual Forever E2E and license decision remain pending. |
 | [GW-018](https://github.com/DubluD3/GoldWise/issues/18) | `BLOCKED` | Pure offline vendor-versus-craft opportunity-cost comparison and guarded AH ask scenario model developed. Live adapter/UI and fee/market scope remain blocked by GW-011, API-010/012; no finished advice feature or client proof. [Issue #18](https://github.com/DubluD3/GoldWise/issues/18) |
 | [GW-026](https://github.com/DubluD3/GoldWise/issues/41) | `IN_REVIEW` | Scan & Setup Guide with explicit source states and isolated preferences is developed on a stack over GW-017. Lua 5.1 syntax/unit/contract CI passed on commit 07a6b528 ([run](https://github.com/DubluD3/GoldWise/actions/runs/43191008974)); full-suite CI expansion and actual Forever dashboard/first-run/reload QA pending. Parent PRs #34-#37 are open drafts; do not merge without their integration. [Manual QA](../development/SCAN_GUIDE_TEST.md) |
@@ -43,6 +44,7 @@ The owner reported that the `70888` build check passed. The existing feature ada
 | CAP-07 Goals & Accounting | F-07 personal plan and ledger | GW-020, GW-021, GW-022 | G5 |
 | CAP-08 Quality & Delivery | F-08 testing, UX, release | GW-023, GW-024, GW-025 | G6-G7 |
 | CAP-09 Guided Setup | F-09 scanner state and onboarding | GW-026 | G4-G6 |
+| CAP-10 Cross-character Intelligence | F-10 conservative gear eligibility | GW-027 | G5 |
 
 ## Stories (each entry is an independently testable issue)
 Each entry lists the story, priority, dependencies, and acceptance criteria.
@@ -90,6 +92,9 @@ Each entry lists the story, priority, dependencies, and acceptance criteria.
 
 ### CAP-09 / F-09 - Guided Setup
 - **GW-026 - P0 - GW-019, GW-017:** First-run and on-demand guide, accurate source state, step-by-step manual capture and local preference persistence. Accept: no false automatic completion; UI and SavedVariables regression tests; owner client QA on verified build. Dependencies are currently stacked draft PRs. [Issue #41](https://github.com/DubluD3/GoldWise/issues/41).
+
+### CAP-10 / F-10 - Cross-character Intelligence
+- **GW-027 - P1 - GW-022 and issue #39:** synthetic pure-domain equipment transfer and suitability checks. Live adapters and QA blocked until verified equipment, binding and character-transfer APIs; no automatic equipment or mail actions.
 
 ## Story discipline
 Each issue: context, user story, evidence links, acceptance checklist, dependencies, tests, risks, DoD. Keep IDs unchanged. No 'AI-only' self-approval of compliance or release gates.

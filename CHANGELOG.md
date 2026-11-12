@@ -1,3 +1,7 @@
+## Unreleased - GW-027 alt equipment advice (offline only, 2026-11-12)
+- Added conservative, pure Lua alternate-character equipment/transfer evidence evaluator and synthetic security/regression fixtures.
+- No live equipment capture, transfer automation or upgrade claim. Client transfer rules and item usability APIs need actual Forever evidence. **BLOCKED from live UI.**
+
 ## Unreleased - GW-025 QA candidate packaging (2026-11-12)
 - Added explicit local privacy disclosure, verified TOC-layout candidate ZIP creation, release-gate enforcement and CI candidate artifact output.
 - Public release remains **BLOCKED** by missing owner license choice, missing target-build E2E approval and unreconciled earlier draft PRs.

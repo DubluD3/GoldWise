@@ -21,6 +21,7 @@ end
 local chrome = addon.companionChrome
 
 local function create(frame)
+    if not chrome.placement(frame, 288, 288, "right") then return end
     local tab = chrome.button(frame, "GoldWise", 90, 10, -36, function()
         if attached.panel:IsShown() then
             attached.panel:Hide()
@@ -32,7 +33,8 @@ local function create(frame)
     end)
     -- Position relative to the native window. Never reparent, move or resize
     -- Blizzard's protected frames. Users may hide this optional companion.
-    local panel = chrome.panel(frame, 288, 288, "TOPLEFT", "TOPRIGHT", 8, -38)
+    local panel = chrome.panel(frame, 288, 288, "right")
+    if not panel then return end
     local header = chrome.label(panel, "GameFontNormal", "gold")
     header:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -12)
     header:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", -8, -36)
@@ -68,7 +70,7 @@ function Companion.show(snapshot)
     if attached and attached.frame ~= frame then attached = nil end
     if not attached then
         local ok, created = pcall(create, frame)
-        if not ok then return false end
+        if not ok or not created then return false end
         attached = created
     end
     lastSnapshot = snapshot
@@ -80,6 +82,10 @@ end
 function Companion.refresh()
     if not attached or not lastSnapshot or not current(lastSnapshot) then
         if attached then attached.panel:Hide() end
+        return false
+    end
+    if not chrome.position(attached.panel, attached.frame, 288, 288, "right") then
+        attached.panel:Hide()
         return false
     end
     if allowedFrame() ~= attached.frame then

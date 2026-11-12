@@ -63,7 +63,7 @@ assert(panel.point[1] == "TOPLEFT")
 native.left, native.right = 800, 1220
 assert(chrome.position(panel, native, 280, 200, "right"))
 assert(panel.point[1] == "TOPRIGHT" and panel.point[3] == "TOPLEFT")
-native.left, native.right = 490, 790
+native.left, native.right = 360, 550
 g.UIParent:SetSize(900, 720)
 assert(not chrome.placement(native, 460, 200, "right"))
 assert(not chrome.position(panel, native, 460, 200, "right"))

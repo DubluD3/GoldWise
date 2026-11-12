@@ -56,3 +56,8 @@
 - [ ] Manually scan complete bags and plan a current fixed-output recipe using the GoldWise dashboard. Reopen the companion via its GoldWise toggle: it should display the currently computed **missing carried units / item count** (or no observed shortages) without a new scan or craft.
 - [ ] Rescan the same profession, refresh bags, switch characters, or let observations expire. The previously displayed plan must no longer appear current. If the frame is restricted/unavailable, retain standalone `/goldwise` fallback.
 - [ ] Check panel positioning at normal and reduced scale, ensure no native control is blocked, and watch for Lua/taint errors. CI covers scoped numeric states but **actual native game test remains NOT RUN**.
+
+## GW-029 itemized recipe panel — real-client QA NOT RUN
+- [ ] Scan current bags and crafting profession; choose a learned recipe in GoldWise, set craft count, and explicitly plan its reagents. Open the attached profession companion and confirm it shows the **same recipe name, planned craft count and no more than two missing carried reagent item IDs/quantities**. If more than two different items are missing, the panel must show an additional-item count.
+- [ ] Verify a different recipe, changed bag scan, changed profession scan, expiration, and character switch do not present the old plan as current. The sidecar must not infer item names, bank or alt inventory, or claim that crafting is executable.
+- [ ] Check the 288x288 adjacent panel on the actual Forever client at multiple window placements and UI scales, including when the profession window is near the right screen edge. It must not cover native buttons, clip or interfere with protected controls. **NOT RUN**; record screenshots and any taint or Lua errors before approval.

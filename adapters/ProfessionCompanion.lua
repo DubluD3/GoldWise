@@ -55,7 +55,7 @@ local function create(frame)
     -- Position relative to the native window. Never reparent, move or resize
     -- Blizzard's protected frames. Users may hide this optional companion.
     local panel = CreateFrameWithOptions({ frameType = "Frame", parent = frame, hidden = true })
-    panel:SetSize(268, 208)
+    panel:SetSize(288, 288)
     panel:SetPoint("TOPLEFT", frame, "TOPRIGHT", 8, -38)
     local backing = panel:CreateTexture(nil, "BACKGROUND")
     backing:SetAllPoints(panel)
@@ -68,10 +68,10 @@ local function create(frame)
     details:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -46)
     details:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -12, 65)
     details:SetWordWrap(true)
-    local open = control(panel, "Open GoldWise", 126, 10, -172, function()
+    local open = control(panel, "Open GoldWise", 126, 10, -252, function()
         if type(GoldWiseOpen) == "function" then GoldWiseOpen("profession") end
     end)
-    local close = control(panel, "Hide", 82, 174, -172, function() panel:Hide() end)
+    local close = control(panel, "Hide", 82, 194, -252, function() panel:Hide() end)
     return { frame = frame, tab = tab, panel = panel, details = details, open = open, close = close }
 end
 

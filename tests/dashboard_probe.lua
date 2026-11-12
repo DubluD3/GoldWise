@@ -213,6 +213,7 @@ assert(hasText("minimum 80 copper") and hasText("Sale proceeds and fees unavaila
 click("Overview")
 click("Sample balance")
 click("Goals")
+click("Gold +1g")
 assert(hasText("Gold: 500 / 10500 copper"))
 clock = clock + 901
 globals.GoldWiseOpen()

@@ -51,8 +51,10 @@ function Review.evaluate(input)
         else
             planStatus = "observed"
             for id, count in pairs(plan.used) do
-                if not integer(id, 1, EXACT) or not integer(count, 0) then
-                    return { status = "unknown", reason = "Reagent plan invalid." }
+                if not integer(id, 1, EXACT) or not integer(count, 0)
+                    or (count > 0 and not integer(bag.totals[id], 0))
+                    or (integer(bag.totals[id], 0) and count > bag.totals[id]) then
+                    return { status = "unknown", reason = "Reagent plan invalid or exceeds observed carried stock." }
                 end
             end
         end

@@ -10,6 +10,7 @@ The owner reported that the `70888` build check passed. The existing feature ada
 
 | Story | Status | Evidence and next action |
 |---|---|---|
+| [GW-024](https://github.com/DubluD3/GoldWise/issues/24) | `BLOCKED` | Owner E2E test matrix E01-E20, installation/rollback, CI links and handoff documented. Actual installed Forever testing is `NOT RUN` and the release cannot proceed. [Test matrix](../development/OWNER_E2E_QA.md) |
 | [GW-027](https://github.com/DubluD3/GoldWise/issues/45) | `BLOCKED` | Pure Lua conservative cross-character gear evaluator added with synthetic fixtures, no live equipment captures/transfer routes. Actual Forever binding, class/race/level/proficiency and alt evidence remain unverified; no live advisory shown. [Issue #45](https://github.com/DubluD3/GoldWise/issues/45) |
 | [GW-025](https://github.com/DubluD3/GoldWise/issues/25) | `BLOCKED` | Reproducible manifest-verified candidate ZIP, privacy disclosure and CI artifact infrastructure; release mode explicitly gated on selected license, signed client QA, compatibility and owner approval. Actual Forever E2E and license decision remain pending. |
 | [GW-018](https://github.com/DubluD3/GoldWise/issues/18) | `BLOCKED` | Pure offline vendor-versus-craft opportunity-cost comparison and guarded AH ask scenario model developed. Live adapter/UI and fee/market scope remain blocked by GW-011, API-010/012; no finished advice feature or client proof. [Issue #18](https://github.com/DubluD3/GoldWise/issues/18) |

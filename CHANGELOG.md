@@ -1,3 +1,7 @@
+## Unreleased - GW-024 owner E2E QA handoff (2026-11-12)
+- Added comprehensive manual Forever E01-E20 matrix, reproducible install/rollback, actual client reporting form and an agent checkpoint.
+- Client QA and owner release approval **NOT RUN/PENDING**; no release gate has been waived.
+
 ## Unreleased - GW-027 alt equipment advice (offline only, 2026-11-12)
 - Added conservative, pure Lua alternate-character equipment/transfer evidence evaluator and synthetic security/regression fixtures.
 - No live equipment capture, transfer automation or upgrade claim. Client transfer rules and item usability APIs need actual Forever evidence. **BLOCKED from live UI.**

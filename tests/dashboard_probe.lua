@@ -26,7 +26,7 @@ local function widget(kind, hidden)
     return object
 end
 
-globals.math, globals.unpack, globals.next = math, unpack, next
+globals.math, globals.unpack, globals.next, globals.tonumber = math, unpack, next, tonumber
 globals.SlashCmdList = {}
 globals.UIParent = widget("UIParent")
 globals.GetScreenWidth = function() return 1280 end

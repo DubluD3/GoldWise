@@ -22,6 +22,7 @@ local goalPanel = false
 local materialsPanel = false
 local professionReviewPanel = false
 local capacityPanel = false
+local testPanel = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -458,6 +459,47 @@ local function materialsPage(time, inventory, plan)
     return result
 end
 
+-- A short, visible route through the first player-controlled validation steps.
+-- Status only reflects same-character, fresh session observations.
+local function testingPage(time, inventory, profession, ledger, plan)
+    local result = { rows = {
+        "QUICK TEST | GoldWise is a QA candidate, not a release.",
+        "Follow the steps below. Actions only observe or navigate; nothing is crafted, bought or moved.",
+    }, actions = {} }
+    local rows, actions = result.rows, result.actions
+    local _, bagsFresh = age(inventory, time, snapshotAge)
+    local _, professionFresh = age(profession, time, snapshotAge)
+    local _, planFresh = age(plan, time, snapshotAge)
+    local readyBags = inventory and inventory.status == "complete" and bagsFresh
+    local readyProfession = profession and professionFresh
+    local readyPlan = plan and planFresh and readyBags
+        and plan.inventory == inventory and plan.professionSnapshot == profession
+        and plan.build == addon.clientBuild
+    local moneyFresh = ledger and ledger.latest
+        and ledger.characterScope == (addon.characterSnapshot and addon.characterSnapshot.scopeKey)
+        and ledger.build == addon.clientBuild
+        and age(ledger.latest, time, snapshotAge) ~= "Time unavailable"
+    if moneyFresh then
+        local _, fresh = age(ledger.latest, time, snapshotAge)
+        moneyFresh = fresh
+    end
+    rows[#rows + 1] = "1. Bags: " .. (readyBags and "observed (complete)" or "NEEDS SCAN - open bags, click Scan bags")
+    rows[#rows + 1] = "2. Professions: " .. (readyProfession and "observed (filtered view)"
+        or "NEEDS SCAN - open a crafting window, click Scan profession")
+    rows[#rows + 1] = "3. Balance: " .. (moneyFresh and "manually sampled" or "NEEDS SAMPLE - click Sample balance")
+    rows[#rows + 1] = "4. Reagent plan: " .. (readyPlan and "available in My Plan"
+        or "PENDING - choose a learned recipe in Professions and Plan reagents")
+    rows[#rows + 1] = "5. Market: OPTIONAL - inspect only after a native Auction House search."
+    rows[#rows + 1] = "To report a failure: note the client build, action and Lua error (remove private identifiers)."
+    actions[1] = { "Scan bags", GoldWiseInventoryScan }
+    actions[2] = { "Scan profession", GoldWiseProfessionScan }
+    actions[3] = { "Sample balance", GoldWiseLedgerSample }
+    actions[4] = { "Choose recipe", function() testPanel, tab, page = false, 3, 1 end }
+    actions[5] = { "My Plan", function() testPanel, tab, page = false, 5, 1 end }
+    actions[6] = { "Back to Overview", function() testPanel, tab, page = false, 1, 1 end }
+    return result
+end
+
 local function state()
     if guideStep then return guidePage() end
     local result = { rows = {}, actions = {} }
@@ -478,6 +520,7 @@ local function state()
     end
 
     if tab == 1 then
+        if testPanel then return testingPage(time, inventory, profession, ledger, plan) end
         rows[1] = inventory and ("Bags · " .. inventory.status .. " · " .. age(inventory, time, snapshotAge)) or "Bags · Scan to see carried items"
         rows[2] = profession and (profession.professionName .. " · " .. profession.skill .. " / " .. profession.cap .. " · " .. age(profession, time, snapshotAge))
             or "Professions · Open a crafting window and scan"
@@ -492,6 +535,7 @@ local function state()
         actions[1] = { "Sample balance", GoldWiseLedgerSample }
         actions[4] = { "Update my data", showGuide }
         actions[5] = { "Goals", function() tab, page, goalPanel = 5, 1, true end }
+        actions[6] = { "Quick test", function() testPanel = true end }
     elseif tab == 2 then
         if materialsPanel then return materialsPage(time, inventory, plan) end
         actions[3] = { "Review materials", function() materialsPanel, page = true, 1 end }
@@ -675,7 +719,7 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or capacityPanel and "Direct Capacity" or tabs[tab]))
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or capacityPanel and "Direct Capacity" or testPanel and "Quick Test" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
@@ -758,7 +802,7 @@ local function build()
     local tabWidth = (width - 48) / #tabs
     for index, label in ipairs(tabs) do
         button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel = nil, index, 1, false, false, false, false
+            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, testPanel = nil, index, 1, false, false, false, false, false
         end)
     end
 
@@ -793,7 +837,7 @@ function GoldWiseOpen(command)
     local isGoalCommand = type(command) == "string"
         and (command == "goal" or command:match("^%s*goal%s+") ~= nil)
     if isGoalCommand then
-        guideStep, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, tab, page = nil, true, false, false, false, 5, 1
+        guideStep, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, testPanel, tab, page = nil, true, false, false, false, false, 5, 1
         local request, reason = addon.goalCommands.parse(command)
         feedback = request and applyCustomGoal(request)
             or ("Invalid goal command (" .. (reason or "unknown") .. "). Use /goldwise goal help.")

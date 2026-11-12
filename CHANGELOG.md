@@ -1,3 +1,8 @@
+## Unreleased - GW-014 direct reagent craft capacity (2026-11-12)
+- In My Plan, **Direct capacity** displays how many fixed-output recipe runs the current carried bags directly cover, excluding other recipe reservations but not double-subtracting the selected recipe's own reservation.
+- Repeated identical reagents are aggregated. Stale/partial/wrong-character stock or malformed reservations fail closed.
+- No claim that crafting is executable or that any craft yields profession skill. Nested crafting, AH prices, inventory automation and bank/alt data remain out of scope; real-client UI QA NOT RUN.
+
 ## Unreleased - GW-020 profession review against scoped goals (2026-11-12)
 - My Plan → Review progression shows observed skill/cap, count and completeness label of learned recipes in the filtered crafting view, optional matching skill goal gap and fresh same-profession recipe material gaps.
 - Explicitly refuses skill-up forecasts or treating crafts as guaranteed skill increases; stale/cross-character observations remain unknown.

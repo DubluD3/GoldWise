@@ -21,6 +21,7 @@ local activeGoal
 local goalPanel = false
 local materialsPanel = false
 local professionReviewPanel = false
+local capacityPanel = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -382,6 +383,36 @@ local function professionReviewPage(time, profession, inventory, plan)
     return result
 end
 
+local function capacityPage(time, inventory, plan)
+    local result = { rows = {
+        "Direct-reagent capacity ONLY. Not a guaranteed craft or skill-up estimate.",
+    }, actions = {} }
+    local rows, actions = result.rows, result.actions
+    local character = addon.characterSnapshot
+    local status = addon.craftCapacity.evaluate({
+        scope = character and character.scopeKey,
+        now = time, maxAge = snapshotAge,
+        recipe = plan and plan.recipeSchematic, inventory = inventory,
+        reservations = inventory and addon.reservationsFor(inventory) or {},
+    })
+    if status.status ~= "direct-reagent-coverage" then
+        rows[#rows + 1] = status.reason
+        rows[#rows + 1] = "Re-scan complete bags and plan a fixed-output recipe manually."
+    else
+        rows[#rows + 1] = string.format("Up to %.0f runs covered by observed direct reagents.", status.maxDirectCrafts)
+        rows[#rows + 1] = "Nested crafting, costs, skill-up odds, and execution requirements are unverified."
+        result.previous, result.next = showRows(rows, #status.rows, function(index)
+            local item = status.rows[index]
+            return string.format("%s: %.0f free of %.0f needed per run (covers %.0f)",
+                name(item.itemId), item.available, item.perCraft, item.craftCount)
+        end)
+    end
+    actions[1] = { "Back to plan", function() capacityPanel, page = false, 1 end }
+    actions[2] = { "Scan bags", function() GoldWiseInventoryScan(); page = 1 end }
+    actions[3] = { "Professions", function() capacityPanel, tab, page = false, 3, 1 end }
+    return result
+end
+
 local function materialsPage(time, inventory, plan)
     local result = { rows = {
         "Carried materials review: manual decisions only. Not a sell recommendation.",
@@ -573,8 +604,10 @@ local function state()
     elseif tab == 5 then
         if goalPanel then return goalPage(time, ledger, profession) end
         if professionReviewPanel then return professionReviewPage(time, profession, inventory, plan) end
+        if capacityPanel then return capacityPage(time, inventory, plan) end
         actions[4] = { "Review progression", function() professionReviewPanel = true end }
         actions[3] = { "Goals", function() goalPanel = true end }
+        actions[5] = { "Direct capacity", function() capacityPanel, page = true, 1 end }
         if not plan then
             rows[1] = "Choose a learned recipe under Professions and plan its reagents."
             return result
@@ -623,7 +656,7 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or tabs[tab]))
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or capacityPanel and "Direct Capacity" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
@@ -706,7 +739,7 @@ local function build()
     local tabWidth = (width - 48) / #tabs
     for index, label in ipairs(tabs) do
         button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel = nil, index, 1, false, false, false
+            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel = nil, index, 1, false, false, false, false
         end)
     end
 
@@ -741,7 +774,7 @@ function GoldWiseOpen(command)
     local isGoalCommand = type(command) == "string"
         and (command == "goal" or command:match("^%s*goal%s+") ~= nil)
     if isGoalCommand then
-        guideStep, goalPanel, materialsPanel, professionReviewPanel, tab, page = nil, true, false, false, 5, 1
+        guideStep, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, tab, page = nil, true, false, false, false, 5, 1
         local request, reason = addon.goalCommands.parse(command)
         feedback = request and applyCustomGoal(request)
             or ("Invalid goal command (" .. (reason or "unknown") .. "). Use /goldwise goal help.")

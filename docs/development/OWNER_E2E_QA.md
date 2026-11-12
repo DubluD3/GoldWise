@@ -114,3 +114,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Confirm exact wording does not promise one skill point per craft, a full recipe catalog or any skill-up probability.
 - [ ] Switch profession or rescan bags; the previous plan must not be attributed to the new profession. Expire the scan; unknown values must not be presented as current.
 - [ ] Confirm no automatic crafting, AH queries or extra API reads when opening review; capture client build, scale, errors, and screenshots only if safe. **Real Forever in-game status: NOT RUN.**
+
+## GW-014 Direct Capacity addendum (NOT RUN)
+- [ ] Manually scan complete bags, open and scan a crafting profession, choose a fixed-output learned recipe, and select **Plan reagents**. Choose **Direct capacity** in My Plan. Compare direct reagent counts to your bag totals.
+- [ ] Reserve the current plan's carried ingredients. Direct capacity must not subtract the same reservation twice; reservations held for a different recipe must reduce available counts.
+- [ ] A recipe with missing direct materials may show 0 covered runs even if nested crafting could theoretically produce them; it must *not* claim guaranteed craftability or future skill gain.
+- [ ] Refresh bags or switch characters/expire snapshot. Stale, partial, unknown, or cross-character figures should not remain trusted. Confirm no automatic crafting, Auction House action, extra game reads or persistent state. Record real client build and UI errors. **NOT RUN**.

@@ -1,3 +1,8 @@
+## Unreleased — GW-032 shared native companion presentation (2026-11-12)
+- Refactored optional profession, carried-bag and Auction House companions onto one conservative, shared UI chrome implementation for label colors, panel backgrounds and passive buttons. No new game-data calls or actions; standalone dashboards remain fallbacks.
+- Added a dedicated offline UI-style contract probe and updated isolated packaging regression fixtures to include the UI directory.
+- Real Forever native frame positions, clipping, combat taint, and appearance are not yet verified. This is not a claim of Blizzard's official visual design integration.
+
 ## Unreleased — GW-031 optional native Auction House observation companion (2026-11-12)
 - Added a player-toggled, read-only GoldWise market panel attached to a visible native Auction House browse frame **only after** the existing two-step player-initiated browse-cache observation succeeds.
 - Displays up to three bounded observed rows with item ID, minimum asking price in copper, reported quantity and explicit uncertainty about fees, per-unit basis, actual sales and market identity.

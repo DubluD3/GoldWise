@@ -42,8 +42,8 @@ local function control(parent, caption, width, x, y, onClick)
 end
 
 local function create(frame)
-    local tab = control(frame, "GoldWise", 90, -98, -36, function()
-        attached.panel:SetShown(not attached.panel:IsShown())
+    local tab = control(frame, "GoldWise", 90, 10, -36, function()
+        if attached.panel:IsShown() then attached.panel:Hide() else attached.panel:Show() end
     end)
     -- Position relative to the native window. Never reparent, move or resize
     -- Blizzard's protected frames. Users may hide this optional companion.

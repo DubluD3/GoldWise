@@ -21,6 +21,7 @@ adapters\TrainerCapture.lua
 adapters\TrainerObserve.lua
 data\RecipeMaterials.lua
 domain\ItemChoices.lua
+domain\MaterialReview.lua
 domain\EquipmentAdvisor.lua
 domain\Goals.lua
 data\MaterialReservations.lua

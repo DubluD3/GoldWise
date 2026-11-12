@@ -1,3 +1,8 @@
+## Unreleased - GW-018 material retention review (2026-11-12)
+- Read-only Material Review subview distinguishes carried, conservatively held and manual-review quantities.
+- Active plan and session reservations avoid counting the same recipe twice; invalid/stale/partial/cross-character data abstains.
+- Never recommends selling. No bank/alt assumptions, AH requests, automation or new WoW APIs. Actual in-game review NOT RUN.
+
 ## Unreleased - GW-020 session goals in My Plan (2026-11-12)
 - New My Goals view reachable from Overview and My Plan; choose +1g and +10 skill from fresh manual snapshots.
 - Evaluates both targets with stale/character guards, allows reset and supports combined goals without persisting or predicting game outcomes.

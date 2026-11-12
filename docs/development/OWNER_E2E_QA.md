@@ -96,3 +96,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Open your crafting profession, choose **Scan profession**, return to My Goals and choose **Skill +10**. Confirm target is limited by the observed cap, and gold target remains intact.
 - [ ] Change/reload character, allow observations to expire, or switch to a different profession: stale/wrong-scoped targets must show **unknown** or reset, never a completed status. **Clear goals** must immediately remove all session targets.
 - [ ] Reload the addon: targets must not persist; no unexpected saved data; no new automatic gameplay action or AH request. Record actual UI scale and client build. Status: **NOT RUN**.
+
+## GW-018 Material Review additive checks (NOT RUN)
+- [ ] Manually scan complete bags; Inventory > **Review materials** should show the actual carried totals, 0 held before planning and **no safe-to-sell labels**.
+- [ ] Plan and reserve reagents; verify current recipe reservations are not counted twice and other recipe holds remain accounted for.
+- [ ] Rescan bags, age the snapshot, switch character or reload; review values should refresh from observation or become unknown, not silently reuse old stock.
+- [ ] No vendor/AH request, crafting or inventory action must occur merely from opening the review. Record client build and in-game UI errors. **NOT RUN**.

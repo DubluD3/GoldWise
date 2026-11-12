@@ -19,6 +19,7 @@ local guideOffered = false
 -- Goal targets exist only for this addon session; never persisted or sent externally.
 local activeGoal
 local goalPanel = false
+local materialsPanel = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -281,6 +282,39 @@ local function goalPage(time, ledger, profession)
     return result
 end
 
+local function materialsPage(time, inventory, plan)
+    local result = { rows = {
+        "Carried materials review: manual decisions only. Not a sell recommendation.",
+    }, actions = {} }
+    local rows, actions = result.rows, result.actions
+    local character = addon.characterSnapshot
+    local observed = addon.materialReview.evaluate({
+        inventory = inventory, plan = plan, reservations = inventory and addon.reservationsFor(inventory) or {},
+        characterScope = character and character.scopeKey,
+        now = time, maxAge = snapshotAge,
+    })
+    if observed.status == "unknown" then
+        rows[#rows + 1] = observed.reason
+        rows[#rows + 1] = "Scan complete carried bags again. Recalculate your current reagent plan."
+    else
+        rows[#rows + 1] = "Active plan: " .. observed.planStatus .. ". Holds are counted conservatively."
+        rows[#rows + 1] = "No bank, alt, future profession or actual market demand is included."
+        if #observed.rows == 0 then
+            rows[#rows + 1] = "No readable item stacks in this complete bag observation."
+        else
+            result.previous, result.next = showRows(rows, #observed.rows, function(index)
+                local item = observed.rows[index]
+                return string.format("%s: %.0f carried, %.0f held, %.0f manual-review (%s)",
+                    name(item.itemId), item.carried, item.hold, item.reviewQuantity, item.status)
+            end)
+        end
+    end
+    actions[1] = { "Scan bags", function() GoldWiseInventoryScan(); page = 1 end }
+    actions[2] = { "Back to bags", function() materialsPanel, page = false, 1 end }
+    actions[3] = { "My Plan", function() materialsPanel, tab, page = false, 5, 1 end }
+    return result
+end
+
 local function state()
     if guideStep then return guidePage() end
     local result = { rows = {}, actions = {} }
@@ -313,6 +347,8 @@ local function state()
         actions[4] = { "Update my data", showGuide }
         actions[5] = { "Goals", function() tab, page, goalPanel = 5, 1, true end }
     elseif tab == 2 then
+        if materialsPanel then return materialsPage(time, inventory, plan) end
+        actions[3] = { "Review materials", function() materialsPanel, page = true, 1 end }
         actions[1] = { "Scan bags", function()
             vendor, page = nil, 1
             GoldWiseInventoryScan()
@@ -485,7 +521,7 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or tabs[tab]))
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
@@ -568,7 +604,7 @@ local function build()
     local tabWidth = (width - 48) / #tabs
     for index, label in ipairs(tabs) do
         button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            guideStep, tab, page, goalPanel = nil, index, 1, false
+            guideStep, tab, page, goalPanel, materialsPanel = nil, index, 1, false, false
         end)
     end
 

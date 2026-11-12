@@ -108,3 +108,6 @@ After the player manually arms a browse observation, performs one native Auction
 
 ### GW-032 shared presentation foundation (draft)
 Profession, carried-bag and market companions now share a consistent small set of dark/gold-toned button, label and panel primitives. This removes duplicated style definitions without adding automatic UI hooks or modifying protected Blizzard controls. The visual fit and actual frame positions remain unverified in the client and are release-blocking QA items; use the standalone dashboard if a native companion cannot attach.
+
+### GW-033 responsive companion placement (draft)
+The three native context panels now calculate a screen-bounded side placement from their native parent and UIParent geometry, flip when needed and abstain when frame bounds or effective scaling cannot be validated. They recheck placement on player reopening; unsupported positions leave the standalone dashboard available. **Live-client scaling, native visual overlap and protected-frame QA remain NOT RUN**.

@@ -731,6 +731,10 @@ local function render()
         control.background:SetColorTexture(unpack(index == tab and colors.selected or colors.surface))
         control.label:SetTextColor(unpack(index == tab and colors.gold or colors.text))
     end
+    local navigationLabel = tab == 3 and "recipe"
+        or tab == 2 and not materialsPanel and "item" or "page"
+    view.previous.label:SetText("Previous " .. navigationLabel)
+    view.next.label:SetText("Next " .. navigationLabel)
     if content.previous then view.previous:Show() else view.previous:Hide() end
     if content.next then view.next:Show() else view.next:Hide() end
     for index, button in ipairs(view.actions) do

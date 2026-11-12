@@ -54,4 +54,10 @@ fresh_case
 mv "$case_dir/data" "$case_dir/original-data"
 ln -s original-data "$case_dir/data"
 reject_candidate
-printf '%s\n' 'PASS invalid interface, duplicate/unsafe/missing manifest sources and symlinks all blocked'
+fresh_case
+mkdir -p "$case_dir/data/nested-real"
+cp "$case_dir/data/Ledger.lua" "$case_dir/data/nested-real/Check.lua"
+ln -s nested-real "$case_dir/data/nested-link"
+printf '%s\n' 'data\nested-link\Check.lua' >> "$case_dir/GoldWise.toc"
+reject_candidate
+printf '%s\n' 'PASS invalid interface, duplicate/unsafe/missing manifest sources and nested symlinks all blocked'

@@ -78,3 +78,8 @@
 - [ ] Compare profession, inventory and market companions side-by-side at multiple UI scales: gold-toned titles and control labels, dark panel background, consistent control height, readable details, and no clipping.
 - [ ] Verify toggling each panel cannot accidentally click Blizzard's underlying native buttons. Report screenshots, UI scale, layout and protected-action errors if any. These native placement behaviors are **not validated** by the offline widget fixture.
 - [ ] Confirm all three context panels still navigate to the correct standalone GoldWise tab and that missing native frames never crash or hide the dashboard. Verify the candidate ZIP includes `ui/CompanionChrome.lua`.
+
+## GW-033 responsive contextual positioning — real-client verification NOT RUN
+- [ ] On Forever 70862/70888, position each native profession, bags and Auction House window near the left and right display edges. The companion should open on a side with sufficient space; if neither side fits, it must gracefully abstain rather than overlap or appear outside the screen.
+- [ ] Verify top/bottom edge layout at small UI scales and at multiple resolutions. Move the native frame after an observation and reopen its GoldWise side panel to verify placement refresh. A missing geometry API or unequal frame/UIParent scale must fall back to the standalone GoldWise dashboard without Lua errors.
+- [ ] Confirm no new hooks, protected Blizzard control changes, automatic bag/AH/profession reads or combat taint; inspect screenshots for incidental overlap. Geometry fixture tests alone do not verify real game layout. Do not approve for release until real UI evidence exists.

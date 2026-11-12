@@ -24,6 +24,7 @@ end
 local chrome = addon.companionChrome
 
 local function create(frame)
+    if not chrome.placement(frame, 260, 222, "left") then return end
     local toggle = chrome.button(frame, "GoldWise Bags", 110, 8, -34, function()
         if companion.panel:IsShown() then
             companion.panel:Hide()
@@ -31,7 +32,8 @@ local function create(frame)
             companion.panel:Show()
         end
     end)
-    local panel = chrome.panel(frame, 260, 222, "TOPRIGHT", "TOPLEFT", -8, -32)
+    local panel = chrome.panel(frame, 260, 222, "left")
+    if not panel then return end
     local heading = chrome.label(panel, "GameFontNormal", "gold")
     heading:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -10)
     heading:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", -12, -34)
@@ -61,6 +63,10 @@ end
 function Companion.refresh()
     if not companion or not lastSnapshot or not current(lastSnapshot) then
         if companion then companion.panel:Hide() end
+        return false
+    end
+    if not chrome.position(companion.panel, companion.frame, 260, 222, "left") then
+        companion.panel:Hide()
         return false
     end
     if allowedFrame() ~= companion.frame or type(GetServerTime) ~= "function" then
@@ -93,7 +99,7 @@ function Companion.show(snapshot)
     end
     if not companion then
         local ok, created = pcall(create, frame)
-        if not ok then return false end
+        if not ok or not created then return false end
         companion = created
     end
     lastSnapshot = snapshot

@@ -12,6 +12,15 @@ local function widget(kind, hidden)
         "SetJustifyH", "SetJustifyV", "SetWordWrap" }) do
         object[method] = function() end
     end
+    function object:ClearAllPoints() self.point = nil end
+    function object:GetWidth() return 1280 end
+    function object:GetHeight() return 720 end
+    function object:GetLeft() return 300 end
+    function object:GetRight() return 720 end
+    function object:GetTop() return 630 end
+    function object:GetBottom() return 150 end
+    function object:GetEffectiveScale() return 1 end
+    function object:SetPoint(...) self.point = { ... } end
     function object:SetText(value) self.value = value end
     function object:SetColorTexture(...) self.color = { ... } end
     function object:SetTextColor(...) self.textColor = { ... } end
@@ -67,7 +76,15 @@ globals.C_Container = {
     end,
 }
 local function visible() return true end
-globals.ProfessionsFrame = { CraftingPage = { IsVisible = visible } }
+local function geometry(frame, left, right, top, bottom)
+    frame.GetLeft = function() return left end
+    frame.GetRight = function() return right end
+    frame.GetTop = function() return top end
+    frame.GetBottom = function() return bottom end
+    frame.GetEffectiveScale = function() return 1 end
+    return frame
+end
+globals.ProfessionsFrame = geometry({ CraftingPage = { IsVisible = visible } }, 260, 800, 650, 100)
 globals.Professions = { InLocalCraftingMode = visible }
 globals.C_TradeSkillUI = {
     GetChildProfessionInfo = function()
@@ -88,7 +105,7 @@ globals.C_TradeSkillUI = {
         }
     end,
 }
-globals.AuctionHouseFrame = { IsVisible = visible, BrowseResultsFrame = { IsVisible = visible } }
+globals.AuctionHouseFrame = geometry({ IsVisible = visible, BrowseResultsFrame = { IsVisible = visible } }, 250, 880, 650, 80)
 globals.C_AuctionHouse = {
     IsThrottledMessageSystemReady = visible,
     HasFullBrowseResults = function() return false end,
@@ -195,7 +212,7 @@ assert(hasText("GoldWise  /  Quick Test") and hasText("Bags: observed (complete)
 click("Back to Overview")
 assert(hasText("GoldWise  /  Overview"))
 print("PASS quick-test page provides a guided manual scan and navigation path")
-globals.ContainerFrame1 = { IsVisible = visible }
+globals.ContainerFrame1 = geometry({ IsVisible = visible }, 840, 1100, 600, 100)
 click("Inventory")
 activeTab("Inventory", "Overview")
 assert(hasPagerLabel("Next item") and hasPagerLabel("Previous item"))

@@ -1,9 +1,12 @@
 # GW-024 · Owner Forever end-to-end test and release gate
 
-**Prepared 2026-11-12. In-game status: NOT RUN.** An AI-only Lua test is not evidence that the installed addon works or complies on your client. The following is a reproducible owner test for the latest stacked QA candidate. Record exact build/interface and report **PASS, FAIL, BLOCKED or NOT RUN** per case.
+**Prepared 2026-11-12. In-game status: NOT RUN.**
+
+**Latest candidate selection rule:** The native-companion changes were developed in *stacked* draft PRs after #58. For a comprehensive test, use the final stacked branch head (not the old #58 head) and a successful workflow/artifact built on exactly that commit. The branch label alone is insufficient; copy the full 40-character commit SHA and record it in the report. Live acceptance remains NOT RUN.
+ An AI-only Lua test is not evidence that the installed addon works or complies on your client. The following is a reproducible owner test for the latest stacked QA candidate. Record exact build/interface and report **PASS, FAIL, BLOCKED or NOT RUN** per case.
 
 ## Prerequisites and installation
-1. Open [PR #58](https://github.com/DubluD3/GoldWise/pull/58) and record its **current full head SHA**. In [GitHub Actions](https://github.com/DubluD3/GoldWise/actions/workflows/lua-smoke.yml), select the latest **successful** Lua regression run for that **exact SHA**. Download its `GoldWise-QA-candidate-<SHA>` artifact (outer ZIP containing inner `GoldWise-0.2.0-test2-candidate.zip`). **Do not install any old artifact merely because a previously linked workflow passed.** This is an owner-only test candidate, not a public release.
+1. Open [latest draft PR in the native integration chain](https://github.com/DubluD3/GoldWise/pulls?q=is%3Apr+is%3Aopen+draft%3Atrue) and record its **current full head SHA**. In [GitHub Actions](https://github.com/DubluD3/GoldWise/actions/workflows/lua-smoke.yml), select the latest **successful** Lua regression run for that **exact SHA**. Download its `GoldWise-QA-candidate-<SHA>` artifact (outer ZIP containing inner `GoldWise-0.2.0-test2-candidate.zip`). **Do not install any old artifact merely because a previously linked workflow passed.** This is an owner-only test candidate, not a public release.
 2. Exit WoW: Forever fully. In Battle.net use game settings → **Show in Explorer/Finder**, navigate to the game installation's actual `Interface/AddOns/` folder. Extract the **inner ZIP** there. Final path must be `<actual Forever installation>/Interface/AddOns/GoldWise/GoldWise.toc`. If `GoldWise/GoldWise/GoldWise.toc` appears, move the inner folder up one level.
 3. Back up any existing GoldWise addon folder and any prior GoldWise SavedVariables under the relevant `WTF/Account/.../SavedVariables/` directory **before** replacing files. Do not copy SavedVariables into an issue or PR report. Disable disposable GoldWise probe addons to avoid interleaved messages.
 4. Start Forever. Confirm GoldWise is enabled in the AddOns list. Open chat and record the output of:
@@ -43,7 +46,7 @@
 | E20 | Release: package filename, files and manifest verified by CI. **STOP** public release: no approved open-source `LICENSE`, no signed human QA and parent PR integration until addressed. Public publishing must remain blocked | BLOCKED |
 
 ## Offline CI (already performed, not in-client proof)
-The cumulative integration candidate at `dc691b7ea28df23916692f645e5da059d72e59b0` passed [GitHub Actions run #43211210854](https://github.com/DubluD3/GoldWise/actions/runs/43211210854): Lua 5.1 syntax/unit/contract/all and QA candidate ZIP validation. **This is historical evidence, not a pointer to install that artifact**. For owner QA, use the newest successful workflow matching PR #58's *current* exact head SHA. Commands executed by the workflow:
+The cumulative integration candidate at `dc691b7ea28df23916692f645e5da059d72e59b0` passed [GitHub Actions run #43211210854](https://github.com/DubluD3/GoldWise/actions/runs/43211210854): Lua 5.1 syntax/unit/contract/all and QA candidate ZIP validation. **This is historical evidence, not a pointer to install that artifact**. For owner QA, use the newest successful workflow matching the **latest stacked draft branch's** current exact head SHA. Commands executed by the workflow:
 ```sh
 sh scripts/test.sh syntax
 sh scripts/test.sh unit
@@ -147,8 +150,8 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Record build, errors and any unsafe or incorrect quantities. No automatic crafting, AH actions, or bag modification is expected. Installed Forever status: `NOT RUN`.
 
 ## Integration review checkpoint — 2026-11-12
-- PR #58's cumulative branch includes the profession-plan guide status correction and strict ledger session attribution. Re-scan the same profession after creating a plan, reopen `/goldwise guide` at Recipe plans and reservations and confirm **Pending** instead of Last observed.
-- Current candidate workflow must be identified by **PR #58 head SHA and successful CI**, not an older hard-coded reference. Verify the latest successful Actions run before installation.
+- the cumulative stacked draft branch includes the profession-plan guide status correction and strict ledger session attribution. Re-scan the same profession after creating a plan, reopen `/goldwise guide` at Recipe plans and reservations and confirm **Pending** instead of Last observed.
+- Current candidate workflow must be identified by **the latest stacked draft branch head SHA and successful CI**, not an older hard-coded reference. Verify the latest successful Actions run before installation.
 - Do not interpret synthetic CI success as in-game client approval. The exact game build, licensing, taint/combat and privacy checks remain mandatory. **Real Forever client QA: NOT RUN.**
 
 ## Consolidated handoff (2026-11-12)

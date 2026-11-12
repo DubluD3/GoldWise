@@ -1,3 +1,7 @@
+## Unreleased - GW-026 guide source-status hardening (2026-11-12)
+- Unknown completeness never becomes a completed scan, and missing active character scope fails closed. Added regression cases for incomplete/malformed observations.
+- Updated stacked QA workflow to immutable Node.js 24 `actions/upload-artifact` pin to prevent previous warning from returning.
+
 ## Unreleased - GW-024 owner E2E QA handoff (2026-11-12)
 - Added comprehensive manual Forever E01-E20 matrix, reproducible install/rollback, actual client reporting form and an agent checkpoint.
 - Client QA and owner release approval **NOT RUN/PENDING**; no release gate has been waived.

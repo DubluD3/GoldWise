@@ -120,3 +120,6 @@ The standalone dashboard now gives concise manual recovery steps for missing or 
 
 ### GW-036 non-overlapping contextual entry points (draft)
 The three context entry buttons are now anchored to the **exterior edge** of their native parent frames, above GoldWise's adjacent side panels, instead of at a potentially conflicting coordinate *inside* Blizzard's window. The button follows the same bounded side flipping and fails closed with the panel if positioning is unsupported. Real game-client frame behavior and protected control safety have not yet been verified.
+
+### GW-037 cumulative QA handoff (draft)
+The private QA candidate ZIP now includes `QA_INSTALL_AND_TEST.txt` alongside the existing not-for-public-release notice. The handoff explains the **outer Actions artifact vs inner installable ZIP**, exact installed path, allowed Forever builds, backup and rollback steps and offline-CI limitations. For complete native frame checks, use `docs/development/NATIVE_UI_OWNER_QA.md` (N01–N12) together with the E01–E20 release matrix. QA instructions now target the **latest stacked draft head SHA**, not an older PR's artifact. In-game acceptance and license approval remain pending.

@@ -1,3 +1,9 @@
+## Unreleased — GW-037 cumulative QA install and in-game acceptance handoff (2026-11-12)
+- Added a short, explicit private-owner QA install, safety and rollback handoff to the packaged candidate; validates its presence and key warnings in packaging regressions.
+- Corrected stale PR #58 artifact selection guidance to use the latest cumulative draft branch's exact full commit SHA and matching successful CI workflow.
+- Added N01–N12 integrated native UI acceptance matrix covering profession/bag/AH companions, conflicts, taint, scope, installation, rollback, and release gating; all in-game checks remain NOT RUN.
+- No changes to gameplay APIs, account data, user authorization, or public release gates.
+
 ## Unreleased — GW-036 external native companion entry placement (2026-11-12)
 - Relocated the opt-in profession, carried-bag and Auction House GoldWise entry controls to the validated **outside edge** of the native window, aligned above their companion panel. This avoids intentionally placing our controls on top of Blizzard's existing client controls.
 - External entry controls follow the same guarded side selection as the panel, switching left or right with available screen space; when geometry cannot be read or the sidecar cannot be safely placed, they do not appear.

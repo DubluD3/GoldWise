@@ -98,6 +98,40 @@ Forever game-client E2E and release approval are pending.
 The developer does not claim Blizzard endorsement or compatibility on
 untested builds. Do not share your SavedVariables or character data.
 NOTICE
+    cat > "$work/GoldWise/QA_INSTALL_AND_TEST.txt" <<'HANDOFF'
+GoldWise PRIVATE OWNER QA CANDIDATE - not a release.
+
+1. Select the latest successful CI run for the exact branch commit you
+   intend to test. The GitHub Actions artifact is an OUTER ZIP. Extract it,
+   then extract its inner GoldWise-*-candidate.zip.
+2. Fully exit WoW: Forever. Back up the existing GoldWise addon folder
+   and GoldWise SavedVariables before replacing the addon.
+3. Install the INNER archive so its final file is:
+   <actual Forever installation>/Interface/AddOns/GoldWise/GoldWise.toc
+   Avoid accidentally nesting GoldWise/GoldWise/.
+4. Launch the game. Check GetBuildInfo() and /console scriptErrors 1.
+   Only version 1.60.1 build 70862 or 70888, interface 16001,
+   is supported by this experimental candidate. Stop on other builds.
+5. Use /goldwise to open the standalone dashboard. Test the manual
+   profession, carried-bags and Auction House observation workflows.
+   Native companion buttons are EXPERIMENTAL. They may not attach if
+   the client exposes different frames, restricted APIs or layout.
+6. Observe UI scaling, native-button overlap, taint/protected-action
+   errors, data provenance, and interactions with other addons.
+   Never test automated purchasing, selling, crafting or mailing:
+   GoldWise does not implement those actions.
+7. If a Lua/taint error, unexpected native UI interference or invalid
+   client build appears, stop, exit the game and restore backups.
+   Report sanitized error/build/UI details only; do not share WTF data.
+
+For the full E01-E20 acceptance checklist and contextual integration
+checks, see docs/development/OWNER_E2E_QA.md and INTEGRATED_TEST.md
+in the source repository at the EXACT tested commit. Those docs are
+not inside this addon-only archive.
+
+PASS in automated CI does NOT mean PASS in the actual game client.
+No public release, redistribution license or owner approval is implied.
+HANDOFF
 fi
 
 mkdir -p dist

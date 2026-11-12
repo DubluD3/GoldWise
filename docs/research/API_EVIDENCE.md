@@ -260,3 +260,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 - `SYNTHETIC`: tests use fictional scopes, item ID 101, class/race/level and transfer-record values. No real World of Warcraft equipment or trade restriction is asserted.
 - The model abstains on unobserved or stale snapshots, mismatched source scope/build/realm/faction, non-transferable or unknown bind state and missing restrictions. An eligible fictional scenario yields **potential-upgrade-review**, never a confirmed upgrade. No equip, mail, trade, remote query or sync call.
 - Manual acceptance: actual owner tests after version-specific API probe and verified UI integration; until then `NOT RUN`.
+
+## GW-026 scanner-state hardening (2026-11-12)
+`INFERRED` defensive state policy: `Last observed` requires an explicitly complete, scoped, fresh observation. Missing completeness no longer implies success and shows `Partial` instead. Missing/unknown current scope displays `Pending`. These changes add no game API calls, new supported scanner capabilities, or live-client evidence. Regression coverage is in `tests/scan_guide.lua`; installed Forever QA still NOT RUN.

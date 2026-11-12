@@ -1,3 +1,8 @@
+## Unreleased - GW-020 offline combined goal foundation (2026-11-12)
+- Added bounded copper/profession targets and read-only evaluation of fresh scoped observations with manual suggestions.
+- Missing, stale, mismatched or partially known observations abstain. No skill-up probabilities or projected earnings fabricated.
+- **Offline only**, no live goal UI, automatic game behavior or persistence migration.
+
 ## Unreleased - GW-026 guide source-status hardening (2026-11-12)
 - Unknown completeness never becomes a completed scan, and missing active character scope fails closed. Added regression cases for incomplete/malformed observations.
 - Updated stacked QA workflow to immutable Node.js 24 `actions/upload-artifact` pin to prevent previous warning from returning.

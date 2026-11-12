@@ -263,3 +263,9 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 
 ## GW-026 scanner-state hardening (2026-11-12)
 `INFERRED` defensive state policy: `Last observed` requires an explicitly complete, scoped, fresh observation. Missing completeness no longer implies success and shows `Partial` instead. Missing/unknown current scope displays `Pending`. These changes add no game API calls, new supported scanner capabilities, or live-client evidence. Regression coverage is in `tests/scan_guide.lua`; installed Forever QA still NOT RUN.
+
+## GW-020 combined target evaluation (2026-11-12)
+- `INFERRED`: pure Lua `domain/Goals.lua` has no WoW calls. It accepts explicit goal targets and caller-normalized, scoped, fresh `money.balanceCopper` and `profession.skill` observations. The contract does not mean these values are automatically recorded or stored in the current client.
+- `OBSERVED-IN-GAME` reused from API-007 manual balance and API-005 manual open profession on build 70862; no new API is called. Build 70888 requires integrated real-client validation.
+- `UNKNOWN`: profession progression skill-up probabilities, future gold income, time-to-goal, new persisted alt goals and game-client UI integration. Output contains no such forecasts.
+- `SYNTHETIC`: unit tests use fictional 25,000/50,000 copper balances and skill 80/100. This is a test-only data source, never real character data or market advice.

@@ -4,6 +4,9 @@ GoldWise is a planned **free, open-source, local-first, read-only economic and p
 
 > **Status: integrated test candidate.** Run `/goldwise` to open the native dashboard. The [integrated test guide](docs/development/INTEGRATED_TEST.md) covers the current build and manual feature flows.
 
+## Combined goal model (GW-020 offline foundation)
+`domain/Goals.lua` models player-selected gold and profession targets without predicting earnings or skill-up probabilities. The calculations require fresh, matching character observations and recalculate after a supplied snapshot changes. This foundation has no live goal editor or persistence yet, and it never performs gameplay actions.
+
 ## Offline cross-character gear checks (GW-027 foundation)
 `domain/EquipmentAdvisor.lua` is a synthetic-test-only cross-character advisory model. It requires two fresh scoped character snapshots, verified binding/equipment/eligibility fields, and independent observed transfer-route evidence. If all match it says **potential upgrade — review**, never a factual or automatic upgrade. Current Forever equipment, binding and alt transfer APIs are **unverified**, so there is no live UI suggestion, gear capture, automatic mail or automatic equip.
 

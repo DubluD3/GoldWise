@@ -52,6 +52,9 @@ docs/           # product, planning, policy, architecture, research
 - Alt and bank snapshots are stale by default until re-observed.
 - No dynamic executable code, network calls, process access or input generation.
 
+## GW-020 combined goals foundation
+`domain/Goals.lua` is a pure, session-only model for explicitly supplied copper and profession skill targets. It recalculates remaining amounts from fresh, character/build-scoped money/profession observations; missing or stale inputs remain unknown. Manual next actions never promise earning rates, crafting outcomes, skill-up probabilities or confirmed sales. No storage migration or live UI until evidence/owner acceptance.
+
 ## GW-027 cross-character equipment eligibility
 Pure `domain/EquipmentAdvisor.lua` consumes caller-normalized last-observed character/item data and independent, fresh transfer authorization evidence. No client APIs or SavedVariables schema changes. Unknown trade route/binding/eligibility restrictions trigger abstain; explicit BoP/soulbound restrictions, incompatible realm/faction/build and disqualifying usability trigger block. Even a fully matching fixture produces **potential-upgrade-review**, never a verified upgrade, until an evidence-backed role/stat comparator is designed. Runtime adapters and UI integration remain blocked under API_EVIDENCE.
 

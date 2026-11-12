@@ -30,3 +30,29 @@ jobs:
         env:
           GOLDWISE_TEST_SUITE: ${{ matrix.suite }}
         run: sh scripts/test.sh "$GOLDWISE_TEST_SUITE"
+
+  candidate-package:
+    name: Validate QA candidate ZIP
+    needs: offline
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate manifest, privacy and candidate ZIP
+        run: sh scripts/package.sh candidate
+      - name: Assert public release is blocked without license and owner sign-off
+        run: |
+          if sh scripts/package.sh release; then
+            echo 'ERROR: unreleased test candidate unexpectedly accepted as a release' >&2
+            exit 1
+          fi
+          echo 'PASS owner/license release gate remains closed'
+      - name: Upload candidate for owner QA (not a release)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2 (Node.js 24)
+        with:
+          name: GoldWise-QA-candidate-${{ github.sha }}
+          path: dist/*.zip
+          if-no-files-found: error
+          retention-days: 7

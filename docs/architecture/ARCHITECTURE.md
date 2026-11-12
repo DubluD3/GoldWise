@@ -58,6 +58,9 @@ docs/           # product, planning, policy, architecture, research
 ## GW-026 guided capture state
 The pure `data/ScanGuide.lua` model describes supported local sources and maps actual session observations to Pending/Partial/Stale/Last observed/Unsupported. Capture method and successful capture are different fields. The dashboard reuses existing verified manual adapter entrypoints and does not issue new gameplay or AH requests. A new separate `GoldWiseGuideDB` (schema 1; completion, current step and skipped-step flags only) stores onboarding preferences without mutating or migrating `GoldWiseDB`. Reject invalid guide preferences without overwriting them. Actual snapshot contents are never reconstructed from a saved preference flag.
 
+## GW-025 release packaging
+`scripts/package.sh` packages only source files referenced by `GoldWise.toc`, public README/CHANGELOG and local PRIVACY disclosure under one `GoldWise/` folder. Candidate ZIP contains a clearly named not-for-public-release warning. Public release mode requires a non-test version, approved LICENSE and owner client-QA sign-off document. No game-client execution is attempted by the script. The script verifies ZIP contents and refuses ambiguous TOC paths.
+
 ## Performance/privacy
 Player-triggered bounded AH scans; no polling loops. Throttle UI updates; cap history and SavedVariables size; no telemetry. No external AI in runtime.
 

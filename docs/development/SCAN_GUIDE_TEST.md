@@ -34,3 +34,6 @@ Record exact outputs, exit status, CI links, client build, scale, and owner appr
 
 ## Rollback
 Disable/remove GoldWise from AddOns. Restoring the previous PR #37 addon folder removes only the guide code; the prior `GoldWiseDB` storage schema remains untouched. `GoldWiseGuideDB` is a separate new SavedVariables table: leave it in place, or remove it manually after backing up the saved-variable file if the owner explicitly wants a preference reset. Never delete account SavedVariables without a backup and explicit request.
+
+## QA candidate artifact
+A full ZIP can be created from the stacked integration branch by `sh scripts/package.sh candidate`; on GitHub Actions the package job verifies the exact TOC file layout and provides a short-lived **QA-only** artifact. Extract it to `<Forever installation>/Interface/AddOns/` and verify there is one top-level `GoldWise` directory. The included `QA_CANDIDATE_NOT_FOR_PUBLIC_RELEASE.txt` is a deliberate warning, not an open-source license. Do not redistribute.

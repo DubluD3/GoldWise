@@ -139,3 +139,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Re-plan the **same** recipe with a smaller count: its existing hold should be replaced rather than added a second time.
 - [ ] Refresh bags: previously held amounts should not contaminate the new inventory snapshot. No game items should move automatically or be sold.
 - [ ] The synthetic invalid-state tests run in CI; they cannot be exercised safely by altering live SavedVariables. Record any UI errors and current game build. Installed client status: **NOT RUN**.
+
+## GW-017 safe availability read checks (NOT RUN)
+- [ ] Manually scan complete bags and inspect Inventory with no holds, then after one or two manually reserved recipes. Correct quantities should appear and valid manual recipe plans should still work.
+- [ ] Re-plan the same recipe: its existing valid hold should not subtract twice. Verify a different recipe's holds still reduce available stock.
+- [ ] Invalid-state regression is synthetic only: CI exercises phantom item IDs, impossible aggregate holds and malformed quantities without altering real game data. Inventory should abstain, and planning refuse, if such in-memory corruption occurs.
+- [ ] Record build, errors and any unsafe or incorrect quantities. No automatic crafting, AH actions, or bag modification is expected. Installed Forever status: `NOT RUN`.

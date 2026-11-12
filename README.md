@@ -87,3 +87,6 @@ A session plan can only reserve carried materials while it is still the **active
 
 ### Defensive reservation integrity
 Before an in-session material hold is created or replaced, GoldWise validates **all** existing holds against the complete observed carried bag stock. Invalid allocations, impossible held quantities and unknown item IDs are rejected without changing the existing session map. Reservation changes do not move or sell items and never imply that remaining stock is safe to sell.
+
+### Safe inventory availability reads (GW-017)
+The Inventory tab and manual reagent planner use a validated carried-stock calculation. If any session reservation is impossible, malformed or refers to an unobserved item, GoldWise refuses to show misleading remaining quantities or create a new recipe plan. Even a reservation for the currently selected recipe is validated before it is excluded from its own availability calculation. Rescan complete bags or clear the invalid session holds; no automatic inventory action is performed.

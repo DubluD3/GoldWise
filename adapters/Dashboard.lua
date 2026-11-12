@@ -519,9 +519,13 @@ local function state()
                 or "Base vendor reference unavailable."
         end
         local free = addon.materialReservations.available(addon.reservationsFor(inventory), inventory.totals)
-        local reserved = inventory.totals[id] - (free[id] or 0)
-        if reserved > 0 then
-            rows[#rows + 1] = string.format("%.0f reserved across session plans", reserved)
+        if not free then
+            rows[#rows + 1] = "Reservation counts unavailable. Clear holds or rescan bags."
+        else
+            local reserved = inventory.totals[id] - (free[id] or 0)
+            if reserved > 0 then
+                rows[#rows + 1] = string.format("%.0f reserved across session plans", reserved)
+            end
         end
         actions[2] = { "Check vendor value", function()
             vendor = { id = id, inventory = inventory, copper = addon.vendorReference(id) }

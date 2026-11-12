@@ -65,7 +65,11 @@ function GoldWisePlanRecipe(recipeId, crafts)
             end
         end
     end
-    local free = addon.materialReservations.available(addon.reservationsFor(inventory), inventory.totals, recipeId)
+    local free, availabilityError = addon.materialReservations.available(
+        addon.reservationsFor(inventory), inventory.totals, recipeId)
+    if not free then
+        return "Reservation state invalid: " .. (availabilityError or "rescan bags and clear holds")
+    end
     local plan, failure = addon.recipeMaterials.plan(recipe, crafts or 1, free, producers)
     if not plan then
         return failure

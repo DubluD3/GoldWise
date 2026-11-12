@@ -21,3 +21,31 @@ assert(not Reservations.reserve(byRecipe, 9, { [100] = 1 }, many))
 assert(not Reservations.reserve(byRecipe, 1, { [100] = 0 }, many))
 assert(Reservations.available(byRecipe, many)[100] == 12)
 print("PASS reservations cap the number of plans and preserve existing allocations")
+
+local malformed = {
+    { [1] = { [100] = 6 }, [2] = { [100] = 6 } },
+    { [1] = { [999] = 1 } },
+    { [1] = { [100] = -1 } },
+    { [1] = { [100] = 0 } },
+    { [1] = {} },
+    { ["bad"] = { [100] = 1 } },
+    { [1] = { [100] = 1.5 } },
+}
+for _, held in ipairs(malformed) do
+    local free, reason = Reservations.available(held, { [100] = 10 }, 1)
+    assert(free == nil and type(reason) == "string")
+end
+local free, reason = Reservations.available({}, { [100] = -1 })
+assert(free == nil and type(reason) == "string")
+free, reason = Reservations.available({}, { ["bad"] = 1 })
+assert(free == nil and type(reason) == "string")
+free, reason = Reservations.available({}, { [100] = 3 }, 0)
+assert(free == nil and type(reason) == "string")
+local observed = { [100] = 10, [101] = 3 }
+local holds = { [1] = { [100] = 4 }, [2] = { [100] = 2, [101] = 1 } }
+free = assert(Reservations.available(holds, observed))
+assert(free[100] == 4 and free[101] == 2)
+free = assert(Reservations.available(holds, observed, 1))
+assert(free[100] == 8 and free[101] == 2)
+assert(holds[1][100] == 4 and observed[100] == 10)
+print("PASS read-only availability fails closed on invalid holds while preserving safe same-recipe exclusions")

@@ -255,6 +255,18 @@ click("My Plan")
 assert(hasText("Choose a learned recipe under Professions"))
 assert(not hasText("Reagent plan ·"))
 print("PASS new manual profession scan invalidates prior plan presentation")
+click("Inventory")
+local held = addon.reservationsFor(addon.inventorySnapshot)
+held[999] = { [999] = 1 }
+click("Inventory")
+assert(hasText("Reservation counts unavailable"))
+click("Professions")
+click("Plan reagents")
+assert(hasText("Reservation state invalid"))
+assert(addon.recipePlan == nil)
+held[999] = nil
+print("PASS corrupted reservation availability fails closed in inventory and planning")
+
 
 local unavailable = Fixture.new()
 unavailable:load("adapters/Dashboard.lua", "GoldWise", { supportedClient = true })

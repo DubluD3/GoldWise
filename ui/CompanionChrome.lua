@@ -93,6 +93,21 @@ function Chrome.position(panel, parent, width, height, preferred)
     return ok
 end
 
+-- Place the entry point next to the native frame, never on top of its
+-- existing controls. The adjacent panel starts beneath this button.
+-- The parent remains the native frame, preserving its visibility lifetime.
+function Chrome.positionEntry(button, parent, width, height, preferred)
+    if not finite(width) or width < 1 then return false end
+    local ok, point, relative, x, y = pcall(Chrome.placement,
+        parent, width, height, preferred)
+    if not ok or not point then return false end
+    local anchored = pcall(function()
+        button:ClearAllPoints()
+        button:SetPoint(point, parent, relative, x, y + 30)
+    end)
+    return anchored
+end
+
 -- Parent the panel to the native window without moving Blizzard's frame.
 -- Fail closed if no side has sufficient unoccluded screen space.
 function Chrome.panel(parent, width, height, preferred)

@@ -21,3 +21,6 @@
 - [ ] Replace test version; verify rights, security/privacy, release provenance, all E2E failures closed; then run `sh scripts/package.sh release` on approved commit.
 - [ ] Confirm all parent PRs integrated safely and rerun CI on release commit. CI mocks do not stand in for a real client.
 - [ ] Publish public releases only after complete human approval, not directly from CI candidate artifacts.
+
+## Actual Forever acceptance record
+Use [OWNER_E2E_QA.md](../development/OWNER_E2E_QA.md) (E01-E20). Owner test outputs remain **NOT RUN** as of 2026-11-12; release is **BLOCKED**. After QA, create the signed owner record *only* from actual evidenced results and explicit authorization.

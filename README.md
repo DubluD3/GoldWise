@@ -72,3 +72,6 @@ Choose **Inventory → Review materials** after manually scanning complete bags.
 
 ### Exact session goal targets via chat
 Alongside the quick +1g and +10-skill dashboard actions, you can specify custom targets: `/goldwise goal gold 25000` (explicit **copper**, never gold) and `/goldwise goal skill 75` (requires a fresh manual scan of the open matching profession and must fit its observed cap). `/goldwise goal help` shows usage; `/goldwise goal clear` clears both. These commands never execute game actions, read AH data, or persist goals. You must sample character balance manually to see current gold progress.
+
+### Profession progression review (GW-020)
+In **My Plan → Review progression**, GoldWise shows your manually observed profession skill/cap, observed learned-recipe count and coverage, any matching skill goal gap, and carried reagent shortages for the currently planned recipe. The recipe snapshot is tagged to the profession it was actually planned under, so another profession's plan is not misattributed. A recipe can require multiple crafts to earn a skill point—or none—so the addon **never predicts how many crafts to level**. Missing or stale evidence stays unknown. No new API calls or automatic crafting.

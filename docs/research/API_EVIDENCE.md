@@ -275,3 +275,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 
 ## GW-018 carried-material review (2026-11-12)
 `INFERRED/OFFLINE-TESTED`: pure Lua `domain/MaterialReview.lua` consumes existing complete carried inventory observations, same-snapshot session reservations and matching fresh plan. No additional Forever APIs, `C_Item` vendor reads or Auction House requests are introduced. `UNKNOWN`: bank, alt, future profession needs, item selling rules, market liquidity and actual game-client UI behavior. Never labels an item safe to sell. In-game QA: `NOT RUN`.
+
+## GW-020 skill progression review (2026-11-12)
+`INFERRED/OFFLINE-TESTED`: Pure `domain/ProfessionGoalReview.lua` compares existing manually observed profession skill and filtered learned recipes to an explicitly set matching skill goal; it optionally displays current planned reagent shortages. `adapters/RecipePlan.lua` records `professionId` derived from the existing open crafting snapshot at manual plan time, without additional game API calls. `UNKNOWN`: chance for a specific recipe to increase skill, number of crafts to reach a goal, missing/unfiltered recipes, other-character trainer state. No estimated skill-up rate is displayed. Live Forever UI QA is `NOT RUN`.

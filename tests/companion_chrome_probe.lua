@@ -75,6 +75,12 @@ native.top, native.bottom = 220, 20
 assert(chrome.position(panel, native, 280, 200, "right"))
 assert(panel.point[5] == -12)
 native.top, native.bottom = 600, 120
+local originalLeft = native.GetLeft
+native.GetLeft = function() error("native geometry unreadable") end
+assert(not chrome.position(panel, native, 280, 200, "right"))
+assert(chrome.panel(native, 280, 200, "right") == nil)
+native.GetLeft = originalLeft
+print("PASS failed native geometry reads safely abstain")
 local label = chrome.label(panel, "GameFontNormalSmall", "text")
 assert(label.textColor[1] == 0.92 and label.wrap)
 local panelTexture = chrome.fill(panel, "panel")

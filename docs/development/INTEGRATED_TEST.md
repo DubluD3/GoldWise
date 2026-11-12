@@ -89,3 +89,9 @@
 - [ ] Repeat a valid manual scan and confirm the entry point returns once (without duplicate native buttons). Repeat invalid/valid cycles and switch characters or reload: old observations must not reappear.
 - [ ] If the native frame changes, has restricted geometry or becomes unsupported, the companion must refuse to attach without a Lua error and must retain the standalone `/goldwise` dashboard.
 - [ ] Verify UI scale, combat taint, protected buttons and actual frame hierarchy. Offline regression coverage is NOT evidence of installed-client compatibility.
+
+## GW-035 dashboard navigation and stale-data recovery — real-client QA NOT RUN
+- [ ] Open GoldWise without an existing inventory or profession observation. Inventory should say to open bags and **Scan bags**; Professions should say to open the native crafting window and **Scan profession**. Merely opening or navigating must not scan anything.
+- [ ] Open My Plan with no current plan. Choose **Go to Professions** and verify the Professions section opens without reading a schematic or crafting. Follow the explicit **Plan reagents** action only after a manual profession and bag scan.
+- [ ] Allow a current bag observation to expire; Inventory should explicitly request **Scan bags**, not silently reuse old counts. When a reagent plan references expired/replaced bags, My Plan provides **Go to Inventory** and **Go to Professions** navigation.
+- [ ] Allow a manual Auction House observation to expire. Market should show the existing one-shot /reload + native search procedure. Do not create an automated AH query or retry. Preserve prior full QA coverage and client-context companion gates.

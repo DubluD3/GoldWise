@@ -546,7 +546,7 @@ local function state()
             GoldWiseInventoryScan()
         end }
         if not inventory then
-            rows[1] = "Scan your bags to see carried items."
+            rows[1] = "No carried-bag observation yet. Open your bags, then choose Scan bags."
             return result
         end
         local recency, fresh = age(inventory, time, snapshotAge)
@@ -562,7 +562,7 @@ local function state()
         rows[3] = string.format("Item %d of %d · %s · %.0f observed in bags", page, #keys, name(id), inventory.totals[id])
         result.previous, result.next = page > 1, page < #keys
         if not fresh then
-            rows[4] = "Refresh bag counts before using this item in a plan."
+            rows[4] = "Bag observation expired. Choose Scan bags to refresh before planning."
             return result
         end
         local _, planFresh = age(plan, time, snapshotAge)
@@ -598,7 +598,7 @@ local function state()
             actions[3] = { "Match recipe", GoldWiseTrainerMatch }
         end
         if not profession then
-            rows[1] = "Open your crafting window and scan the profession."
+            rows[1] = "No profession observation yet. Open native crafting, then choose Scan profession."
             return result
         end
         rows[1] = profession.professionName .. " · " .. profession.skill .. " / " .. profession.cap
@@ -654,7 +654,7 @@ local function state()
         rows[1] = "Browse cache · " .. market.status .. " · " .. recency
         rows[2] = "Asking prices · Sale proceeds and fees unavailable"
         if not fresh then
-            rows[3] = "Reload to collect another browse observation."
+            rows[3] = "Browse cache is stale. /reload, then use Observe browse and a new native search."
             return result
         end
         if #market.rows == 0 then
@@ -674,13 +674,22 @@ local function state()
         actions[3] = { "Goals", function() goalPanel = true end }
         actions[5] = { "Direct capacity", function() capacityPanel, page = true, 1 end }
         if not plan then
-            rows[1] = "Choose a learned recipe under Professions and plan its reagents."
+            rows[1] = "No current reagent plan. Open Professions, choose a learned recipe, then Plan reagents."
+            actions[1] = { "Go to Professions", function()
+                tab, selection, page = 3, 1, 1
+            end }
             return result
         end
         local recency, fresh = age(plan, time, snapshotAge)
         rows[1] = "Reagent plan · " .. recency
         if not fresh or not inventory or inventory ~= plan.inventory then
-            rows[2] = "Bag data changed or expired. Recalculate the plan."
+            rows[2] = "Bag data changed or expired. Re-scan bags, then re-plan in Professions."
+            actions[1] = { "Go to Inventory", function()
+                tab, page = 2, 1
+            end }
+            actions[2] = { "Go to Professions", function()
+                tab, selection, page = 3, 1, 1
+            end }
             return result
         end
         local steps = {}

@@ -1,15 +1,45 @@
-# GoldWise integrated test
+# GoldWise — integrated owner smoke test (QA candidate only)
 
-Test candidate `0.2.0-test2` targets Forever build `70888`, interface `16001`. The earlier verified build `70862` can open the dashboard and existing scans. Trainer capture is available on `70888`, where the selected-service path was observed. Keep chat output, balances, prices and identifiers private when reporting results.
+**Updated 2026-11-12 · Live Forever client QA: NOT RUN.** This is the short, end-to-end **human** walkthrough of the cumulative draft PR #58. The authoritative full acceptance and release gate remains [OWNER_E2E_QA.md](OWNER_E2E_QA.md), cases E01–E20. Offline CI success does not prove any of these live checks.
 
-1. Close WoW. Extract the integrated ZIP into Forever's `Interface/AddOns` folder so the manifest is at `Interface/AddOns/GoldWise/GoldWise.toc`. Enable GoldWise and disable the disposable GoldWise probes and Build Check addon.
-2. Log in, run `/goldwise` and check Overview. Take a balance sample, then sample again after at least one second. If the balance changes through normal gameplay, check the signed delta and use **Label other** and **Clear label**. The ledger keeps changes for the current session.
-3. Open Inventory and choose **Scan bags**. Move through items with **Previous** and **Next**. Compare the selected item's carried total with your bags. Try **Check vendor value** on a readable item and compare the reference with the native item value if visible.
-4. Open your crafting window and choose **Scan profession** in Professions. Compare skill, cap, and learned recipes. Use **Next** to choose a simple learned recipe with fixed output and ordinary item reagents. Choose **More crafts** if needed and **Plan reagents**. My Plan should show the missing quantities and ordered crafting steps. Choose **Reserve carried reagents** and look for the reserved count in Inventory. If you plan a second recipe that shares a reagent, its shortage should account for the first reservation. **Clear reservations** releases the allocations, and a fresh bag scan starts a new reservation set.
-5. Optional trainer comparison on build `70888`. Select the trainer's recipe row and choose **Read trainer** in Professions. Open the matching crafting profession within five minutes, choose **Match recipe**, then **Scan profession**. A matched requirement appears with the trainer source and age.
-6. Open the native Auction House **Buy** view. From Market, choose **Observe browse** and make one search with Blizzard's Search button. Reopen GoldWise and choose **Observe browse** again within 60 seconds. Reopen Market to compare cache coverage and the observed asking-price minimum. A new observation uses a fresh UI session.
-7. Close and reopen the dashboard. Check text fit at your usual UI scale, try a smaller usable scale, and check that native game panels remain usable. After `/reload`, local storage should report schema 1 and session observations should start empty. Check the same on another character or after a full restart if practical.
+## A. Choose the exact current candidate
 
-Report the client build, UI scale, pass or fail for each path you used, and any Lua error. Live results for the integrated dashboard, fixed-output schematics, and vendor lookup are pending.
+1. Open [PR #58](https://github.com/DubluD3/GoldWise/pull/58), record its **full current head SHA**, and select its latest **successful** Lua regression Actions run **on that same SHA**. The current head may change after this document. Do not install an artifact merely because an older workflow says PASS.
+2. Download the `GoldWise-QA-candidate-<SHA>` GitHub Actions artifact. This is an outer ZIP holding an **inner** `GoldWise-0.2.0-test2-candidate.zip`. Extract the **inner ZIP** so `Interface/AddOns/GoldWise/GoldWise.toc` is the final path, not `GoldWise/GoldWise/GoldWise.toc`.
+3. **Fully exit WoW**, back up the existing GoldWise addon and its two SavedVariables files/entries (do not share them), disable disposable GoldWise probes, then install. Verify the current Forever version/build/interface using `/run local v,b,d,i=GetBuildInfo();print(v,b,d,i)`. Only `1.60.1` build `70862` or `70888`, interface `16001`, is allowlisted. If patched, **STOP** rather than bypassing the guard.
+4. Run `/console scriptErrors 1`, `/reload`, `/goldwise`. Record OS, resolution, UI scale, other addons, current SHA and errors.
 
-The candidate provides session browse observations, manual ledger attribution, trainer requirements when matched, and reagent planning for supported learned recipes. Persistent market history, a net Auction House comparison, and skill-up forecasts still require evidence for market identity, price basis and fees, or skill-up behavior.
+## B. Test player-controlled observations and navigation
+
+1. **Quick test (new):** After exiting the first-run guide, choose **Overview → Quick test**. It lists bags, profession, balance and reagent plan as observed or pending. Use **Scan bags**, **Scan profession** (with native crafting view open), **Sample balance**, **Choose recipe**, **My Plan**, and **Back to Overview**. A scan that fails or becomes stale must not be marked complete. This screen is an in-session QA aid, not a claim of gameplay validation.
+2. **Guide:** On first run, complete or skip steps. Reopen using `/goldwise guide`; confirm Pending / Partial / Stale states, manual vs automatic labels and Unsupported equipment, bank, alt sources. Completion does not mean scans succeeded.
+2. **Dashboard:** Open Overview, Inventory, Professions, Market and My Plan. Close/reopen `/goldwise`; check native UI placement, text and navigation at 100% and a smaller usable scale. Do not expect automated buying/crafting/mailing.
+3. **Inventory:** Click **Scan bags** and compare totals with native bags. Select a stack, use **Check vendor value** only if readable. Open **Review materials**: carried/held/manual-review amounts are informational, **never permission to sell**.
+4. **Ledger:** Outside trade and with no money on cursor, choose **Sample balance**; sample again after at least a second. Verify signed unclassified changes and reversible user labels, no fabricated sales.
+5. **Professions:** Open a normal player crafting window and click **Scan profession**. Compare skill, cap and learned **filtered** recipe rows. No complete recipe catalog is implied. Trainer matching is offered on verified build `70888` only; it must abstain when the requirement is not observed.
+6. **AH browse:** At the native Auctioneer Buy view, choose **Observe browse** in GoldWise, manually trigger one Blizzard search, then reopen GoldWise and observe within 60 seconds. Compare cache labels and visible asking price. There must be no addon-initiated auction query, sale proceeds, fees or forecast. Abort on throttle/error.
+
+## C. Reagent, reservation, goal and review integration
+
+1. Scan **complete bags** and the open profession. Pick a learned fixed-output recipe, optionally choose **More crafts**, then **Plan reagents**. Compare missing inputs, nested crafting steps and item names against source observations. Unsupported schematics must abstain rather than invent ingredients.
+2. In **My Plan → Direct capacity**, compare the observed immediate reagent sets. This is **not** guaranteed craftability or skill gain; nested crafts and bank/alts are excluded.
+3. In **My Plan → Review progression**, confirm observed skill/cap, filtered learned-recipe count and any selected skill target remaining. No skill-up probability or crafts-per-level estimate is allowed.
+4. Choose **Reserve carried reagents**. Check Inventory's held count and **Review materials**. Plan a second recipe sharing reagents; verify no double allocation. Re-plan the same recipe and confirm its own prior hold is not double-subtracted. **Clear reservations** returns the in-memory holds to zero.
+5. Test **Goals** from Overview/My Plan and **My Goals**: use **Gold +1g**, **Skill +10**, `/goldwise goal gold 25000` (**copper**), `/goldwise goal skill 75` (only with a fresh profession scan), `/goldwise goal help` and `/goldwise goal clear`. Without manual balance observation, progress should be **unknown**, not a guessed zero/completion.
+6. **Invalidation:** After creating a plan, manually rescan the **same profession**. The old plan must disappear from My Plan; the guide's **Recipe plans and reservations** step must be **Pending**, not current. An obsolete plan must not reserve. Repeat after rescanning bags, changing characters, reloading, and after the 15-minute freshness window. Do not force live in-memory corruption; CI covers malformed holds in synthetic tests.
+
+## UI navigation clarity (2026-11-12; live verification pending)
+
+- [ ] The selected top-level tab has a gold label and visually distinct darker-gold background. Switching from Overview to Inventory, Professions, Market and My Plan updates the selection without moving or acting on game items.
+- [ ] Contextual action slot 1 is visually emphasized; other actions remain readable and clickable.
+- [ ] Inventory pager reads **Previous item / Next item**, the profession recipe pager reads **Previous recipe / Next recipe**, and long review/market/plan lists use **Previous page / Next page**. Hidden pager buttons must not intercept clicks. Test at 100% and smaller game UI scale.
+- [ ] **Overview → Quick test** still works, and its manual actions retain the expected observations. Verify on the actual WoW Forever build; the Lua fixture only validates widget properties and commands.
+
+## D. Safety, persistence and acceptance
+
+1. Check normal combat, mouse input, Blizzard UI coexistence, at least one existing AH addon if installed, and lack of protected-action taint. Check performance/FPS for noticeable regression; do not claim a benchmark without measurements.
+2. After `/reload` and full restart, verify only bounded **local guide preferences and storage metadata** persist; session recipes, goals, inventory/AH observations, reservations and money ledger do not become current by magic. Re-login as another character and check scope isolation.
+3. Inspect addon folder and privacy disclosures for no account/network/telemetry/auto-play. If anything attempts automated AH searches, crafting, mail, equip, or protected actions, **STOP**.
+4. Record results in [E01–E20](OWNER_E2E_QA.md) with PASS / FAIL / BLOCKED / NOT RUN and **sanitized** screenshots or exact error strings, not raw SavedVariables or character names. On any error, fully close game, restore the backed-up addon and leave unrelated SavedVariables untouched.
+
+**Release is explicitly BLOCKED.** No approved LICENSE, no signed owner in-client QA, and no integrated merge/release authorization. The candidate ZIP is private-owner QA only. Do not equate a green CI badge with production readiness.

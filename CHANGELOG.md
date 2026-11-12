@@ -1,3 +1,8 @@
+## Unreleased — GW-017 fail-closed availability reads (2026-11-12)
+- Read-only reservation availability now validates complete observed bag counts and all current recipe holds, including the excluded recipe, before computing any free quantities.
+- Inventory displays unavailable instead of incorrect reserved amounts, and manual reagent planning refuses invalid reservation maps without creating a plan.
+- Added pure Lua and dashboard fixture regression coverage. No additional WoW API calls, automatic actions, persistence changes or in-game proof.
+
 ## Unreleased — GW-017 reservation integrity and atomicity (2026-11-12)
 - Validate all currently held recipe allocations and observed stock before accepting a reservation change.
 - Reject corrupt existing holds, phantom items, negative/fractional amounts, invalid identifiers and excessive reservations atomically, without silently replacing or reallocating anything.

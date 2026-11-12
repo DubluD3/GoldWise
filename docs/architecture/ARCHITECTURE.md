@@ -93,3 +93,6 @@ An active plan has an ephemeral build and exact profession-snapshot identity in 
 
 ## GW-017 reservation model boundary (2026-11-12)
 The pure `MaterialReservations.reserve` action validates the entire observed stock and current reservation map before evaluating a proposed replacement. Aggregate held amounts cannot exceed observed stock; stored recipe keys and item IDs are integer IDs, stored quantities are positive integers, and new requests are nonnegative integer counts for observed items. It only swaps the requesting recipe's entry after validating both old and new states, preserving atomic failure behavior and the eight-plan maximum. Read-only `available` retains its existing call contract. No new WoW APIs or persistence changes.
+
+## GW-017 read-only availability boundary (2026-11-12)
+`MaterialReservations.available` now returns `nil, reason` if the observed carried bag map or any session hold is malformed, refers to missing stock, exceeds observed totals, or breaches the eight-plan limit. Excluded-recipe holds are still checked before that recipe is exempted from subtraction. `RecipePlan` requires successful validation before invoking the pure nested planner; `Dashboard` prints unavailable rather than using an unvalidated negative remainder. This closes the read/write mismatch without changing saved schemas or using new WoW API calls.

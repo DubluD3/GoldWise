@@ -1,49 +1,62 @@
-# Development checkpoint — GoldWise (2026-11-12)
+# GoldWise — consolidated integration checkpoint (2026-11-12)
 
-**Stop reason:** actual installed WoW Forever QA and owner-approved licensing/release are unavailable to the engineering agent. Safe independent offline stories have been implemented on reviewable draft branches; this is not a production release. Read this document before resuming.
+**Status: REVIEW / OWNER QA PENDING — NOT A RELEASE.** This document describes the cumulative draft head `feature/GW-017-safe-availability-reads` (PR #58) as verified at commit `dc691b7ea28df23916692f645e5da059d72e59b0`, [offline CI #43211210854](https://github.com/DubluD3/GoldWise/actions/runs/43211210854). Later commits require their **own** successful CI evidence. Do not infer real-client compatibility from CI.
 
-## Current stack: merge only after sequential owner review
-1. [PR #34](https://github.com/DubluD3/GoldWise/pull/34) GW-013 trainer probe → `main`
-2. [PR #35](https://github.com/DubluD3/GoldWise/pull/35) GW-014 reagent graph → #34
-3. [PR #36](https://github.com/DubluD3/GoldWise/pull/36) GW-019 five-tab dashboard → #35
-4. [PR #37](https://github.com/DubluD3/GoldWise/pull/37) GW-017 reservations → #36
-5. [PR #42](https://github.com/DubluD3/GoldWise/pull/42) GW-026 first-run guide → #37, head `8689c7e698af3f39983389f15c46ed5cd42f3578`; [CI PASS](https://github.com/DubluD3/GoldWise/actions/runs/43191696374)
-6. [PR #43](https://github.com/DubluD3/GoldWise/pull/43) GW-018 offline vendor/crafting/ask model → #42, head `78dd33a1aa5e3fb40fb99a0afe77d4375752a6c2`; [CI PASS](https://github.com/DubluD3/GoldWise/actions/runs/43192391313)
-7. [PR #44](https://github.com/DubluD3/GoldWise/pull/44) GW-025 QA ZIP, privacy, release gate → #43, head `2103954671a756eb9fc5819a70d327d11f90d568`; [CI + artifact PASS](https://github.com/DubluD3/GoldWise/actions/runs/43193418138)
-8. [PR #46](https://github.com/DubluD3/GoldWise/pull/46) GW-027 offline alt gear/transfer model → #44, head `b79c22f79c3d05976e0795f851c1c25aa2aefe81`; [CI PASS](https://github.com/DubluD3/GoldWise/actions/runs/43194083422)
-9. GW-024 client QA documentation (this branch, review pending), to be based on #46.
+## Integration graph
 
-Do NOT merge/rebase the stack without rechecking actual heads, tests, conflicts, issue acceptance and user-tested functionality. Do not self-approve production or source rights.
+The GitHub PR graph was inspected on 2026-11-12: **20 open draft PRs, one contiguous parent-to-child base chain, no observed chain breaks**. The target of #34 is `main`; all other PRs target the previous PR's branch. This validates branch topology, **not** mergeability, absence of conflicts or owner acceptance.
 
-## Functionality currently provided in the **stacked** QA candidate
-- Existing verified scope on prior owner tests: bootstrap, character, manual bags/professions, native AH browse-result observation, manual money delta; direct AH queries remain prohibited/unverified.
-- Earlier draft functionality: fixed-output recipe material DAG, session reservations, five-tab informational dashboard and guarded trainer probe.
-- GW-026: per-source guide, first-run/on-demand navigation, accurate missing/stale/partial states; isolated `GoldWiseGuideDB` version 1 preference state, original `GoldWiseDB` version 1 untouched.
-- GW-018: guarded offline item-vendor/crafting comparisons, synthetic fixtures, no live expected auction proceeds.
-- GW-025: privacy disclosure and explicit QA ZIP packaging with validated TOC, CI artifact, public release disabled without human gate.
-- GW-027: offline conservative alt gear eligibility, synthetic fixtures; no live equipment capture, mailing or swap.
+| Order | PR | Scope | Base |
+|---:|---|---|---|
+| 1 | [#34](https://github.com/DubluD3/GoldWise/pull/34) | Trainer verification foundation | main |
+| 2 | [#35](https://github.com/DubluD3/GoldWise/pull/35) | Nested recipe reagents | #34 |
+| 3 | [#36](https://github.com/DubluD3/GoldWise/pull/36) | Five-tab dashboard | #35 |
+| 4 | [#37](https://github.com/DubluD3/GoldWise/pull/37) | Session reservations | #36 |
+| 5 | [#42](https://github.com/DubluD3/GoldWise/pull/42) | First-run scan guide | #37 |
+| 6 | [#43](https://github.com/DubluD3/GoldWise/pull/43) | Offline economics model | #42 |
+| 7 | [#44](https://github.com/DubluD3/GoldWise/pull/44) | QA ZIP and release gates | #43 |
+| 8 | [#46](https://github.com/DubluD3/GoldWise/pull/46) | Offline equipment advisor | #44 |
+| 9 | [#47](https://github.com/DubluD3/GoldWise/pull/47) | Owner QA handoff | #46 |
+| 10 | [#48](https://github.com/DubluD3/GoldWise/pull/48) | Guide source hardening | #47 |
+| 11 | [#49](https://github.com/DubluD3/GoldWise/pull/49) | Goal domain model | #48 |
+| 12 | [#50](https://github.com/DubluD3/GoldWise/pull/50) | Dashboard goals | #49 |
+| 13 | [#51](https://github.com/DubluD3/GoldWise/pull/51) | Material retention review | #50 |
+| 14 | [#52](https://github.com/DubluD3/GoldWise/pull/52) | Custom goal chat commands | #51 |
+| 15 | [#53](https://github.com/DubluD3/GoldWise/pull/53) | Profession progression review | #52 |
+| 16 | [#54](https://github.com/DubluD3/GoldWise/pull/54) | Direct-reagent craft capacity | #53 |
+| 17 | [#55](https://github.com/DubluD3/GoldWise/pull/55) | Profession-scoped producer cache | #54 |
+| 18 | [#56](https://github.com/DubluD3/GoldWise/pull/56) | Reservation action-time validation | #55 |
+| 19 | [#57](https://github.com/DubluD3/GoldWise/pull/57) | Atomic reservation validation | #56 |
+| 20 | [#58](https://github.com/DubluD3/GoldWise/pull/58) | Fail-closed availability and guide integrity | #57 |
 
-## Exact CI proof
-- #42 head `8689c7e`: syntax/unit/contract/all PASS.
-- #43 head `78dd33a`: syntax/unit/contract/all PASS.
-- #44 head `2103954`: syntax/unit/contract/all and candidate ZIP job PASS. A QA artifact with short expiration was uploaded. Artifact expires 2026-11-19 09:40 UTC.
-- #46 head `b79c22f`: syntax/unit/contract/all and candidate ZIP job PASS.
-- This documentation PR's final checks need their own Actions run.
-- **Actual Forever in-game test results for integrated candidate: NOT RUN.**
+**Do not merge or rebase this chain without explicit owner authorization.** Before any approved merge sequence, re-fetch actual PR base/head SHAs and reviews, inspect each diff for rebase/conflict issues, test the integrated result after each dependency resolution, and preserve signed-off QA/license gates. A single final cumulative test run does **not** mean that each individual merge will automatically succeed.
 
-## True gates and limitations
-1. Client build verification: current allowlist only `1.60.1` builds `70862` and `70888`, interface `16001`. Each patch requires fresh live proof.
-2. API-010/012 and GW-011: market identity, per-unit price interpretation, AH fees/deposits, durable market history unknown. Never auto-query or infer sales.
-3. Profession skill-up probabilities, progression/trainer behaviors beyond verified probe, comprehensive craft economics, bank, alt snapshots, equipment stats/bind/transfer rule APIs, and complete goals UI require evidence/adapters. Avoid claims they are implemented.
-4. No chosen public redistribution `LICENSE`; owner selects after review; do NOT fabricate a license or grant.
-5. No in-game performance, real-client accessibility, combat taint, multi-session, multi-character regression signoff. Actual owner must test and provide sanitized evidence.
-6. Existing upstream PRs #34-#37 are open drafts; no merges performed.
+## What the cumulative candidate actually offers
 
-## Next action
-Run the **[GW-024 owner E2E QA checklist](OWNER_E2E_QA.md)** on the latest integrated candidate ZIP and report the real build, UI scale, E01-E20 results and errors. Keep failures as issues. Revalidate API evidence, implement independent only-evidenced adapters/stories and rerun all four Lua suites and ZIP checks. Merge PRs in dependency order after owner reviews. Only after all release gates and rights/license decision should an owner-authorized release ZIP be considered.
+- On-device, accountless addon and five informational tabs: Overview, Inventory, Professions, Market and My Plan.
+- First-run/on-demand scan guide; character-scope observation on login and *manual* carried bag, visible profession, AH browse-result and money samples; data freshness/unknown labels.
+- Fixed-output recipe schematic capture on player action, bounded nested reagent planning, temporary per-recipe reservations, inventory material review and direct reagent coverage; producer cache restricted to current exact profession scan.
+- Session-only customizable copper and profession skill targets, read-only progression review; no skill-up forecasting.
+- Offline-only equipment and item alternative models are **not** verified live equipment, market pricing or cross-character data support.
+- Known platform allowlist: `1.60.1` build `70862` or `70888`, interface `16001`. This is a development compatibility constraint, not a guarantee after new game patches.
 
-No background automation or unchecked gameplay action is authorized by this checkpoint.
+## Evidence and exact blocked gates
 
-## Follow-up hardening (2026-11-12)
-- The Node.js 20 deprecation warning was resolved on packaging PR #44 (head `02b269efc199736ebda96e3183c9b239287cb62e`, [CI PASS](https://github.com/DubluD3/GoldWise/actions/runs/43194780775)). This downstream hardening branch incorporates the same pinned Node.js 24 artifact uploader so its own QA ZIP does not reintroduce the warning. Future stack reconciliation must preserve this change when merging PR #44.
-- Guide completeness now requires an **explicit boolean true**, not merely absence of false. Unknown/malformed coverage is Partial. Missing character scope is Pending. Malformed scanner definitions fail closed. These are offline-only defensive semantics; actual Forever UI QA remains NOT RUN.
+| Gate | Current result | Requirement to progress |
+|---|---|---|
+| Lua 5.1 syntax, unit, contract, complete regression | PASS at prior head | Rerun on **new current head** after every change |
+| Candidate ZIP integrity and manifest | PASS at prior head | Reverify newest artifact by matching full head SHA |
+| Contiguous stacked draft PR base graph | PASS (topology only) | Recheck heads/bases before any authorized integration |
+| Actual installed Forever E01–E20 | **NOT RUN** | Owner executes [E2E checklist](OWNER_E2E_QA.md) using latest passing candidate |
+| Combat taint, UI scale, game compatibility, AH coexistence, performance | **NOT RUN** | Record live evidence and defects |
+| Accurate skill-up odds, actual AH fee/net profit, durable bank/alt/gear evidence | **UNKNOWN / NOT VERIFIED** | Current-client API proof and separate explicitly approved stories |
+| Open-source license and third-party content rights | **BLOCKED** | Owner selects/approves license and legal/compliance review |
+| Signed release approval and final integration | **BLOCKED** | Owner signs actual QA and explicitly authorizes merge/release |
+
+No public GitHub release was found in the inspected repository release list. Missing LICENSE / owner approval keeps `sh scripts/package.sh release` intentionally blocked; the CI artifact is a **QA-only candidate**.
+
+## Owner next step
+
+Use [INTEGRATED_TEST.md](INTEGRATED_TEST.md) for the compact game walkthrough and [OWNER_E2E_QA.md](OWNER_E2E_QA.md) for complete E01–E20 acceptance. In GitHub Actions for PR #58's **head branch**, select the most recent **successful** Lua regression workflow whose commit equals the current PR head. Download the candidate artifact there; do **not** follow an old immutable run link for installation. Back up addon folder and GoldWise SavedVariables first.
+
+**Engineering next step after test feedback:** collect sanitized defects, fix reproducible failures, reverify current build/API restrictions, retest and only then ask for explicit integration/merge approval. Do not silently turn another `continue` into merge or release authorization.

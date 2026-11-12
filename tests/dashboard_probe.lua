@@ -13,6 +13,8 @@ local function widget(kind, hidden)
         object[method] = function() end
     end
     function object:SetText(value) self.value = value end
+    function object:SetColorTexture(...) self.color = { ... } end
+    function object:SetTextColor(...) self.textColor = { ... } end
     function object:CreateTexture() return widget("Texture") end
     function object:CreateFontString()
         local label = widget("FontString")
@@ -101,6 +103,28 @@ local function hasText(fragment)
         if label.value and label.value:find(fragment, 1, true) then return true end
     end
 end
+local function visibleButton(label)
+    for _, candidate in ipairs(widgets) do
+        if candidate.shown and candidate.label and candidate.label.value == label then
+            return candidate
+        end
+    end
+end
+local function hasPagerLabel(label)
+    for _, candidate in ipairs(widgets) do
+        if candidate.label and candidate.label.value == label then return true end
+    end
+end
+local function activeTab(label, other)
+    local selected = assert(visibleButton(label), "missing selected tab " .. label)
+    local inactive = assert(visibleButton(other), "missing inactive tab " .. other)
+    assert(selected.background and inactive.background)
+    assert(selected.background.color[1] ~= inactive.background.color[1],
+        "selected tab must be visually distinct")
+    assert(selected.label.textColor[1] ~= inactive.label.textColor[1],
+        "selected tab label must have visual emphasis")
+end
+
 local function click(label)
     for _, candidate in ipairs(widgets) do
         if candidate.shown and candidate.label and candidate.label.value == label then
@@ -118,6 +142,7 @@ globals.SlashCmdList.GOLDWISE()
 assert(widgets[1].shown and hasText("Scan & Setup Guide"))
 click("Exit guide")
 assert(hasText("GoldWise  /  Overview"))
+activeTab("Overview", "Inventory")
 globals.SlashCmdList.GOLDWISE("goal gold 25000")
 assert(hasText("GoldWise  /  My Goals") and hasText("Gold: unknown"))
 assert(hasText("Custom session target set"))
@@ -152,9 +177,29 @@ assert(hasText("Combined goal: in-progress"))
 click("Back to plan")
 assert(hasText("GoldWise  /  My Plan"))
 click("Overview")
-click("Inventory")
+click("Quick test")
+assert(hasText("GoldWise  /  Quick Test"))
+assert(hasText("Bags: NEEDS SCAN") and hasText("Professions: NEEDS SCAN"))
+assert(hasText("Balance: manually sampled") and hasText("Reagent plan: PENDING"))
 click("Scan bags")
-assert(reads == 1 and vendorReads == 0 and hasText("Fixture hide") and not hasText("Action unavailable"))
+assert(hasText("Bags: observed (complete)") and reads == 1)
+click("Scan profession")
+assert(hasText("Professions: observed (filtered view)"))
+click("Sample balance")
+assert(hasText("Balance: manually sampled"))
+click("Choose recipe")
+assert(hasText("GoldWise  /  Professions"))
+click("Overview")
+click("Quick test")
+assert(hasText("GoldWise  /  Quick Test") and hasText("Bags: observed (complete)"))
+click("Back to Overview")
+assert(hasText("GoldWise  /  Overview"))
+print("PASS quick-test page provides a guided manual scan and navigation path")
+click("Inventory")
+activeTab("Inventory", "Overview")
+assert(hasPagerLabel("Next item") and hasPagerLabel("Previous item"))
+click("Scan bags")
+assert(reads == 2 and vendorReads == 0 and hasText("Fixture hide") and not hasText("Action unavailable"))
 click("Check vendor value")
 assert(vendorReads == 1 and hasText("29 copper"))
 click("Review materials")
@@ -171,6 +216,8 @@ print("PASS dashboard opens lazily, renders inventory, and reads vendor info onl
 
 click("Scan bags")
 click("Professions")
+activeTab("Professions", "Inventory")
+assert(hasPagerLabel("Next recipe") and hasPagerLabel("Previous recipe"))
 click("Scan profession")
 globals.SlashCmdList.GOLDWISE("goal gold 10000")
 assert(hasText("Gold: unknown") and hasText("Custom session target set"))
@@ -255,6 +302,25 @@ click("My Plan")
 assert(hasText("Choose a learned recipe under Professions"))
 assert(not hasText("Reagent plan ·"))
 print("PASS new manual profession scan invalidates prior plan presentation")
+globals.SlashCmdList.GOLDWISE("guide")
+assert(hasText("Recipe plans and reservations"))
+assert(hasText("State: Pending"))
+assert(hasText("No observation in this session"))
+click("Exit guide")
+print("PASS scan guide never certifies an old plan after a profession rescan")
+
+click("Inventory")
+local held = addon.reservationsFor(addon.inventorySnapshot)
+held[999] = { [999] = 1 }
+click("Inventory")
+assert(hasText("Reservation counts unavailable"))
+click("Professions")
+click("Plan reagents")
+assert(hasText("Reservation state invalid"))
+assert(addon.recipePlan == nil)
+held[999] = nil
+print("PASS corrupted reservation availability fails closed in inventory and planning")
+
 
 local unavailable = Fixture.new()
 unavailable:load("adapters/Dashboard.lua", "GoldWise", { supportedClient = true })

@@ -6,6 +6,8 @@ local colors = {
     text = { 243 / 255, 245 / 255, 248 / 255 },
     muted = { 169 / 255, 181 / 255, 199 / 255 },
     gold = { 232 / 255, 193 / 255, 90 / 255 },
+    selected = { 93 / 255, 71 / 255, 37 / 255, 1 },
+    primary = { 64 / 255, 83 / 255, 101 / 255, 1 },
 }
 local pageSize = 6
 local snapshotAge = 900
@@ -22,6 +24,7 @@ local goalPanel = false
 local materialsPanel = false
 local professionReviewPanel = false
 local capacityPanel = false
+local testPanel = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -104,12 +107,24 @@ local function guidePage()
         complete = false
     elseif step.key == "ledger" then
         local ledger = addon.ledgerView and addon.ledgerView()
-        snap = ledger and ledger.latest
+        if ledger and ledger.characterScope == scope and ledger.build == addon.clientBuild then
+            snap = ledger.latest
+        end
     elseif step.key == "plan" then
-        snap = scoped(addon.recipePlan)
+        local plan = scoped(addon.recipePlan)
+        local profession = scoped(addon.professionSnapshot)
+        if plan and profession and plan.professionSnapshot == profession
+            and plan.build == addon.clientBuild then
+            snap = plan
+        end
     end
+    -- A ledger's latest sample has no own scope: its parent session already
+    -- passed the explicit character/build gate above. Never infer scopes for
+    -- other source types, including invalid/old plans.
+    local sourceScope = step.key == "ledger" and snap and scope
+        or snap and (snap.characterScope or snap.scopeKey)
     local source = snap and {
-        scope = snap.characterScope or snap.scopeKey or scope,
+        scope = sourceScope,
         observedAt = snap.observedAt,
         complete = complete,
     }
@@ -446,6 +461,47 @@ local function materialsPage(time, inventory, plan)
     return result
 end
 
+-- A short, visible route through the first player-controlled validation steps.
+-- Status only reflects same-character, fresh session observations.
+local function testingPage(time, inventory, profession, ledger, plan)
+    local result = { rows = {
+        "QUICK TEST | GoldWise is a QA candidate, not a release.",
+        "Follow the steps below. Actions only observe or navigate; nothing is crafted, bought or moved.",
+    }, actions = {} }
+    local rows, actions = result.rows, result.actions
+    local _, bagsFresh = age(inventory, time, snapshotAge)
+    local _, professionFresh = age(profession, time, snapshotAge)
+    local _, planFresh = age(plan, time, snapshotAge)
+    local readyBags = inventory and inventory.status == "complete" and bagsFresh
+    local readyProfession = profession and professionFresh
+    local readyPlan = plan and planFresh and readyBags
+        and plan.inventory == inventory and plan.professionSnapshot == profession
+        and plan.build == addon.clientBuild
+    local moneyFresh = ledger and ledger.latest
+        and ledger.characterScope == (addon.characterSnapshot and addon.characterSnapshot.scopeKey)
+        and ledger.build == addon.clientBuild
+        and age(ledger.latest, time, snapshotAge) ~= "Time unavailable"
+    if moneyFresh then
+        local _, fresh = age(ledger.latest, time, snapshotAge)
+        moneyFresh = fresh
+    end
+    rows[#rows + 1] = "1. Bags: " .. (readyBags and "observed (complete)" or "NEEDS SCAN - open bags, click Scan bags")
+    rows[#rows + 1] = "2. Professions: " .. (readyProfession and "observed (filtered view)"
+        or "NEEDS SCAN - open a crafting window, click Scan profession")
+    rows[#rows + 1] = "3. Balance: " .. (moneyFresh and "manually sampled" or "NEEDS SAMPLE - click Sample balance")
+    rows[#rows + 1] = "4. Reagent plan: " .. (readyPlan and "available in My Plan"
+        or "PENDING - choose a learned recipe in Professions and Plan reagents")
+    rows[#rows + 1] = "5. Market: OPTIONAL - inspect only after a native Auction House search."
+    rows[#rows + 1] = "To report a failure: note the client build, action and Lua error (remove private identifiers)."
+    actions[1] = { "Scan bags", GoldWiseInventoryScan }
+    actions[2] = { "Scan profession", GoldWiseProfessionScan }
+    actions[3] = { "Sample balance", GoldWiseLedgerSample }
+    actions[4] = { "Choose recipe", function() testPanel, tab, page = false, 3, 1 end }
+    actions[5] = { "My Plan", function() testPanel, tab, page = false, 5, 1 end }
+    actions[6] = { "Back to Overview", function() testPanel, tab, page = false, 1, 1 end }
+    return result
+end
+
 local function state()
     if guideStep then return guidePage() end
     local result = { rows = {}, actions = {} }
@@ -466,6 +522,7 @@ local function state()
     end
 
     if tab == 1 then
+        if testPanel then return testingPage(time, inventory, profession, ledger, plan) end
         rows[1] = inventory and ("Bags · " .. inventory.status .. " · " .. age(inventory, time, snapshotAge)) or "Bags · Scan to see carried items"
         rows[2] = profession and (profession.professionName .. " · " .. profession.skill .. " / " .. profession.cap .. " · " .. age(profession, time, snapshotAge))
             or "Professions · Open a crafting window and scan"
@@ -480,6 +537,7 @@ local function state()
         actions[1] = { "Sample balance", GoldWiseLedgerSample }
         actions[4] = { "Update my data", showGuide }
         actions[5] = { "Goals", function() tab, page, goalPanel = 5, 1, true end }
+        actions[6] = { "Quick test", function() testPanel = true end }
     elseif tab == 2 then
         if materialsPanel then return materialsPage(time, inventory, plan) end
         actions[3] = { "Review materials", function() materialsPanel, page = true, 1 end }
@@ -519,9 +577,13 @@ local function state()
                 or "Base vendor reference unavailable."
         end
         local free = addon.materialReservations.available(addon.reservationsFor(inventory), inventory.totals)
-        local reserved = inventory.totals[id] - (free[id] or 0)
-        if reserved > 0 then
-            rows[#rows + 1] = string.format("%.0f reserved across session plans", reserved)
+        if not free then
+            rows[#rows + 1] = "Reservation counts unavailable. Clear holds or rescan bags."
+        else
+            local reserved = inventory.totals[id] - (free[id] or 0)
+            if reserved > 0 then
+                rows[#rows + 1] = string.format("%.0f reserved across session plans", reserved)
+            end
         end
         actions[2] = { "Check vendor value", function()
             vendor = { id = id, inventory = inventory, copper = addon.vendorReference(id) }
@@ -659,11 +721,20 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or capacityPanel and "Direct Capacity" or tabs[tab]))
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or capacityPanel and "Direct Capacity" or testPanel and "Quick Test" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
     view.status:SetText(message)
+    -- Selection must be visible; previously every tab used the same color.
+    for index, control in ipairs(view.tabs) do
+        control.background:SetColorTexture(unpack(index == tab and colors.selected or colors.surface))
+        control.label:SetTextColor(unpack(index == tab and colors.gold or colors.text))
+    end
+    local navigationLabel = tab == 3 and "recipe"
+        or tab == 2 and not materialsPanel and "item" or "page"
+    view.previous.label:SetText("Previous " .. navigationLabel)
+    view.next.label:SetText("Next " .. navigationLabel)
     if content.previous then view.previous:Show() else view.previous:Hide() end
     if content.next then view.next:Show() else view.next:Hide() end
     for index, button in ipairs(view.actions) do
@@ -671,6 +742,9 @@ local function render()
         button.action = action and action[2]
         if action then
             button.label:SetText(action[1])
+            -- Give the first contextual action visual priority without
+            -- introducing unverified button templates or secure actions.
+            button.background:SetColorTexture(unpack(index == 1 and colors.primary or colors.surface))
             button:Show()
         else
             button:Hide()
@@ -682,6 +756,7 @@ local function fill(parent, color)
     local texture = parent:CreateTexture(nil, "BACKGROUND")
     texture:SetAllPoints(parent)
     texture:SetColorTexture(unpack(color))
+    return texture
 end
 
 local function text(parent, template, color, horizontal, vertical)
@@ -697,7 +772,7 @@ local function button(parent, label, width, x, y, action)
     local control = CreateFrameWithOptions({ frameType = "Button", parent = parent })
     control:SetSize(width, 24)
     control:SetPoint("TOPLEFT", parent, "TOPLEFT", x, y)
-    fill(control, colors.surface)
+    control.background = fill(control, colors.surface)
     control.label = text(control, "GameFontNormalSmall", colors.text, "CENTER", "MIDDLE")
     control.label:SetAllPoints(control)
     control.label:SetText(label)
@@ -740,9 +815,10 @@ local function build()
     button(frame, "Close", 56, width - 68, -12, function() frame:Hide() end)
 
     local tabWidth = (width - 48) / #tabs
+    local tabButtons = {}
     for index, label in ipairs(tabs) do
-        button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel = nil, index, 1, false, false, false, false
+        tabButtons[index] = button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
+            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, testPanel = nil, index, 1, false, false, false, false, false
         end)
     end
 
@@ -760,8 +836,8 @@ local function build()
             page = page + delta
         end
     end
-    local previous = button(frame, "Previous", 76, 16, -(height - 83), function() move(-1) end)
-    local following = button(frame, "Next", 76, 100, -(height - 83), function() move(1) end)
+    local previous = button(frame, "Previous", 106, 16, -(height - 83), function() move(-1) end)
+    local following = button(frame, "Next", 106, 130, -(height - 83), function() move(1) end)
     local actions = {}
     local actionWidth = (width - 48) / 3
     for index = 1, 6 do
@@ -770,14 +846,14 @@ local function build()
         actions[index] = button(frame, "", actionWidth, 16 + column * (actionWidth + 8),
             -(height - 55 + row * 28))
     end
-    return { frame = frame, title = title, body = body, status = status, actions = actions, previous = previous, next = following }
+    return { frame = frame, title = title, body = body, status = status, tabs = tabButtons, actions = actions, previous = previous, next = following }
 end
 
 function GoldWiseOpen(command)
     local isGoalCommand = type(command) == "string"
         and (command == "goal" or command:match("^%s*goal%s+") ~= nil)
     if isGoalCommand then
-        guideStep, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, tab, page = nil, true, false, false, false, 5, 1
+        guideStep, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, testPanel, tab, page = nil, true, false, false, false, false, 5, 1
         local request, reason = addon.goalCommands.parse(command)
         feedback = request and applyCustomGoal(request)
             or ("Invalid goal command (" .. (reason or "unknown") .. "). Use /goldwise goal help.")

@@ -290,3 +290,6 @@ The reservation action now reads the existing **GetServerTime** source through a
 
 ## GW-017 reservation integrity model (2026-11-12)
 `OFFLINE-TESTED`: the Lua session reservation model now rejects impossible prior holds and invalid observed stock before authorizing any replacement, even if a caller bypasses higher-level UI checks. There are **no new WoW API calls**, no automated inventory mutation, and no persistent source changes. Synthetic tests are not live client proof. Installed Forever QA: `NOT RUN`.
+
+## GW-017 guarded inventory availability (2026-11-12)
+`OFFLINE-TESTED`: Validated Lua in-memory reservation availability replaces unconditional arithmetic in the Inventory display and manual recipe planner. Malformed or impossible held quantities fail closed without subtracting or planning. No new Blizzard API is accessed. Actual WoW Forever client QA: `NOT RUN`.

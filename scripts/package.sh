@@ -68,6 +68,17 @@ while IFS= read -r original; do
     esac
     case "$path" in *.lua|*.xml) ;; *) fail "invalid addon source: $path" ;; esac
     test -f "$path" || fail "missing TOC source file: $path"
+    # Never copy arbitrary bytes through symlinks, including linked addon
+    # directory roots. All packaged sources must be repository-owned files.
+    test ! -L "$path" || fail "symlink TOC source forbidden: $path"
+    remaining=$path
+    directory=
+    while [ "$remaining" != "${remaining#*/}" ]; do
+        component=${remaining%%/*}
+        directory=${directory:+$directory/}$component
+        test ! -L "$directory" || fail "symlink addon source directory forbidden: $path"
+        remaining=${remaining#*/}
+    done
     if grep -Fqx "$path" "$work/seen"; then fail "duplicate TOC source: $path"; fi
     printf '%s\n' "$path" >> "$work/seen"
     mkdir -p "$work/GoldWise/$(dirname "$path")"

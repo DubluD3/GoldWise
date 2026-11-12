@@ -3,7 +3,7 @@
 **Prepared 2026-11-12. In-game status: NOT RUN.** An AI-only Lua test is not evidence that the installed addon works or complies on your client. The following is a reproducible owner test for the latest stacked QA candidate. Record exact build/interface and report **PASS, FAIL, BLOCKED or NOT RUN** per case.
 
 ## Prerequisites and installation
-1. On GitHub, open [latest candidate CI run](https://github.com/DubluD3/GoldWise/actions/runs/43194083422), download the **GoldWise-QA-candidate** workflow artifact (a ZIP containing an inner `GoldWise-0.2.0-test2-candidate.zip`). This is an owner's test artifact, not a public release.
+1. Open [PR #58](https://github.com/DubluD3/GoldWise/pull/58) and record its **current full head SHA**. In [GitHub Actions](https://github.com/DubluD3/GoldWise/actions/workflows/lua-smoke.yml), select the latest **successful** Lua regression run for that **exact SHA**. Download its `GoldWise-QA-candidate-<SHA>` artifact (outer ZIP containing inner `GoldWise-0.2.0-test2-candidate.zip`). **Do not install any old artifact merely because a previously linked workflow passed.** This is an owner-only test candidate, not a public release.
 2. Exit WoW: Forever fully. In Battle.net use game settings → **Show in Explorer/Finder**, navigate to the game installation's actual `Interface/AddOns/` folder. Extract the **inner ZIP** there. Final path must be `<actual Forever installation>/Interface/AddOns/GoldWise/GoldWise.toc`. If `GoldWise/GoldWise/GoldWise.toc` appears, move the inner folder up one level.
 3. Back up any existing GoldWise addon folder and any prior GoldWise SavedVariables under the relevant `WTF/Account/.../SavedVariables/` directory **before** replacing files. Do not copy SavedVariables into an issue or PR report. Disable disposable GoldWise probe addons to avoid interleaved messages.
 4. Start Forever. Confirm GoldWise is enabled in the AddOns list. Open chat and record the output of:
@@ -43,7 +43,7 @@
 | E20 | Release: package filename, files and manifest verified by CI. **STOP** public release: no approved open-source `LICENSE`, no signed human QA and parent PR integration until addressed. Public publishing must remain blocked | BLOCKED |
 
 ## Offline CI (already performed, not in-client proof)
-At commit `b79c22f79c3d05976e0795f851c1c25aa2aefe81`, the [GitHub Actions run](https://github.com/DubluD3/GoldWise/actions/runs/43194083422) passed actual Lua 5.1 syntax/unit/contract/all and QA candidate ZIP validation. Commands executed by the workflow:
+The cumulative integration candidate at `dc691b7ea28df23916692f645e5da059d72e59b0` passed [GitHub Actions run #43211210854](https://github.com/DubluD3/GoldWise/actions/runs/43211210854): Lua 5.1 syntax/unit/contract/all and QA candidate ZIP validation. **This is historical evidence, not a pointer to install that artifact**. For owner QA, use the newest successful workflow matching PR #58's *current* exact head SHA. Commands executed by the workflow:
 ```sh
 sh scripts/test.sh syntax
 sh scripts/test.sh unit
@@ -139,3 +139,17 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Re-plan the **same** recipe with a smaller count: its existing hold should be replaced rather than added a second time.
 - [ ] Refresh bags: previously held amounts should not contaminate the new inventory snapshot. No game items should move automatically or be sold.
 - [ ] The synthetic invalid-state tests run in CI; they cannot be exercised safely by altering live SavedVariables. Record any UI errors and current game build. Installed client status: **NOT RUN**.
+
+## GW-017 safe availability read checks (NOT RUN)
+- [ ] Manually scan complete bags and inspect Inventory with no holds, then after one or two manually reserved recipes. Correct quantities should appear and valid manual recipe plans should still work.
+- [ ] Re-plan the same recipe: its existing valid hold should not subtract twice. Verify a different recipe's holds still reduce available stock.
+- [ ] Invalid-state regression is synthetic only: CI exercises phantom item IDs, impossible aggregate holds and malformed quantities without altering real game data. Inventory should abstain, and planning refuse, if such in-memory corruption occurs.
+- [ ] Record build, errors and any unsafe or incorrect quantities. No automatic crafting, AH actions, or bag modification is expected. Installed Forever status: `NOT RUN`.
+
+## Integration review checkpoint — 2026-11-12
+- PR #58's cumulative branch includes the profession-plan guide status correction and strict ledger session attribution. Re-scan the same profession after creating a plan, reopen `/goldwise guide` at Recipe plans and reservations and confirm **Pending** instead of Last observed.
+- Current candidate workflow must be identified by **PR #58 head SHA and successful CI**, not an older hard-coded reference. Verify the latest successful Actions run before installation.
+- Do not interpret synthetic CI success as in-game client approval. The exact game build, licensing, taint/combat and privacy checks remain mandatory. **Real Forever client QA: NOT RUN.**
+
+## Consolidated handoff (2026-11-12)
+The full 20-draft-PR integration graph, blocker inventory and exact prior-head CI evidence are recorded in [CURRENT_CHECKPOINT.md](CURRENT_CHECKPOINT.md). A compact start-to-finish procedure is in [INTEGRATED_TEST.md](INTEGRATED_TEST.md). Both are documentation for **unmerged QA**; never treat a code or docs CI pass as actual gameplay approval. If any changes land after the cited prior CI run, rerun on the exact new head and recheck candidate SHA before installing. The owner alone authorizes release and decides a compatible LICENSE.

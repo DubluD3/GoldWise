@@ -13,17 +13,51 @@ local function count(value, minimum)
         and value >= minimum and value <= MAX_COUNT
 end
 
--- Backwards-compatible read-only calculation. The action boundary below is
--- stricter: it validates the ENTIRE observed inventory and hold map first.
+-- Read paths must refuse the same impossible stock that the write
+-- boundary rejects. No negative "available" counts or phantom item IDs.
+-- Even the excluded recipe is validated before its hold is released.
 function Reservations.available(byRecipe, owned, exceptRecipe)
-    local free = {}
+    if type(byRecipe) ~= "table" or type(owned) ~= "table"
+        or (exceptRecipe ~= nil and not validId(exceptRecipe)) then
+        return nil, "Reservation inputs unavailable."
+    end
+    local free, held = {}, {}
     for item, quantity in pairs(owned) do
+        if not validId(item) or not count(quantity, 0) then
+            return nil, "Observed inventory invalid."
+        end
         free[item] = quantity
+    end
+    local plans = 0
+    for recipe, quantities in pairs(byRecipe) do
+        if not validId(recipe) or type(quantities) ~= "table" then
+            return nil, "Existing reservations invalid."
+        end
+        plans = plans + 1
+        if plans > MAX_PLANS then
+            return nil, "Reservation limit reached. Clear reservations to continue."
+        end
+        local nonempty = false
+        for item, quantity in pairs(quantities) do
+            if not validId(item) or not count(quantity, 1)
+                or free[item] == nil then
+                return nil, "Existing reservations invalid."
+            end
+            nonempty = true
+            local total = (held[item] or 0) + quantity
+            if total > free[item] then
+                return nil, "Existing reservations exceed carried stock."
+            end
+            held[item] = total
+        end
+        if not nonempty then
+            return nil, "Existing reservations invalid."
+        end
     end
     for recipe, quantities in pairs(byRecipe) do
         if recipe ~= exceptRecipe then
             for item, quantity in pairs(quantities) do
-                free[item] = (free[item] or 0) - quantity
+                free[item] = free[item] - quantity
             end
         end
     end

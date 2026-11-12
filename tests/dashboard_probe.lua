@@ -380,6 +380,24 @@ held[999] = nil
 print("PASS corrupted reservation availability fails closed in inventory and planning")
 
 
+-- A superseded or invalid source must hide both its panel and its
+-- entry point. Rescanning is the only way to make it accessible again.
+assert(visibleButton("GoldWise") and visibleButton("GoldWise Bags")
+    and visibleButton("GoldWise Market"))
+addon.professionCompanion.invalidate()
+addon.inventoryCompanion.invalidate()
+addon.marketCompanion.invalidate()
+assert(not visibleButton("GoldWise"))
+assert(not visibleButton("GoldWise Bags"))
+assert(not visibleButton("GoldWise Market"))
+assert(addon.professionCompanion.show(addon.professionSnapshot))
+assert(addon.inventoryCompanion.show(addon.inventorySnapshot))
+assert(addon.marketCompanion.show(addon.auctionObservation) == false)
+-- The original market cache has aged out; no old entry point may return.
+assert(visibleButton("GoldWise") and visibleButton("GoldWise Bags"))
+assert(not visibleButton("GoldWise Market"))
+print("PASS stale native companion controls are hidden, and only fresh observations restore them")
+
 local unavailable = Fixture.new()
 unavailable:load("adapters/Dashboard.lua", "GoldWise", { supportedClient = true })
 unavailable.globals.GoldWiseOpen()

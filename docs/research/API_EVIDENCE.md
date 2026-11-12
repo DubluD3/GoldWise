@@ -293,3 +293,8 @@ The reservation action now reads the existing **GetServerTime** source through a
 
 ## GW-017 guarded inventory availability (2026-11-12)
 `OFFLINE-TESTED`: Validated Lua in-memory reservation availability replaces unconditional arithmetic in the Inventory display and manual recipe planner. Malformed or impossible held quantities fail closed without subtracting or planning. No new Blizzard API is accessed. Actual WoW Forever client QA: `NOT RUN`.
+
+## GW-028 native profession child frame (2026-11-12)
+- **Evidence:** `ProfessionsFrame` / `CraftingPage:IsVisible()` is already used by the manually tested profession-capture path. `CreateFrameWithOptions`, `CreateTexture`, `CreateFontString`, and `SetPoint` are used in the existing dashboard; the test fixtures simulate these APIs.
+- **New behavior:** on a successful **manual** profession scan only, create a passive child button under `ProfessionsFrame`, and an adjacent opt-in summary panel anchored to its edge. No hooking of protected Blizzard buttons, frame modification, new data-fetch API, scan timer, or event polling.
+- **Class:** `OFFLINE-CONTRACT-TESTED` for widget construction and open/close; **NOT YET VERIFIED IN GAME** for placement, skin, parent clipping, protected-frame behavior, or client build changes. If creation fails, silently retain the existing standalone dashboard. Review layout and taint on the exact allowlisted Forever build before relying on this UI.

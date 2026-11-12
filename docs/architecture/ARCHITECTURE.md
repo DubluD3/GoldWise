@@ -52,6 +52,9 @@ docs/           # product, planning, policy, architecture, research
 - Alt and bank snapshots are stale by default until re-observed.
 - No dynamic executable code, network calls, process access or input generation.
 
+## GW-027 cross-character equipment eligibility
+Pure `domain/EquipmentAdvisor.lua` consumes caller-normalized last-observed character/item data and independent, fresh transfer authorization evidence. No client APIs or SavedVariables schema changes. Unknown trade route/binding/eligibility restrictions trigger abstain; explicit BoP/soulbound restrictions, incompatible realm/faction/build and disqualifying usability trigger block. Even a fully matching fixture produces **potential-upgrade-review**, never a verified upgrade, until an evidence-backed role/stat comparator is designed. Runtime adapters and UI integration remain blocked under API_EVIDENCE.
+
 ## GW-018 offline economic alternative contracts
 `domain/ItemChoices.lua` is pure Lua: exact integer copper bounds, explicit vendor reference alternatives, reserved-stock-aware nested recipe material accounting (using `data/RecipeMaterials.lua`), and optional scoped fresh verified-unit-basis AH asking-price hypotheticals. Output differentiates vendor-reference comparisons from **ask-only** and **unknown**. AH fee/cut/deposit scenarios require explicit *verified* inputs and must never be interpreted as expected sale proceeds. No live Forever adapter is wired because API-010/012 and price unit basis remain unverified; test fixtures alone never authorize them.
 

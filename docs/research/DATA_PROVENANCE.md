@@ -50,3 +50,6 @@ Each external dataset needs:
 
 ### GW-018 synthetic test data (2026-11-12)
 The fictional `tests/item_choices.lua` item identifiers, 100-cloth conversion, prices and fee examples are authored test-only data. They are **not** Forever recipes, vendor values, observed market prices or verified charges. The corresponding pure domain implementation does not import any third-party dataset and never consults external providers.
+
+### GW-027 synthetic equipment fixtures (2026-11-12)
+`tests/equipment_advisor.lua` uses fabricated character scope, realm/faction, item ID 101, role-agnostic class/race/proficiency, and an invented transfer evidence record. They exist solely to exercise fail-closed domain behavior. GoldWise does not obtain live equipment or cross-character trading permissions from these fixtures.

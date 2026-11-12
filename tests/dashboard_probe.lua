@@ -21,6 +21,7 @@ local function widget(kind, hidden)
     function object:GetBottom() return 150 end
     function object:GetEffectiveScale() return 1 end
     function object:SetPoint(...) self.point = { ... } end
+    function object:SetPoint(...) self.point = { ... } end
     function object:SetText(value) self.value = value end
     function object:SetColorTexture(...) self.color = { ... } end
     function object:SetTextColor(...) self.textColor = { ... } end
@@ -229,6 +230,8 @@ assert(hasPagerLabel("Next item") and hasPagerLabel("Previous item"))
 click("Scan bags")
 assert(reads == 2 and vendorReads == 0 and hasText("Fixture hide") and not hasText("Action unavailable"))
 assert(visibleButton("GoldWise Bags"))
+assert(visibleButton("GoldWise Bags").point[1] == "TOPRIGHT")
+assert(visibleButton("GoldWise Bags").point[3] == "TOPLEFT")
 click("GoldWise Bags")
 assert(hasText("GoldWise | Carried Bags"))
 assert(hasText("1 item types | 4 total units"))
@@ -260,6 +263,8 @@ assert(hasPagerLabel("Next recipe") and hasPagerLabel("Previous recipe"))
 click("Scan profession")
 assert(addon.professionCompanion.isCurrent())
 assert(visibleButton("GoldWise"))
+assert(visibleButton("GoldWise").point[1] == "TOPLEFT")
+assert(visibleButton("GoldWise").point[3] == "TOPRIGHT")
 click("GoldWise")
 assert(hasText("GoldWise | Profession") and hasText("Plan: unavailable."))
 click("Open GoldWise")
@@ -334,6 +339,8 @@ assert(not widgets[1].shown and addon.auctionObservation)
 globals.GoldWiseOpen()
 assert(hasText("minimum 80 copper") and hasText("Sale proceeds and fees unavailable"))
 assert(visibleButton("GoldWise Market"))
+assert(visibleButton("GoldWise Market").point[1] == "TOPLEFT")
+assert(visibleButton("GoldWise Market").point[3] == "TOPRIGHT")
 click("GoldWise Market")
 assert(hasText("GoldWise | Market Observation"))
 assert(hasText("1 readable of 1 reported rows"))

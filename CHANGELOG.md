@@ -1,3 +1,8 @@
+## Unreleased — GW-036 external native companion entry placement (2026-11-12)
+- Relocated the opt-in profession, carried-bag and Auction House GoldWise entry controls to the validated **outside edge** of the native window, aligned above their companion panel. This avoids intentionally placing our controls on top of Blizzard's existing client controls.
+- External entry controls follow the same guarded side selection as the panel, switching left or right with available screen space; when geometry cannot be read or the sidecar cannot be safely placed, they do not appear.
+- No new game-data reads, automatic scanning, auctions, protected-frame overrides or gameplay actions. Physical-client native frame layout and taint remain NOT RUN.
+
 ## Unreleased — GW-035 guided recovery and reduced navigation (2026-11-12)
 - The standalone dashboard now explicitly tells the player what manual action to take when carried bags, profession data or an exact reagent plan are missing or stale.
 - My Plan has a **Go to Professions** shortcut when no plan exists, and **Go to Inventory / Go to Professions** shortcuts when its bag evidence changed or expired. These are navigation-only: no implicit reads, crafting, searches or item actions.

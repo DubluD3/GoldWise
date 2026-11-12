@@ -49,6 +49,11 @@ local function create(frame)
             attached.panel:Show()
         end
     end)
+    if not chrome.positionEntry(toggle, frame, 296, 250, "right") then
+        toggle:Hide()
+        panel:Hide()
+        return
+    end
     return { frame = frame, toggle = toggle, panel = panel, details = details }
 end
 
@@ -68,6 +73,11 @@ end
 function Companion.refresh()
     if not attached or not lastObservation or not current(lastObservation) then
         if attached then attached.panel:Hide() end
+        return false
+    end
+    if not chrome.positionEntry(attached.toggle, attached.frame, 296, 250, "right") then
+        attached.toggle:Hide()
+        attached.panel:Hide()
         return false
     end
     if not chrome.position(attached.panel, attached.frame, 296, 250, "right") then

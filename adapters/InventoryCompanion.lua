@@ -45,6 +45,11 @@ local function create(frame)
             companion.panel:Show()
         end
     end)
+    if not chrome.positionEntry(toggle, frame, 260, 222, "left") then
+        toggle:Hide()
+        panel:Hide()
+        return
+    end
     return { frame = frame, toggle = toggle, panel = panel, details = details, open = open, close = close }
 end
 
@@ -64,6 +69,11 @@ end
 function Companion.refresh()
     if not companion or not lastSnapshot or not current(lastSnapshot) then
         if companion then companion.panel:Hide() end
+        return false
+    end
+    if not chrome.positionEntry(companion.toggle, companion.frame, 260, 222, "left") then
+        companion.toggle:Hide()
+        companion.panel:Hide()
         return false
     end
     if not chrome.position(companion.panel, companion.frame, 260, 222, "left") then

@@ -95,3 +95,8 @@
 - [ ] Open My Plan with no current plan. Choose **Go to Professions** and verify the Professions section opens without reading a schematic or crafting. Follow the explicit **Plan reagents** action only after a manual profession and bag scan.
 - [ ] Allow a current bag observation to expire; Inventory should explicitly request **Scan bags**, not silently reuse old counts. When a reagent plan references expired/replaced bags, My Plan provides **Go to Inventory** and **Go to Professions** navigation.
 - [ ] Allow a manual Auction House observation to expire. Market should show the existing one-shot /reload + native search procedure. Do not create an automated AH query or retry. Preserve prior full QA coverage and client-context companion gates.
+
+## GW-036 external native entry controls — live game QA NOT RUN
+- [ ] After a permitted manual profession, bag and market observation, locate the small GoldWise entry **outside** the parent native window, immediately above the side companion. Verify no native tabs, slots, search, purchase, posting or crafting buttons are obstructed.
+- [ ] On the left and right edges and different UI scales, verify the entry switches sides **with** the companion and remains reachable. If no side fits, GoldWise should decline to display the external entry while preserving the standalone dashboard.
+- [ ] Dismiss/open the companion repeatedly; verify entry position matches the panel after moving the native parent and no duplicate entries appear. Check screen clipping, combat taint and restricted/protected-frame warnings. Actual Forever client placement is **NOT RUN**; report screenshots and build before declaring native integration usable.

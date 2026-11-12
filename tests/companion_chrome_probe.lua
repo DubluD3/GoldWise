@@ -59,14 +59,22 @@ assert(panel.shown == false and panel.width == 280 and panel.height == 200)
 assert(panel.point[2] == native and panel.point[3] == "TOPRIGHT")
 assert(panel.point[4] == 8 and panel.point[5] == -38)
 assert(chrome.position(panel, native, 280, 200, "right"))
+assert(chrome.positionEntry(btn, native, 280, 200, "right"))
+assert(btn.point[1] == "TOPLEFT" and btn.point[2] == native)
+assert(btn.point[3] == "TOPRIGHT" and btn.point[4] == 8)
+assert(btn.point[5] == panel.point[5] + 30)
 assert(panel.point[1] == "TOPLEFT")
 native.left, native.right = 800, 1220
 assert(chrome.position(panel, native, 280, 200, "right"))
 assert(panel.point[1] == "TOPRIGHT" and panel.point[3] == "TOPLEFT")
+assert(chrome.positionEntry(btn, native, 280, 200, "right"))
+assert(btn.point[1] == "TOPRIGHT" and btn.point[3] == "TOPLEFT")
+assert(btn.point[5] == panel.point[5] + 30)
 native.left, native.right = 360, 550
 g.UIParent:SetSize(900, 720)
 assert(not chrome.placement(native, 460, 200, "right"))
 assert(not chrome.position(panel, native, 460, 200, "right"))
+assert(not chrome.positionEntry(btn, native, 460, 200, "right"))
 g.UIParent:SetSize(1280, 720)
 native.scale = 1.25
 assert(not chrome.placement(native, 280, 200, "right"))
@@ -78,6 +86,7 @@ native.top, native.bottom = 600, 120
 local originalLeft = native.GetLeft
 native.GetLeft = function() error("native geometry unreadable") end
 assert(not chrome.position(panel, native, 280, 200, "right"))
+assert(not chrome.positionEntry(btn, native, 280, 200, "right"))
 assert(chrome.panel(native, 280, 200, "right") == nil)
 native.GetLeft = originalLeft
 print("PASS failed native geometry reads safely abstain")

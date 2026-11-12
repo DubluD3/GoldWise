@@ -47,6 +47,11 @@ local function create(frame)
             attached.panel:Show()
         end
     end)
+    if not chrome.positionEntry(tab, frame, 288, 288, "right") then
+        tab:Hide()
+        panel:Hide()
+        return
+    end
     return { frame = frame, tab = tab, panel = panel, details = details, open = open, close = close }
 end
 
@@ -91,6 +96,11 @@ end
 function Companion.refresh()
     if not attached or not lastSnapshot or not current(lastSnapshot) then
         if attached then attached.panel:Hide() end
+        return false
+    end
+    if not chrome.positionEntry(attached.tab, attached.frame, 288, 288, "right") then
+        attached.tab:Hide()
+        attached.panel:Hide()
         return false
     end
     if not chrome.position(attached.panel, attached.frame, 288, 288, "right") then

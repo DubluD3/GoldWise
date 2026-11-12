@@ -72,3 +72,6 @@ Player-triggered bounded AH scans; no polling loops. Throttle UI updates; cap hi
 
 ## Integration gates
 G0 validate actual client API first. Any proposed module may be postponed when client capabilities are unproven.
+
+## GW-020 dashboard session targets (2026-11-12)
+The existing five-tab layout remains unchanged. A Goals action in Overview and My Plan opens a temporary My Goals subview. Goals can only be derived from a player-triggered sampled character balance (+10,000 copper) or the currently observed profession (+10 skill, capped); they do not call game APIs or persist. The dashboard wraps `addon.ledgerView().latest` with the ledger's known build and scope before evaluating; profession data likewise receives the verified build and character scope. Missing, expired or wrong-scoped snapshots yield unknown rather than projections. The player may clear the goal at any time. This UI does not implement arbitrary custom input, alt goals, earning estimates or skill-up probabilities.

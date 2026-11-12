@@ -114,3 +114,6 @@ The three native context panels now calculate a screen-bounded side placement fr
 
 ### GW-034 native companion lifecycle safety (draft)
 Contextual buttons are now created only after panel construction succeeds, hidden on observation invalidation and restored only when fresh scoped evidence can render successfully. Character context recapture invalidates all three companions. Unreadable native geometry fails closed to the independent dashboard. Real-client visibility, layout and protected action/taint verification remain mandatory.
+
+### GW-035 guided recovery (draft)
+The standalone dashboard now gives concise manual recovery steps for missing or stale inventory, profession, reagent plans and market observations. **Go to Professions** and **Go to Inventory** shortcuts change views only and never trigger game reads; the existing AH observation remains strictly one-shot and requires a fresh Blizzard search after reload. This improves usability while contextual native UI compatibility remains pending live game QA.

@@ -188,7 +188,7 @@ assert(plans == 1 and hasText("GoldWise  /  My Plan") and hasText("Missing 2"))
 click("Goals")
 click("Skill +10")
 assert(hasText("Profession: 30 / 40 skill, 10 remaining"))
-assert(hasText("Gold: unknown")) -- the previous manual balance is now stale
+assert(not hasText("Gold: unknown")) -- cleared prior goal; quick skill action sets only skill
 click("Back to plan")
 click("Reserve carried reagents")
 assert(hasText("This recipe has a session reservation."))

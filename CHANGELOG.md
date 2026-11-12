@@ -1,3 +1,9 @@
+## Unreleased — GW-031 optional native Auction House observation companion (2026-11-12)
+- Added a player-toggled, read-only GoldWise market panel attached to a visible native Auction House browse frame **only after** the existing two-step player-initiated browse-cache observation succeeds.
+- Displays up to three bounded observed rows with item ID, minimum asking price in copper, reported quantity and explicit uncertainty about fees, per-unit basis, actual sales and market identity.
+- No new auction requests, hooks, scanning loop, purchases, listings, per-unit or profit calculations. Missing/restricted frames and stale/partial observations stay conservative, with existing standalone Market dashboard fallback.
+- In-client placement and protected-action compatibility still NOT RUN; draft only.
+
 ## Unreleased — GW-030 optional carried-bag companion (2026-11-12)
 - Experimental, opt-in read-only companion attached to `ContainerFrame1` only when a visible/restricted-value-checked frame is present during an explicit player bag scan. Shows up to three sorted carried item IDs/counts, complete-scan totals and explicit bank/alt unknowns.
 - Fails closed for incomplete/stale/wrong-character data, malformed counts, unknown bag frame or UI primitives; retains standalone Inventory dashboard and manual scan workflow. No hooks, bag polling, item clicks, moves or sells.

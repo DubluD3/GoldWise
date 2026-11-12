@@ -39,6 +39,8 @@ adapters\LedgerCapture.lua
 adapters\VendorReference.lua
 data\InventoryCompanionSummary.lua
 adapters\InventoryCompanion.lua
+data\MarketCompanionSummary.lua
+adapters\MarketCompanion.lua
 adapters\Dashboard.lua
 data\ProfessionCompanionSummary.lua
 adapters\ProfessionCompanion.lua

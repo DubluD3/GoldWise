@@ -71,9 +71,9 @@ g.UIParent:SetSize(1280, 720)
 native.scale = 1.25
 assert(not chrome.placement(native, 280, 200, "right"))
 native.scale = 1
-native.top, native.bottom = 300, 50
+native.top, native.bottom = 220, 20
 assert(chrome.position(panel, native, 280, 200, "right"))
-assert(panel.point[5] == -92)
+assert(panel.point[5] == -12)
 native.top, native.bottom = 600, 120
 local label = chrome.label(panel, "GameFontNormalSmall", "text")
 assert(label.textColor[1] == 0.92 and label.wrap)

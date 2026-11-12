@@ -22,15 +22,6 @@ local chrome = addon.companionChrome
 
 local function create(frame)
     if not chrome.placement(frame, 288, 288, "right") then return end
-    local tab = chrome.button(frame, "GoldWise", 90, 10, -36, function()
-        if attached.panel:IsShown() then
-            attached.panel:Hide()
-        else
-            -- Refresh only on a player click, never by polling the game.
-            if not addon.professionCompanion.refresh() then return end
-            attached.panel:Show()
-        end
-    end)
     -- Position relative to the native window. Never reparent, move or resize
     -- Blizzard's protected frames. Users may hide this optional companion.
     local panel = chrome.panel(frame, 288, 288, "right")
@@ -47,6 +38,15 @@ local function create(frame)
         if type(GoldWiseOpen) == "function" then GoldWiseOpen("profession") end
     end)
     local close = chrome.button(panel, "Hide", 82, 194, -252, function() panel:Hide() end)
+    local tab = chrome.button(frame, "GoldWise", 90, 10, -36, function()
+        if attached.panel:IsShown() then
+            attached.panel:Hide()
+        else
+            -- Refresh only on a player click, never by polling the game.
+            if not addon.professionCompanion.refresh() then return end
+            attached.panel:Show()
+        end
+    end)
     return { frame = frame, tab = tab, panel = panel, details = details, open = open, close = close }
 end
 
@@ -59,6 +59,7 @@ end
 
 local Companion = {}
 function Companion.invalidate()
+    if attached and attached.tab then attached.tab:Hide() end
     lastSnapshot = nil
     if attached then attached.panel:Hide() end
 end
@@ -73,6 +74,7 @@ function Companion.show(snapshot)
         if not ok or not created then return false end
         attached = created
     end
+    if attached.tab then attached.tab:Show() end
     lastSnapshot = snapshot
     -- A newly scanned profession remains accessible even if another source
     -- is unknown; a plan is displayed only when all snapshots agree.

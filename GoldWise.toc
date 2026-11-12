@@ -14,7 +14,10 @@ adapters\BagCapture.lua
 adapters\InventoryCapture.lua
 data\ProfessionSnapshot.lua
 adapters\ProfessionCapture.lua
+data\RecipeCatalog.lua
 adapters\ProfessionScan.lua
+adapters\TrainerCapture.lua
+adapters\TrainerObserve.lua
 data\AuctionObservation.lua
 adapters\AuctionCapture.lua
 adapters\AuctionObserve.lua

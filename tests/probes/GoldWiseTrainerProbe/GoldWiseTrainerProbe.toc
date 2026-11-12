@@ -1,0 +1,7 @@
+## Interface: 16001
+## Title: GoldWise Trainer Probe
+## Version: 2
+## Notes: Disposable GW-013 trainer requirement and recipe identity check.
+
+TrainerCapture.lua
+Probe.lua

@@ -7,7 +7,7 @@ local function integer(value, minimum)
 end
 
 function Ledger.new(build, characterScope)
-    if build ~= "70862" or type(characterScope) ~= "string" or #characterScope == 0 then
+    if (build ~= "70862" and build ~= "70888") or type(characterScope) ~= "string" or #characterScope == 0 then
         return nil, "scope-unavailable"
     end
     return { build = build, characterScope = characterScope, entries = {} }

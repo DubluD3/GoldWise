@@ -67,5 +67,5 @@ function Summary.evaluate(profession, inventory, plan, character, build, now)
     return table.concat(lines, "\n")
 end
 
-addon.professionCompanionSummary = Summary
+if addon then addon.professionCompanionSummary = Summary end
 return Summary

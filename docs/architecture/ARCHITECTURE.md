@@ -75,3 +75,6 @@ G0 validate actual client API first. Any proposed module may be postponed when c
 
 ## GW-020 dashboard session targets (2026-11-12)
 The existing five-tab layout remains unchanged. A Goals action in Overview and My Plan opens a temporary My Goals subview. Goals can only be derived from a player-triggered sampled character balance (+10,000 copper) or the currently observed profession (+10 skill, capped); they do not call game APIs or persist. The dashboard wraps `addon.ledgerView().latest` with the ledger's known build and scope before evaluating; profession data likewise receives the verified build and character scope. Missing, expired or wrong-scoped snapshots yield unknown rather than projections. The player may clear the goal at any time. This UI does not implement arbitrary custom input, alt goals, earning estimates or skill-up probabilities.
+
+## GW-018 conservative carried-material review (2026-11-12)
+`domain/MaterialReview.lua` requires complete, fresh, scoped carried-bag stock and validates snapshot-anchored session reservations. It computes holds as `other recipe reservations + max(active recipe reservation, current plan usage)`, refusing impossible allocations. Inventory's **Review materials** subview displays held and manual-review counts but does not assert sell safety. No game reader or persistent state was added.

@@ -272,3 +272,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 
 ## GW-020 dashboard integration (2026-11-12)
 `INFERRED/OFFLINE TESTED`: Existing manual `GoldWiseLedgerSample` and `GoldWiseProfessionScan` actions supply observed snapshots, and `addon.goalPlanner` computes targets. No new WoW APIs or unattended scans were added. The Goal subview uses only current-session snapshots and never silently treats a gold change as a sale. In-game installed UI, client-specific rendering and protection/taint remain `NOT RUN` pending owner verification.
+
+## GW-018 carried-material review (2026-11-12)
+`INFERRED/OFFLINE-TESTED`: pure Lua `domain/MaterialReview.lua` consumes existing complete carried inventory observations, same-snapshot session reservations and matching fresh plan. No additional Forever APIs, `C_Item` vendor reads or Auction House requests are introduced. `UNKNOWN`: bank, alt, future profession needs, item selling rules, market liquidity and actual game-client UI behavior. Never labels an item safe to sell. In-game QA: `NOT RUN`.

@@ -66,3 +66,6 @@ This project is unofficial and unaffiliated with Blizzard Entertainment.
 
 ### Session goals in the dashboard (GW-020 integration)
 The **Goals** action from Overview or My Plan opens **My Goals**. After sampling balance or scanning your open profession, set a gold target **1 gold above the sampled balance** and/or a skill target **up to 10 levels above the sampled profession skill**, capped at the observed skill limit. Both are temporary, recalculated from matching fresh observations, and can be cleared. This is not a gold-income forecast or an automated plan. All goals reset on addon reload. The native client integration still requires owner QA.
+
+### Carried-material retention review (GW-018)
+Choose **Inventory → Review materials** after manually scanning complete bags. The page shows per-item carried quantity, amounts held by the current reagent plan/reservations and remaining units requiring **manual review, not permission to sell**. Bank, alts, future crafting needs, market prices and demand remain unknown. Missing or stale inventory disables quantities. No automatic scan, AH query or inventory movement occurs.

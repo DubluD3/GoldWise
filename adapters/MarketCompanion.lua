@@ -29,13 +29,6 @@ local chrome = addon.companionChrome
 
 local function create(frame)
     if not chrome.placement(frame, 296, 250, "right") then return end
-    local toggle = chrome.button(frame, "GoldWise Market", 124, 10, -38, function()
-        if attached.panel:IsShown() then
-            attached.panel:Hide()
-        elseif Companion.refresh() then
-            attached.panel:Show()
-        end
-    end)
     local panel = chrome.panel(frame, 296, 250, "right")
     if not panel then return end
     local header = chrome.label(panel, "GameFontNormal", "gold")
@@ -49,7 +42,14 @@ local function create(frame)
         if type(GoldWiseOpen) == "function" then GoldWiseOpen("market") end
     end)
     chrome.button(panel, "Hide", 82, 202, -214, function() panel:Hide() end)
-    return { frame = frame, panel = panel, details = details }
+    local toggle = chrome.button(frame, "GoldWise Market", 124, 10, -38, function()
+        if attached.panel:IsShown() then
+            attached.panel:Hide()
+        elseif Companion.refresh() then
+            attached.panel:Show()
+        end
+    end)
+    return { frame = frame, toggle = toggle, panel = panel, details = details }
 end
 
 local function current(snapshot)
@@ -60,6 +60,7 @@ local function current(snapshot)
 end
 
 function Companion.invalidate()
+    if attached and attached.toggle then attached.toggle:Hide() end
     lastObservation = nil
     if attached then attached.panel:Hide() end
 end
@@ -99,6 +100,7 @@ function Companion.show(snapshot)
     if not frame then return false end
     if attached and attached.frame ~= frame then
         attached.panel:Hide()
+        if attached.toggle then attached.toggle:Hide() end
         attached = nil
     end
     if not attached then
@@ -106,6 +108,7 @@ function Companion.show(snapshot)
         if not ok or not created then return false end
         attached = created
     end
+    if attached.toggle then attached.toggle:Show() end
     lastObservation = snapshot
     return Companion.refresh()
 end

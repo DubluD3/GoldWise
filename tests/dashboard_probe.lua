@@ -110,6 +110,11 @@ local function visibleButton(label)
         end
     end
 end
+local function hasPagerLabel(label)
+    for _, candidate in ipairs(widgets) do
+        if candidate.label and candidate.label.value == label then return true end
+    end
+end
 local function activeTab(label, other)
     local selected = assert(visibleButton(label), "missing selected tab " .. label)
     local inactive = assert(visibleButton(other), "missing inactive tab " .. other)
@@ -192,6 +197,7 @@ assert(hasText("GoldWise  /  Overview"))
 print("PASS quick-test page provides a guided manual scan and navigation path")
 click("Inventory")
 activeTab("Inventory", "Overview")
+assert(hasPagerLabel("Next item") and hasPagerLabel("Previous item"))
 click("Scan bags")
 assert(reads == 2 and vendorReads == 0 and hasText("Fixture hide") and not hasText("Action unavailable"))
 click("Check vendor value")
@@ -211,6 +217,7 @@ print("PASS dashboard opens lazily, renders inventory, and reads vendor info onl
 click("Scan bags")
 click("Professions")
 activeTab("Professions", "Inventory")
+assert(hasPagerLabel("Next recipe") and hasPagerLabel("Previous recipe"))
 click("Scan profession")
 globals.SlashCmdList.GOLDWISE("goal gold 10000")
 assert(hasText("Gold: unknown") and hasText("Custom session target set"))

@@ -81,3 +81,6 @@ The existing five-tab layout remains unchanged. A Goals action in Overview and M
 
 ## GW-020 profession goal review (2026-11-12)
 `domain/ProfessionGoalReview.lua` is a pure, bounded read-only summary for fresh current-character profession scans and optional current matching goals and recipe plans. `adapters/RecipePlan.lua` adds `professionId` to the ephemeral plan at manual creation. The review rejects cross-profession, stale or mismatched plan/inventory evidence; filtered learned recipes cannot be interpreted as the full available catalog. No craft count or leveling outcome is inferred from skill differences.
+
+## GW-014 direct craft capacity (2026-11-12)
+The manual RecipePlan adapter attaches the captured fixed-output recipe to its ephemeral plan, scoped to its current character and timestamp. The read-only `domain/CraftCapacity.lua` coalesces duplicate direct reagents and computes floor(free stock/per-run requirement), where free stock subtracts other recipes' reservations but not the plan's own reservation. It fails closed on stale, partial, mismatched, malformed or impossible quantities. The My Plan subview never invokes a reader or crafts an item and never equates covered reagents with successful craft or skill gain.

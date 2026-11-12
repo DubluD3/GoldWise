@@ -75,3 +75,6 @@ Alongside the quick +1g and +10-skill dashboard actions, you can specify custom 
 
 ### Profession progression review (GW-020)
 In **My Plan → Review progression**, GoldWise shows your manually observed profession skill/cap, observed learned-recipe count and coverage, any matching skill goal gap, and carried reagent shortages for the currently planned recipe. The recipe snapshot is tagged to the profession it was actually planned under, so another profession's plan is not misattributed. A recipe can require multiple crafts to earn a skill point—or none—so the addon **never predicts how many crafts to level**. Missing or stale evidence stays unknown. No new API calls or automatic crafting.
+
+### Direct-reagent capacity (GW-014)
+After a manual fixed-output recipe plan, choose **My Plan → Direct capacity** to review how many *direct reagent sets* are covered by fresh observed carried bags. This only counts the recorded recipe's immediate fixed reagents, excludes stock held for other recipes and does not double count its own reservation. It does **not** account for nested crafts, bank, other characters, item quality, fees, actual crafting eligibility or profession skill-up odds. No crafting action is executed.

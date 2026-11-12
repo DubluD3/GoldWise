@@ -25,13 +25,6 @@ local chrome = addon.companionChrome
 
 local function create(frame)
     if not chrome.placement(frame, 260, 222, "left") then return end
-    local toggle = chrome.button(frame, "GoldWise Bags", 110, 8, -34, function()
-        if companion.panel:IsShown() then
-            companion.panel:Hide()
-        elseif Companion.refresh() then
-            companion.panel:Show()
-        end
-    end)
     local panel = chrome.panel(frame, 260, 222, "left")
     if not panel then return end
     local heading = chrome.label(panel, "GameFontNormal", "gold")
@@ -45,6 +38,13 @@ local function create(frame)
         if type(GoldWiseOpen) == "function" then GoldWiseOpen("inventory") end
     end)
     local close = chrome.button(panel, "Hide", 82, 166, -184, function() panel:Hide() end)
+    local toggle = chrome.button(frame, "GoldWise Bags", 110, 8, -34, function()
+        if companion.panel:IsShown() then
+            companion.panel:Hide()
+        elseif Companion.refresh() then
+            companion.panel:Show()
+        end
+    end)
     return { frame = frame, toggle = toggle, panel = panel, details = details, open = open, close = close }
 end
 
@@ -56,6 +56,7 @@ local function current(snapshot)
 end
 
 function Companion.invalidate()
+    if companion and companion.toggle then companion.toggle:Hide() end
     lastSnapshot = nil
     if companion then companion.panel:Hide() end
 end
@@ -95,6 +96,7 @@ function Companion.show(snapshot)
     if not frame then return false end
     if companion and companion.frame ~= frame then
         companion.panel:Hide()
+        if companion.toggle then companion.toggle:Hide() end
         companion = nil
     end
     if not companion then
@@ -103,7 +105,11 @@ function Companion.show(snapshot)
         companion = created
     end
     lastSnapshot = snapshot
-    return Companion.refresh()
+    local ready = Companion.refresh()
+    if companion.toggle then
+        if ready then companion.toggle:Show() else companion.toggle:Hide() end
+    end
+    return ready
 end
 
 addon.inventoryCompanion = Companion

@@ -111,3 +111,6 @@ Profession, carried-bag and market companions now share a consistent small set o
 
 ### GW-033 responsive companion placement (draft)
 The three native context panels now calculate a screen-bounded side placement from their native parent and UIParent geometry, flip when needed and abstain when frame bounds or effective scaling cannot be validated. They recheck placement on player reopening; unsupported positions leave the standalone dashboard available. **Live-client scaling, native visual overlap and protected-frame QA remain NOT RUN**.
+
+### GW-034 native companion lifecycle safety (draft)
+Contextual buttons are now created only after panel construction succeeds, hidden on observation invalidation and restored only when fresh scoped evidence can render successfully. Character context recapture invalidates all three companions. Unreadable native geometry fails closed to the independent dashboard. Real-client visibility, layout and protected action/taint verification remain mandatory.

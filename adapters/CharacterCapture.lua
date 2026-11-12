@@ -18,6 +18,11 @@ local function capture(initialLogin, reloading)
     if not initialLogin and not reloading then
         return
     end
+    -- Character context is about to be replaced; no previously rendered
+    -- companion may claim observations from the preceding scope.
+    if addon.professionCompanion then addon.professionCompanion.invalidate() end
+    if addon.inventoryCompanion then addon.inventoryCompanion.invalidate() end
+    if addon.marketCompanion then addon.marketCompanion.invalidate() end
     if type(issecretvalue) ~= "function" then
         print("GoldWise character snapshot unavailable (secret-value guard unavailable).")
         return

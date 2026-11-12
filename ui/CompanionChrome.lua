@@ -83,8 +83,9 @@ function Chrome.placement(parent, width, height, preferred)
 end
 
 function Chrome.position(panel, parent, width, height, preferred)
-    local point, relative, x, y = Chrome.placement(parent, width, height, preferred)
-    if not point then return false end
+    local checked, point, relative, x, y = pcall(Chrome.placement,
+        parent, width, height, preferred)
+    if not checked or not point then return false end
     local ok = pcall(function()
         panel:ClearAllPoints()
         panel:SetPoint(point, parent, relative, x, y)
@@ -95,7 +96,8 @@ end
 -- Parent the panel to the native window without moving Blizzard's frame.
 -- Fail closed if no side has sufficient unoccluded screen space.
 function Chrome.panel(parent, width, height, preferred)
-    if not Chrome.placement(parent, width, height, preferred) then return end
+    local checked, point = pcall(Chrome.placement, parent, width, height, preferred)
+    if not checked or not point then return end
     local panel = CreateFrameWithOptions({ frameType = "Frame", parent = parent, hidden = true })
     panel:SetSize(width, height)
     if not Chrome.position(panel, parent, width, height, preferred) then

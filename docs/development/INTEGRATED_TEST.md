@@ -28,6 +28,13 @@
 5. Test **Goals** from Overview/My Plan and **My Goals**: use **Gold +1g**, **Skill +10**, `/goldwise goal gold 25000` (**copper**), `/goldwise goal skill 75` (only with a fresh profession scan), `/goldwise goal help` and `/goldwise goal clear`. Without manual balance observation, progress should be **unknown**, not a guessed zero/completion.
 6. **Invalidation:** After creating a plan, manually rescan the **same profession**. The old plan must disappear from My Plan; the guide's **Recipe plans and reservations** step must be **Pending**, not current. An obsolete plan must not reserve. Repeat after rescanning bags, changing characters, reloading, and after the 15-minute freshness window. Do not force live in-memory corruption; CI covers malformed holds in synthetic tests.
 
+## UI navigation clarity (2026-11-12; live verification pending)
+
+- [ ] The selected top-level tab has a gold label and visually distinct darker-gold background. Switching from Overview to Inventory, Professions, Market and My Plan updates the selection without moving or acting on game items.
+- [ ] Contextual action slot 1 is visually emphasized; other actions remain readable and clickable.
+- [ ] Inventory pager reads **Previous item / Next item**, the profession recipe pager reads **Previous recipe / Next recipe**, and long review/market/plan lists use **Previous page / Next page**. Hidden pager buttons must not intercept clicks. Test at 100% and smaller game UI scale.
+- [ ] **Overview → Quick test** still works, and its manual actions retain the expected observations. Verify on the actual WoW Forever build; the Lua fixture only validates widget properties and commands.
+
 ## D. Safety, persistence and acceptance
 
 1. Check normal combat, mouse input, Blizzard UI coexistence, at least one existing AH addon if installed, and lack of protected-action taint. Check performance/FPS for noticeable regression; do not claim a benchmark without measurements.

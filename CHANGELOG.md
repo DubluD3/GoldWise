@@ -1,3 +1,8 @@
+## Unreleased — GW-030 optional carried-bag companion (2026-11-12)
+- Experimental, opt-in read-only companion attached to `ContainerFrame1` only when a visible/restricted-value-checked frame is present during an explicit player bag scan. Shows up to three sorted carried item IDs/counts, complete-scan totals and explicit bank/alt unknowns.
+- Fails closed for incomplete/stale/wrong-character data, malformed counts, unknown bag frame or UI primitives; retains standalone Inventory dashboard and manual scan workflow. No hooks, bag polling, item clicks, moves or sells.
+- Actual `ContainerFrame1` availability/placement and combat taint in this Forever build remain NOT RUN; do not represent CI fixture coverage as client verification.
+
 ## Unreleased — GW-029 contextual recipe details (2026-11-12)
 - Extended the optional native profession companion with the exact observed root recipe/craft count and up to two sorted missing carried item quantities; extra missing item types are counted rather than overflowing the panel.
 - Added bounded validation for recipe identity, quantity, and displayed recipe labels. Incorrect, stale or malformed plans remain unavailable; no game API reads or gameplay actions were added.

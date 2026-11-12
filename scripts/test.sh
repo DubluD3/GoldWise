@@ -41,7 +41,7 @@ ran_suite=false
 for suite in tests/*.lua; do
     case "${suite#tests/}" in
         auction_observation.lua|character_snapshot.lua|inventory_snapshot.lua|item_choices.lua|material_review.lua|equipment_advisor.lua|goals.lua|goal_commands.lua|profession_goal_review.lua|craft_capacity.lua|ledger.lua|market_history.lua|material_reservations.lua|reservation_integrity.lua|scan_guide.lua|\
-        profession_snapshot.lua|profession_companion_summary.lua|recipe_catalog.lua|recipe_materials.lua|storage.lua)
+        profession_snapshot.lua|profession_companion_summary.lua|inventory_companion_summary.lua|recipe_catalog.lua|recipe_materials.lua|storage.lua)
             group=unit
             ;;
         *_probe.lua|bootstrap.lua|character_capture.lua|ledger_capture.lua|saved_variables.lua)

@@ -1,6 +1,7 @@
 local _, addon = ...
 
 function GoldWiseInventoryScan()
+    if addon.inventoryCompanion then addon.inventoryCompanion.invalidate() end
     addon.inventorySnapshot = nil
     addon.features.inventory = false
     if not addon.supportedClient then
@@ -24,4 +25,7 @@ function GoldWiseInventoryScan()
     end
     addon.features.inventory = snapshot.status == "complete"
     addon.bagCapture.report("GoldWise inventory", snapshot, labelsOrReason)
+    if addon.inventorySnapshot and addon.inventoryCompanion then
+        addon.inventoryCompanion.show(addon.inventorySnapshot)
+    end
 end

@@ -35,7 +35,7 @@
 
 ## UI/UX design rules (REQUIRED for UI stories)
 - Read [docs/design/DESIGN_SYSTEM.md](docs/design/DESIGN_SYSTEM.md) before creating or changing any screen, component, tooltip, theme or navigation behavior.
-- Direction: a restrained, readable **dark economy dashboard with subtle WoW fantasy accents**, not a copied website, ornate parchment wall or dense spreadsheet-first interface.
+- Direction: a **Warcraft-native, game-integrated interface**: familiar framed panels, muted stone/leather/parchment surfaces, restrained bronze/gold trim, WoW item quality cues and readable Blizzard-style controls. Target **70% modern WoW usability / 30% classic fantasy**; avoid a banking SaaS dashboard, copied Blizzard assets, excessive ornament or spreadsheet-first layout.
 - Use the documented token palette, spacing, type hierarchy and repeatable components as design targets, adapting to **verified WoW UI capabilities**. Do not assume CSS/web rendering, fonts, animation, frame templates, or resize APIs exist.
 - Prefer **Overview / Inventory / Professions / Market / My Plan** navigation. Give each recommendation a short action, transparent “Why?”, alternatives, data source/time and uncertainty.
 - Keep item rarity colors recognizable; supplement every color-coded status with words or icons. Do not represent asking prices as guaranteed sale proceeds.

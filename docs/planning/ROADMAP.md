@@ -1,5 +1,5 @@
 # Roadmap (dependencies, not promises)
-Baseline date is 2026-11-09. See the [backlog](BACKLOG.md#current-progress) for current story status and verification evidence.
+Baseline date is 2026-11-09. Updated 2026-11-12: GW-026 Scan & Setup Guide is a draft integration candidate stacked on #37; offline CI passes but live first-run, persistence, UI-scale and combat verification are pending. This does not advance G6 or G7 to complete. See the [backlog](BACKLOG.md#current-progress) for current story status and verification evidence.
 
 | Gate | Objective | Target effort (indicative) | Required exit |
 |---|---|---|---|

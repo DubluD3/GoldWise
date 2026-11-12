@@ -90,3 +90,6 @@ The ephemeral recipe-producer cache is tied to the exact manually scanned profes
 
 ## GW-017 reservation action boundary (2026-11-12)
 An active plan has an ephemeral build and exact profession-snapshot identity in addition to its existing bag snapshot and character scope. `reserveRecipePlan` validates all these at action time with freshly sampled server time; rejects before calling `materialReservations.reserve` or mutating session reservations. The same snapshot-bound reservations remain session-only and isolated on bag refresh, with no SavedVariables migration.
+
+## GW-017 reservation model boundary (2026-11-12)
+The pure `MaterialReservations.reserve` action validates the entire observed stock and current reservation map before evaluating a proposed replacement. Aggregate held amounts cannot exceed observed stock; stored recipe keys and item IDs are integer IDs, stored quantities are positive integers, and new requests are nonnegative integer counts for observed items. It only swaps the requesting recipe's entry after validating both old and new states, preserving atomic failure behavior and the eight-plan maximum. Read-only `available` retains its existing call contract. No new WoW APIs or persistence changes.

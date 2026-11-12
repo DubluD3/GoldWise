@@ -133,3 +133,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Rescan the same profession, then try the old action from any previous context; it must be rejected and leave reservations unchanged. Recompute a fresh plan to reserve again.
 - [ ] Rescan bags, change characters, or wait beyond 15 minutes. Previous plans must not reserve anything. An unavailable server timestamp must refuse the action.
 - [ ] Verify there are no new automatic scans, crafting steps or client API reads beyond a player-triggered timestamp at reservation. Real-client status: **NOT RUN**.
+
+## GW-017 reservation integrity addendum (NOT RUN)
+- [ ] Manually scan bags, create and reserve a recipe plan, then create a competing recipe plan. The new reservation must respect previously held reagents and cannot exceed your current carried quantities.
+- [ ] Re-plan the **same** recipe with a smaller count: its existing hold should be replaced rather than added a second time.
+- [ ] Refresh bags: previously held amounts should not contaminate the new inventory snapshot. No game items should move automatically or be sold.
+- [ ] The synthetic invalid-state tests run in CI; they cannot be exercised safely by altering live SavedVariables. Record any UI errors and current game build. Installed client status: **NOT RUN**.

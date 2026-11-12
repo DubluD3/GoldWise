@@ -28,6 +28,7 @@ end
 local chrome = addon.companionChrome
 
 local function create(frame)
+    if not chrome.placement(frame, 296, 250, "right") then return end
     local toggle = chrome.button(frame, "GoldWise Market", 124, 10, -38, function()
         if attached.panel:IsShown() then
             attached.panel:Hide()
@@ -35,7 +36,8 @@ local function create(frame)
             attached.panel:Show()
         end
     end)
-    local panel = chrome.panel(frame, 296, 250, "TOPLEFT", "TOPRIGHT", 8, -38)
+    local panel = chrome.panel(frame, 296, 250, "right")
+    if not panel then return end
     local header = chrome.label(panel, "GameFontNormal", "gold")
     header:SetPoint("TOPLEFT", panel, "TOPLEFT", 12, -12)
     header:SetPoint("BOTTOMRIGHT", panel, "TOPRIGHT", -12, -38)
@@ -65,6 +67,10 @@ end
 function Companion.refresh()
     if not attached or not lastObservation or not current(lastObservation) then
         if attached then attached.panel:Hide() end
+        return false
+    end
+    if not chrome.position(attached.panel, attached.frame, 296, 250, "right") then
+        attached.panel:Hide()
         return false
     end
     if allowedFrame() ~= attached.frame or type(GetServerTime) ~= "function" then
@@ -97,7 +103,7 @@ function Companion.show(snapshot)
     end
     if not attached then
         local ok, created = pcall(create, frame)
-        if not ok then return false end
+        if not ok or not created then return false end
         attached = created
     end
     lastObservation = snapshot

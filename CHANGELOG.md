@@ -1,3 +1,8 @@
+## Unreleased — GW-034 native companion lifecycle hardening (2026-11-12)
+- Companion panel entry buttons now appear only after all required widget creation and current observation validation succeed. Invalidating a manual profession or inventory scan, or the market observation, also hides the old entry button, not just its panel.
+- Rescanning restores an entry button only with a validated fresh current observation. Replacing a profession native parent hides the orphaned button. Recapturing character context invalidates all three companions.
+- Native placement handles unreadable geometry without propagating errors. Offline UI tests cover hidden/recovered controls and stale market fallback. Actual client frame hierarchy and taint remain NOT RUN.
+
 ## Unreleased — GW-033 responsive companion positioning (2026-11-12)
 - Shared companion positioning now validates native frame bounds, UIParent dimensions, effective-scale compatibility and available adjacent screen space before attaching a profession, carried-inventory or Auction House side panel.
 - Flips to the opposite side when the preferred position does not fit, clamps vertical alignment and refuses unsupported layouts instead of placing interactive overlays offscreen. Checks placement again on manual reopen.

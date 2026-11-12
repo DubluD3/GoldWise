@@ -1,3 +1,8 @@
+## Unreleased — GW-029 contextual recipe details (2026-11-12)
+- Extended the optional native profession companion with the exact observed root recipe/craft count and up to two sorted missing carried item quantities; extra missing item types are counted rather than overflowing the panel.
+- Added bounded validation for recipe identity, quantity, and displayed recipe labels. Incorrect, stale or malformed plans remain unavailable; no game API reads or gameplay actions were added.
+- Client panel placement and scaling are NOT RUN in-game. Existing fallback dashboard remains intact.
+
 ## Unreleased — GW-028 contextual plan summary (2026-11-12)
 - Extended the opt-in profession-frame sidecar with only the current scoped, fresh reagent-plan shortfall; stale, partial or malformed observations display unavailable instead of misleading counts.
 - Added pure Lua scope/freshness/invalid-count regression suite; no automated crafting, vendor/AH search, or background inventory observation.

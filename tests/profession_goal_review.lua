@@ -15,7 +15,9 @@ assert(result.caution:find("No skill-up chance",1,true))
 print("PASS goal and material shortfall distinguished without skill-up predictions")
 local function with(changes)
     local x={} for k,v in pairs(input) do x[k]=v end
-    for k,v in pairs(changes) do x[k]=v end
+    for k,v in pairs(changes) do
+        if v == false then x[k] = nil else x[k] = v end
+    end
     return Model.evaluate(x)
 end
 assert(with({goal=false}).goalStatus=="no-skill-target")

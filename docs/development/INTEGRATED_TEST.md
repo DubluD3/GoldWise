@@ -3,7 +3,7 @@
 **Updated 2026-11-12 · Live Forever client QA: NOT RUN.**
 
 **Candidate selection:** The newer native-companion draft branches build on earlier PRs. Do not select PR #58 merely because it appears in old documentation. Use the **latest intended cumulative branch**, ensure the GitHub Actions run and its artifact match that branch's complete commit SHA, and keep the exact SHA in your QA report. All native context panels remain NOT RUN in the real game.
- This is the short, end-to-end **human** walkthrough of the cumulative stacked draft PR chain (latest proposed integration candidate). The authoritative full acceptance and release gate remains [OWNER_E2E_QA.md](OWNER_E2E_QA.md), cases E01–E20. Offline CI success does not prove any of these live checks.
+ This is the short, end-to-end **human** walkthrough of the cumulative stacked draft PR chain (latest proposed integration candidate). The authoritative full acceptance and release gate remains [OWNER_E2E_QA.md](OWNER_E2E_QA.md), cases E01–E20. For native companion acceptance, use [NATIVE_UI_OWNER_QA.md](NATIVE_UI_OWNER_QA.md), cases N01–N12. Offline CI success does not prove any of these live checks.
 
 ## A. Choose the exact current candidate
 

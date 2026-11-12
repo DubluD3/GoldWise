@@ -108,3 +108,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Enter `/goldwise goal skill 75` before an open-profession scan: expect an explanatory refusal. Scan a profession; choose an attainable target at/below the **observed skill cap**, then confirm it retains the gold target.
 - [ ] Invalid inputs (`/goldwise goal gold -1`, `/goldwise goal skill 99999999`, `/goldwise goal gold 12g`) must not change the last valid targets. `/goldwise goal clear` clears them. `/goldwise goal help` displays the copper unit and commands.
 - [ ] Repeated goal chat commands while My Goals is open should update the view rather than toggle it closed. Reload and confirm no target persists. **Installed Forever status: NOT RUN**.
+
+## GW-020 Profession Review addendum (NOT RUN)
+- [ ] Scan bags and your open profession, set a matching skill target, plan a recipe and choose **My Plan → Review progression**. Skill/cap and observed learned-recipe count should match the manually scanned view; verify the displayed target gap and reagent shortfall.
+- [ ] Confirm exact wording does not promise one skill point per craft, a full recipe catalog or any skill-up probability.
+- [ ] Switch profession or rescan bags; the previous plan must not be attributed to the new profession. Expire the scan; unknown values must not be presented as current.
+- [ ] Confirm no automatic crafting, AH queries or extra API reads when opening review; capture client build, scale, errors, and screenshots only if safe. **Real Forever in-game status: NOT RUN.**

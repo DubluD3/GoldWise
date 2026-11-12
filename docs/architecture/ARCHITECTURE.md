@@ -78,3 +78,6 @@ The existing five-tab layout remains unchanged. A Goals action in Overview and M
 
 ## GW-018 conservative carried-material review (2026-11-12)
 `domain/MaterialReview.lua` requires complete, fresh, scoped carried-bag stock and validates snapshot-anchored session reservations. It computes holds as `other recipe reservations + max(active recipe reservation, current plan usage)`, refusing impossible allocations. Inventory's **Review materials** subview displays held and manual-review counts but does not assert sell safety. No game reader or persistent state was added.
+
+## GW-020 profession goal review (2026-11-12)
+`domain/ProfessionGoalReview.lua` is a pure, bounded read-only summary for fresh current-character profession scans and optional current matching goals and recipe plans. `adapters/RecipePlan.lua` adds `professionId` to the ephemeral plan at manual creation. The review rejects cross-profession, stale or mismatched plan/inventory evidence; filtered learned recipes cannot be interpreted as the full available catalog. No craft count or leveling outcome is inferred from skill differences.

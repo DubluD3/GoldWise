@@ -56,6 +56,7 @@ function GoldWisePlanRecipe(recipeId, crafts)
     if not plan then
         return failure
     end
+    plan.professionId = profession.professionId
     plan.recipeId = recipeId
     plan.characterScope = scope
     plan.observedAt = now

@@ -20,6 +20,7 @@ local guideOffered = false
 local activeGoal
 local goalPanel = false
 local materialsPanel = false
+local professionReviewPanel = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -330,6 +331,57 @@ local function goalPage(time, ledger, profession)
     return result
 end
 
+local function professionReviewPage(time, profession, inventory, plan)
+    local result = { rows = {
+        "Profession review uses only your observed open crafting view.",
+        "Craft count is NOT a predicted skill-point gain; no skill-up probabilities verified.",
+    }, actions = {} }
+    local rows, actions = result.rows, result.actions
+    local character = addon.characterSnapshot
+    local scope = character and character.scopeKey
+    local goal = activeGoal
+    if goal and (goal.characterScope ~= scope or goal.build ~= addon.clientBuild) then
+        goal = nil
+    end
+    local summary = addon.professionGoalReview.evaluate({
+        characterScope = scope, build = addon.clientBuild, now = time,
+        maxAge = snapshotAge, profession = profession, goal = goal,
+        plan = plan, inventory = inventory,
+    })
+    if summary.status == "unknown" then
+        rows[#rows + 1] = summary.reason
+        rows[#rows + 1] = "Open your crafting profession and scan it manually."
+    else
+        rows[#rows + 1] = string.format("Observed skill %.0f / %.0f; %.0f learned recipes in %s view.",
+            summary.skill, summary.cap, summary.observedLearnedCount, summary.observedCoverage)
+        if summary.goalStatus == "remaining" then
+            rows[#rows + 1] = string.format("Target %.0f skill: %.0f points remain (number of crafts unknown).",
+                summary.goalTarget, summary.remainingSkill)
+        elseif summary.goalStatus == "reached" then
+            rows[#rows + 1] = "Observed skill meets the selected profession target."
+        elseif summary.goalStatus == "different-profession" then
+            rows[#rows + 1] = "Target belongs to another profession. No progress comparison."
+        else
+            rows[#rows + 1] = "No matching skill target. Set one in My Goals."
+        end
+        if summary.materialStatus == "missing-carried-inputs" then
+            rows[#rows + 1] = string.format("Current recipe plan lacks %.0f carried reagent units across %.0f items.",
+                summary.missingUnits, summary.missingKinds)
+        elseif summary.materialStatus == "carried-inputs-observed" then
+            rows[#rows + 1] = "Current recipe plan's material inputs are observed in carried bags."
+        else
+            rows[#rows + 1] = "Recipe material coverage: " .. summary.materialStatus .. "."
+        end
+        rows[#rows + 1] = "Learned-recipe list may be filtered; no guaranteed leveling route."
+    end
+    actions[1] = { "Scan profession", GoldWiseProfessionScan }
+    actions[2] = { "Back to plan", function() professionReviewPanel = false end }
+    actions[3] = { "My Goals", function()
+        professionReviewPanel, goalPanel, tab = false, true, 5
+    end }
+    return result
+end
+
 local function materialsPage(time, inventory, plan)
     local result = { rows = {
         "Carried materials review: manual decisions only. Not a sell recommendation.",
@@ -520,6 +572,8 @@ local function state()
         end)
     elseif tab == 5 then
         if goalPanel then return goalPage(time, ledger, profession) end
+        if professionReviewPanel then return professionReviewPage(time, profession, inventory, plan) end
+        actions[4] = { "Review progression", function() professionReviewPanel = true end }
         actions[3] = { "Goals", function() goalPanel = true end }
         if not plan then
             rows[1] = "Choose a learned recipe under Professions and plan its reagents."
@@ -569,7 +623,7 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or tabs[tab]))
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or materialsPanel and "Material Review" or professionReviewPanel and "Profession Review" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
@@ -652,7 +706,7 @@ local function build()
     local tabWidth = (width - 48) / #tabs
     for index, label in ipairs(tabs) do
         button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            guideStep, tab, page, goalPanel, materialsPanel = nil, index, 1, false, false
+            guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel = nil, index, 1, false, false, false
         end)
     end
 
@@ -687,7 +741,7 @@ function GoldWiseOpen(command)
     local isGoalCommand = type(command) == "string"
         and (command == "goal" or command:match("^%s*goal%s+") ~= nil)
     if isGoalCommand then
-        guideStep, goalPanel, materialsPanel, tab, page = nil, true, false, 5, 1
+        guideStep, goalPanel, materialsPanel, professionReviewPanel, tab, page = nil, true, false, false, 5, 1
         local request, reason = addon.goalCommands.parse(command)
         feedback = request and applyCustomGoal(request)
             or ("Invalid goal command (" .. (reason or "unknown") .. "). Use /goldwise goal help.")

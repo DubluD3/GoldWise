@@ -40,7 +40,7 @@ export LC_ALL=C
 ran_suite=false
 for suite in tests/*.lua; do
     case "${suite#tests/}" in
-        auction_observation.lua|character_snapshot.lua|inventory_snapshot.lua|item_choices.lua|material_review.lua|equipment_advisor.lua|goals.lua|goal_commands.lua|ledger.lua|market_history.lua|material_reservations.lua|scan_guide.lua|\
+        auction_observation.lua|character_snapshot.lua|inventory_snapshot.lua|item_choices.lua|material_review.lua|equipment_advisor.lua|goals.lua|goal_commands.lua|profession_goal_review.lua|ledger.lua|market_history.lua|material_reservations.lua|scan_guide.lua|\
         profession_snapshot.lua|recipe_catalog.lua|recipe_materials.lua|storage.lua)
             group=unit
             ;;

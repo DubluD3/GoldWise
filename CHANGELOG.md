@@ -1,3 +1,8 @@
+## Unreleased - GW-020 profession review against scoped goals (2026-11-12)
+- My Plan → Review progression shows observed skill/cap, count and completeness label of learned recipes in the filtered crafting view, optional matching skill goal gap and fresh same-profession recipe material gaps.
+- Explicitly refuses skill-up forecasts or treating crafts as guaranteed skill increases; stale/cross-character observations remain unknown.
+- No new WoW APIs, automatic interactions, goals storage or Auction House queries. Real client UI NOT RUN.
+
 ## Unreleased - GW-020 exact player goal targets (2026-11-12)
 - Added strictly validated /goldwise goal gold <copper>, goal skill <level>, help, and clear commands. Goal panel displays the result without closing on repeated command.
 - No new game APIs; targets remain local session only. Profession selection requires an existing fresh, matching manual scan; invalid targets cannot mutate goals.

@@ -104,12 +104,24 @@ local function guidePage()
         complete = false
     elseif step.key == "ledger" then
         local ledger = addon.ledgerView and addon.ledgerView()
-        snap = ledger and ledger.latest
+        if ledger and ledger.characterScope == scope and ledger.build == addon.clientBuild then
+            snap = ledger.latest
+        end
     elseif step.key == "plan" then
-        snap = scoped(addon.recipePlan)
+        local plan = scoped(addon.recipePlan)
+        local profession = scoped(addon.professionSnapshot)
+        if plan and profession and plan.professionSnapshot == profession
+            and plan.build == addon.clientBuild then
+            snap = plan
+        end
     end
+    -- A ledger's latest sample has no own scope: its parent session already
+    -- passed the explicit character/build gate above. Never infer scopes for
+    -- other source types, including invalid/old plans.
+    local sourceScope = step.key == "ledger" and snap and scope
+        or snap and (snap.characterScope or snap.scopeKey)
     local source = snap and {
-        scope = snap.characterScope or snap.scopeKey or scope,
+        scope = sourceScope,
         observedAt = snap.observedAt,
         complete = complete,
     }

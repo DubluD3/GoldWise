@@ -33,6 +33,9 @@ assert(run({reservations={[21]={[10]=20},[22]={[10]=1}}}).status=="unknown")
 print("PASS no plan, stale, partial, cross-character and impossible reservations")
 local bad={characterScope="char-A",observedAt=970,inventory=bag,recipeId=21,used={[10]=21},missing={}}
 assert(run({plan=bad}).status=="unknown")
+local missingItemPlan={characterScope="char-A",observedAt=970,inventory=bag,recipeId=21,
+    used={[999]=1},missing={}}
+assert(run({plan=missingItemPlan}).status=="unknown")
 local expired=run({plan={characterScope="char-A",observedAt=99,inventory=bag,recipeId=21,
     used={[10]=5},missing={}}})
 assert(expired.status=="review-only" and expired.planStatus=="unavailable-or-stale")

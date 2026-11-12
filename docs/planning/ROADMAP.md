@@ -14,4 +14,6 @@ Baseline date is 2026-11-09. Updated 2026-11-12: GW-026 Scan & Setup Guide is a 
 
 **Critical path:** G0 → G1 → G2/G3 → G4 → G5 → G6 → G7. If AH data unavailable, ship inventory/profession-only beta rather than fabricate live value.
 
+GW-025 packaging gate: an installable **QA candidate only** can be produced after offline tests; release packaging is blocked without license/owner signed client QA. This does not complete G7.
+
 No phase is 'complete' until evidence and acceptance criteria exist. Re-estimate after G0. Use GitHub issues for execution; the canonical ID mapping remains in `BACKLOG.md`.

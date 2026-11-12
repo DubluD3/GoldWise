@@ -1,3 +1,7 @@
+## Unreleased - GW-025 QA candidate packaging (2026-11-12)
+- Added explicit local privacy disclosure, verified TOC-layout candidate ZIP creation, release-gate enforcement and CI candidate artifact output.
+- Public release remains **BLOCKED** by missing owner license choice, missing target-build E2E approval and unreconciled earlier draft PRs.
+
 ## Unreleased - GW-018 economic comparisons (offline only, 2026-11-12)
 - Pure Lua vendor-reference and crafting-opportunity-cost comparison using reservation-aware verified recipe graphs, plus guardrails for AH asking-price scenarios and externally evidenced fees.
 - Synthetic 100-unit cloth alternative regression; no live price/advice UI integration because market identity, unit basis and auction fees remain blocked.

@@ -69,3 +69,6 @@ The **Goals** action from Overview or My Plan opens **My Goals**. After sampling
 
 ### Carried-material retention review (GW-018)
 Choose **Inventory → Review materials** after manually scanning complete bags. The page shows per-item carried quantity, amounts held by the current reagent plan/reservations and remaining units requiring **manual review, not permission to sell**. Bank, alts, future crafting needs, market prices and demand remain unknown. Missing or stale inventory disables quantities. No automatic scan, AH query or inventory movement occurs.
+
+### Exact session goal targets via chat
+Alongside the quick +1g and +10-skill dashboard actions, you can specify custom targets: `/goldwise goal gold 25000` (explicit **copper**, never gold) and `/goldwise goal skill 75` (requires a fresh manual scan of the open matching profession and must fit its observed cap). `/goldwise goal help` shows usage; `/goldwise goal clear` clears both. These commands never execute game actions, read AH data, or persist goals. You must sample character balance manually to see current gold progress.

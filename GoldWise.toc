@@ -24,6 +24,7 @@ domain\ItemChoices.lua
 domain\MaterialReview.lua
 domain\EquipmentAdvisor.lua
 domain\Goals.lua
+domain\GoalCommands.lua
 data\MaterialReservations.lua
 adapters\ReservationSession.lua
 adapters\RecipeSchematic.lua

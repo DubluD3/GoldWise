@@ -26,7 +26,7 @@ local function widget(kind, hidden)
     return object
 end
 
-globals.math, globals.unpack, globals.next = math, unpack, next
+globals.math, globals.unpack, globals.next, globals.tonumber = math, unpack, next, tonumber
 globals.SlashCmdList = {}
 globals.UIParent = widget("UIParent")
 globals.GetScreenWidth = function() return 1280 end
@@ -118,6 +118,16 @@ globals.SlashCmdList.GOLDWISE()
 assert(widgets[1].shown and hasText("Scan & Setup Guide"))
 click("Exit guide")
 assert(hasText("GoldWise  /  Overview"))
+globals.SlashCmdList.GOLDWISE("goal gold 25000")
+assert(hasText("GoldWise  /  My Goals") and hasText("Gold: unknown"))
+assert(hasText("Custom session target set"))
+globals.SlashCmdList.GOLDWISE("goal gold -1")
+assert(hasText("Invalid goal command") and hasText("Gold: unknown"))
+globals.SlashCmdList.GOLDWISE("goal skill 75")
+assert(hasText("Scan your open profession first") and hasText("Gold: unknown"))
+globals.SlashCmdList.GOLDWISE("goal clear")
+assert(hasText("No active goal"))
+click("Overview")
 click("Guide")
 assert(hasText("Character identity"))
 click("Next step")
@@ -162,13 +172,23 @@ print("PASS dashboard opens lazily, renders inventory, and reads vendor info onl
 click("Scan bags")
 click("Professions")
 click("Scan profession")
+globals.SlashCmdList.GOLDWISE("goal gold 10000")
+assert(hasText("Gold: unknown") and hasText("Custom session target set"))
+globals.SlashCmdList.GOLDWISE("goal skill 35")
+assert(hasText("Profession: 30 / 35 skill, 5 remaining"))
+assert(hasText("Gold: unknown"))
+globals.SlashCmdList.GOLDWISE("goal skill 99")
+assert(hasText("target must not exceed") and hasText("Profession: 30 / 35"))
+globals.SlashCmdList.GOLDWISE("goal clear")
+assert(hasText("No active goal"))
+click("Professions")
 click("More crafts")
 click("Plan reagents")
 assert(plans == 1 and hasText("GoldWise  /  My Plan") and hasText("Missing 2"))
 click("Goals")
 click("Skill +10")
 assert(hasText("Profession: 30 / 40 skill, 10 remaining"))
-assert(hasText("Gold: unknown")) -- the previous manual balance is now stale
+assert(not hasText("Gold: unknown")) -- cleared prior goal; quick skill action sets only skill
 click("Back to plan")
 click("Reserve carried reagents")
 assert(hasText("This recipe has a session reservation."))
@@ -193,6 +213,7 @@ assert(hasText("minimum 80 copper") and hasText("Sale proceeds and fees unavaila
 click("Overview")
 click("Sample balance")
 click("Goals")
+click("Gold +1g")
 assert(hasText("Gold: 500 / 10500 copper"))
 clock = clock + 901
 globals.GoldWiseOpen()

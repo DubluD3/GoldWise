@@ -164,10 +164,58 @@ local function guidePage()
     return result
 end
 
+local function applyCustomGoal(request)
+    if request.kind == "help" then
+        return "Use /goldwise goal gold <copper>, /goldwise goal skill <level>, or /goldwise goal clear."
+    end
+    if request.kind == "clear" then
+        activeGoal = nil
+        return "Session goals cleared."
+    end
+    local character = addon.characterSnapshot
+    local scope = character and character.scopeKey
+    local buildId = addon.clientBuild
+    if not addon.supportedClient or type(scope) ~= "string" or #scope == 0
+        or type(buildId) ~= "string" then
+        return "Character identity or supported build unavailable."
+    end
+    if activeGoal and (activeGoal.characterScope ~= scope or activeGoal.build ~= buildId) then
+        activeGoal = nil
+    end
+    local target = {
+        id = "session-goal", characterScope = scope, build = buildId,
+        goldTargetCopper = activeGoal and activeGoal.goldTargetCopper,
+        professionId = activeGoal and activeGoal.professionId,
+        professionTargetSkill = activeGoal and activeGoal.professionTargetSkill,
+    }
+    if request.kind == "gold" then
+        target.goldTargetCopper = request.target
+    elseif request.kind == "skill" then
+        local profession = scoped(addon.professionSnapshot)
+        local time = now()
+        if not profession or not time or type(profession.observedAt) ~= "number"
+            or profession.observedAt > time or time - profession.observedAt > snapshotAge
+            or type(profession.cap) ~= "number" or profession.cap % 1 ~= 0
+            or type(profession.professionId) ~= "number"
+            or request.target > profession.cap then
+            return "Scan your open profession first; target must not exceed its observed cap."
+        end
+        target.professionId = profession.professionId
+        target.professionTargetSkill = request.target
+    else
+        return "Unknown goal command."
+    end
+    local created, reason = addon.goalPlanner.new(target)
+    if not created then return "Goal unavailable: " .. (reason or "invalid target") end
+    activeGoal = created
+    return "Custom session target set. Observe fresh character data to track progress."
+end
+
 local function goalPage(time, ledger, profession)
     local result = { rows = {
         "Session goals only. Targets are private and reset on reload or character change.",
         "Gold +1g and Skill +10 create explicit targets from your last fresh manual observations.",
+        "Custom: /goldwise goal gold 25000 (copper) or /goldwise goal skill 75.",
         "No projected earnings, skill-up chance, automatic selling or crafting.",
     }, actions = {} }
     local rows, actions = result.rows, result.actions
@@ -636,7 +684,14 @@ local function build()
 end
 
 function GoldWiseOpen(command)
-    if command == "guide" then
+    local isGoalCommand = type(command) == "string"
+        and (command == "goal" or command:match("^%s*goal%s+") ~= nil)
+    if isGoalCommand then
+        guideStep, goalPanel, materialsPanel, tab, page = nil, true, false, 5, 1
+        local request, reason = addon.goalCommands.parse(command)
+        feedback = request and applyCustomGoal(request)
+            or ("Invalid goal command (" .. (reason or "unknown") .. "). Use /goldwise goal help.")
+    elseif command == "guide" then
         showGuide()
     elseif not guideOffered and addon.guidePreferences and not addon.guidePreferences.finished then
         showGuide()
@@ -654,7 +709,7 @@ function GoldWiseOpen(command)
         end
         view = dashboard
     end
-    if view.frame:IsShown() and command ~= "guide" then
+    if view.frame:IsShown() and command ~= "guide" and not isGoalCommand then
         view.frame:Hide()
         return
     end

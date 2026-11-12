@@ -102,3 +102,9 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Plan and reserve reagents; verify current recipe reservations are not counted twice and other recipe holds remain accounted for.
 - [ ] Rescan bags, age the snapshot, switch character or reload; review values should refresh from observation or become unknown, not silently reuse old stock.
 - [ ] No vendor/AH request, crafting or inventory action must occur merely from opening the review. Record client build and in-game UI errors. **NOT RUN**.
+
+## GW-020 exact target commands (NOT RUN)
+- [ ] With no manual balance observation, enter `/goldwise goal gold 25000`; My Goals should show Gold **unknown**, not zero or completed. Manually sample balance and verify the remaining copper.
+- [ ] Enter `/goldwise goal skill 75` before an open-profession scan: expect an explanatory refusal. Scan a profession; choose an attainable target at/below the **observed skill cap**, then confirm it retains the gold target.
+- [ ] Invalid inputs (`/goldwise goal gold -1`, `/goldwise goal skill 99999999`, `/goldwise goal gold 12g`) must not change the last valid targets. `/goldwise goal clear` clears them. `/goldwise goal help` displays the copper unit and commands.
+- [ ] Repeated goal chat commands while My Goals is open should update the view rather than toggle it closed. Reload and confirm no target persists. **Installed Forever status: NOT RUN**.

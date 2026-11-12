@@ -1,3 +1,8 @@
+## Unreleased - GW-020 exact player goal targets (2026-11-12)
+- Added strictly validated /goldwise goal gold <copper>, goal skill <level>, help, and clear commands. Goal panel displays the result without closing on repeated command.
+- No new game APIs; targets remain local session only. Profession selection requires an existing fresh, matching manual scan; invalid targets cannot mutate goals.
+- Offline unit and dashboard contract tests; live Forever client test NOT RUN.
+
 ## Unreleased - GW-018 material retention review (2026-11-12)
 - Read-only Material Review subview distinguishes carried, conservatively held and manual-review quantities.
 - Active plan and session reservations avoid counting the same recipe twice; invalid/stale/partial/cross-character data abstains.

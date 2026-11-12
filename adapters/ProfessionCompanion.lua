@@ -68,7 +68,11 @@ function Companion.show(snapshot)
     if not current(snapshot) then return false end
     local frame = allowedFrame()
     if not frame then return false end
-    if attached and attached.frame ~= frame then attached = nil end
+    if attached and attached.frame ~= frame then
+        attached.panel:Hide()
+        if attached.tab then attached.tab:Hide() end
+        attached = nil
+    end
     if not attached then
         local ok, created = pcall(create, frame)
         if not ok or not created then return false end

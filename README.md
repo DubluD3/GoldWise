@@ -84,3 +84,6 @@ Nested reagent plans use only schematics captured during the **same manual profe
 
 ### Reservation safety (GW-017)
 A session plan can only reserve carried materials while it is still the **active plan**, the same complete inventory snapshot, the **exact profession scan** that created it, the same character and verified client build, and all observations are fresh (15 minutes). Expired or superseded plans are rejected without changing reservations. Clear or recalculate plans after a scan, relog or client patch. No items are moved or crafted.
+
+### Defensive reservation integrity
+Before an in-session material hold is created or replaced, GoldWise validates **all** existing holds against the complete observed carried bag stock. Invalid allocations, impossible held quantities and unknown item IDs are rejected without changing the existing session map. Reservation changes do not move or sell items and never imply that remaining stock is safe to sell.

@@ -1,3 +1,8 @@
+## Unreleased — GW-017 reservation integrity and atomicity (2026-11-12)
+- Validate all currently held recipe allocations and observed stock before accepting a reservation change.
+- Reject corrupt existing holds, phantom items, negative/fractional amounts, invalid identifiers and excessive reservations atomically, without silently replacing or reallocating anything.
+- Preserve the established eight-plan cap and same-recipe replacement semantics. Local Lua unit/contract CI; live Forever client testing NOT RUN.
+
 ## Unreleased - GW-017 reservation context and freshness guard (2026-11-12)
 - Reservation action now rechecks the active plan, exact profession snapshot, scoped character/build, complete bag snapshot and 15-minute freshness at action time—not just when opening the plan.
 - Missing/restricted time and superseded plans fail without modifying any held reagents. Offline contract tests cover transitions and expiration.

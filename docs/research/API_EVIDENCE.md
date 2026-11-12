@@ -287,3 +287,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 
 ## GW-017 action-time reservation revalidation (2026-11-12)
 The reservation action now reads the existing **GetServerTime** source through a pcall/secret-value guard at player click time; this is not a new API. It refuses a superseded current plan, replaced profession observation, changed character/build, replaced/incomplete bags, future/stale evidence or restricted/unreadable time. Pure Lua and fixture contract tests are not evidence of installed-client success. In-game status: **NOT RUN**.
+
+## GW-017 reservation integrity model (2026-11-12)
+`OFFLINE-TESTED`: the Lua session reservation model now rejects impossible prior holds and invalid observed stock before authorizing any replacement, even if a caller bypasses higher-level UI checks. There are **no new WoW API calls**, no automated inventory mutation, and no persistent source changes. Synthetic tests are not live client proof. Installed Forever QA: `NOT RUN`.

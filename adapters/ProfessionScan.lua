@@ -2,6 +2,7 @@ local _, addon = ...
 local prefix = "GoldWise profession: "
 
 function GoldWiseProfessionScan()
+    if addon.professionCompanion then addon.professionCompanion.invalidate() end
     addon.professionSnapshot = nil
     addon.recipeCatalog = nil
     addon.features.professions = false
@@ -24,4 +25,5 @@ function GoldWiseProfessionScan()
     addon.recipeCatalog = addon.recipeCatalogModel.fromSnapshot(addon.clientBuild, snapshot)
     addon.features.professions = snapshot.recipeStatus == "filtered"
     addon.professionCapture.report(prefix, snapshot)
+    if addon.professionCompanion then addon.professionCompanion.show(snapshot) end
 end

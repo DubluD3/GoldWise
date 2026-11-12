@@ -117,3 +117,6 @@ Contextual buttons are now created only after panel construction succeeds, hidde
 
 ### GW-035 guided recovery (draft)
 The standalone dashboard now gives concise manual recovery steps for missing or stale inventory, profession, reagent plans and market observations. **Go to Professions** and **Go to Inventory** shortcuts change views only and never trigger game reads; the existing AH observation remains strictly one-shot and requires a fresh Blizzard search after reload. This improves usability while contextual native UI compatibility remains pending live game QA.
+
+### GW-036 non-overlapping contextual entry points (draft)
+The three context entry buttons are now anchored to the **exterior edge** of their native parent frames, above GoldWise's adjacent side panels, instead of at a potentially conflicting coordinate *inside* Blizzard's window. The button follows the same bounded side flipping and fails closed with the panel if positioning is unsupported. Real game-client frame behavior and protected control safety have not yet been verified.

@@ -836,8 +836,8 @@ local function build()
             page = page + delta
         end
     end
-    local previous = button(frame, "Previous", 76, 16, -(height - 83), function() move(-1) end)
-    local following = button(frame, "Next", 76, 100, -(height - 83), function() move(1) end)
+    local previous = button(frame, "Previous", 106, 16, -(height - 83), function() move(-1) end)
+    local following = button(frame, "Next", 106, 130, -(height - 83), function() move(1) end)
     local actions = {}
     local actionWidth = (width - 48) / 3
     for index = 1, 6 do

@@ -78,11 +78,14 @@ function Companion.show(snapshot)
         if not ok or not created then return false end
         attached = created
     end
-    if attached.tab then attached.tab:Show() end
     lastSnapshot = snapshot
     -- A newly scanned profession remains accessible even if another source
     -- is unknown; a plan is displayed only when all snapshots agree.
-    return Companion.refresh()
+    local ready = Companion.refresh()
+    if attached.tab then
+        if ready then attached.tab:Show() else attached.tab:Hide() end
+    end
+    return ready
 end
 
 function Companion.refresh()

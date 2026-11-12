@@ -37,6 +37,7 @@ local function control(parent, caption, width, x, y, onClick)
     title:SetAllPoints(button)
     title:SetJustifyH("CENTER")
     title:SetText(caption)
+    button.label = title
     button:SetScript("OnClick", onClick)
     return button
 end

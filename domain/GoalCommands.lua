@@ -5,7 +5,7 @@ local MAX_SKILL = 2147483647
 
 local function positiveDecimal(raw, maximum)
     if type(raw) ~= "string" or #raw == 0 or #raw > 16
-        or not raw:match("^%d+$") then return nil end
+        or not raw:match("^[1-9]%d*$") then return nil end
     local number = tonumber(raw)
     if type(number) ~= "number" or number < 1 or number > maximum
         or number % 1 ~= 0 then return nil end

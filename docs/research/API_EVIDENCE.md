@@ -237,3 +237,12 @@ GW-023 splits existing offline tests into syntax, unit, and adapter contract che
 
 ## Test probe rules
 Use harmless, read-only console inspection of known symbols; do not query AH until trigger/cooldown semantics verified. Record client version using supported client UI. Never spam APIs, try protected calls or run automation. Ask owner to execute controlled client probes; Codex cannot assert test success from generated code alone.
+
+## GW-026 - Guided scanner readiness (2026-11-12)
+- `OFFICIAL`: [Blizzard UI addon policy](https://eu.forums.blizzard.com/en/wow/t/wow-user-interface-add-on-development-policy/1642), rechecked November 12, 2026: free unobfuscated source, no ads/donation solicitation and no negative realm/client performance impact. This does **not** approve automated gameplay, AH querying or any new behavior.
+- `CLIENT-EXTRACTED` and `OBSERVED-IN-GAME` evidence is reused from API-001 (build/clock), API-002 (ADDON_LOADED, existing SavedVariables account-local manifest support), API-003 (manual bags), API-005 (manual profession), API-006 (player searches, manual cache observation), API-007 (manual money), and API-008 (login character). No additional game read/action API is introduced.
+- The dashboard's frame rendering is inherited from draft PR #36. **New guide UI on 70862/70888: UNKNOWN, NOT RUN.** This implementation does not assert that draft dashboard frame semantics have been verified live.
+- `INFERRED` product mapping: character identity is Automatic (login event observed); carried bags, professions, market and ledger are **Player action required**; equipment, bank and persisted alts are **Unsupported**; recipe plans are user-directed session state. Distinguish status of data (`Pending`/`Partial`/`Stale`/`Last observed`) from permitted mechanism.
+- Auction House is manual read-only: no addon-originated `SendSearchQuery`, `ReplicateItems`, automated retries or new event subscriptions. Market identity and AH fee/deposit model remain **UNKNOWN/BLOCKED** under API-012/API-010.
+- `GoldWiseGuideDB` uses only completion boolean, 1-based step index, known skipped source keys. Separate SavedVariables schema 1 is a compatibility strategy; client logout/reload persistence and current build UI behavior require owner testing.
+- Client actions and unsupported cases are enumerated in [SCAN_GUIDE_TEST.md](../development/SCAN_GUIDE_TEST.md). No new Blizzard API signature is claimed without evidence.

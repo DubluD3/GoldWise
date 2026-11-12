@@ -1,3 +1,8 @@
+## Unreleased - GW-026 scan guide candidate (2026-11-12)
+- Added first-run and on-demand native Scan & Setup Guide, per-source method, status, timestamps/reasons, steps and nonautomated retry actions.
+- Added isolated versioned local `GoldWiseGuideDB` preferences for completion, resume step and skip flags; `GoldWiseDB` unchanged.
+- Added offline readiness and corruption tests. **Pending:** actual Lua 5.1/CI outcomes, real Forever UI and persistence QA, parent PR integration and owner release approval. NOT PRODUCTION READY.
+
 # Changelog
 
 ## Unreleased

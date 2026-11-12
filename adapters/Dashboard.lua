@@ -14,6 +14,8 @@ local view
 local tab, page, selection, crafts = 1, 1, 1, 1
 local feedback
 local vendor
+local guideStep
+local guideOffered = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -67,7 +69,99 @@ local function showRows(rows, count, renderRow)
     return page > 1, page < pages
 end
 
+
+local function showGuide()
+    local prefs = addon.guidePreferences
+    guideStep = prefs and prefs.step or 1
+end
+
+local function guidePage()
+    local model = addon.scanGuideModel
+    local step = model.steps[guideStep]
+    if not step then guideStep = 1; step = model.steps[1] end
+    local character = addon.characterSnapshot
+    local scope = character and character.scopeKey
+    local snap
+    local complete = true
+    if step.key == "character" then
+        snap = character
+    elseif step.key == "bags" then
+        snap = scoped(addon.inventorySnapshot)
+        complete = snap and snap.status == "complete"
+    elseif step.key == "professions" then
+        snap = scoped(addon.professionSnapshot)
+        -- Filtered learned recipes never establish a complete recipe catalog.
+        complete = false
+    elseif step.key == "auction" then
+        snap = scoped(addon.auctionObservation)
+        -- Live market identity and full scan scope are still unverified.
+        complete = false
+    elseif step.key == "ledger" then
+        local ledger = addon.ledgerView and addon.ledgerView()
+        snap = ledger and ledger.latest
+    elseif step.key == "plan" then
+        snap = scoped(addon.recipePlan)
+    end
+    local source = snap and {
+        scope = snap.characterScope or snap.scopeKey or scope,
+        observedAt = snap.observedAt,
+        complete = complete,
+    }
+    local status, detail = model.evaluate(step, source, now(), step.key == "auction" and marketAge or snapshotAge,
+        scope, addon.supportedClient)
+    local result = { rows = {
+        "GoldWise stays on this device. No account, uploads, or automated gameplay actions.",
+        string.format("Step %d of %d  -  %s", guideStep, #model.steps, step.title),
+        "Method: " .. step.method .. "  |  State: " .. status,
+        detail,
+        "WHAT TO DO: " .. step.instruction,
+        "WHY: " .. step.why,
+    }, actions = {} }
+    local actions = result.actions
+    if addon.guidePreferencesError then
+        result.rows[#result.rows + 1] = "Guide preferences invalid; left untouched. Steps cannot be saved."
+    end
+    if addon.guidePreferences and addon.guidePreferences.skipped[step.key] then
+        result.rows[#result.rows + 1] = "Previously skipped. Skipping does not mean data was collected."
+    end
+    local function advance(index)
+        guideStep = index
+        if addon.guidePreferences then model.setStep(addon.guidePreferences, index) end
+    end
+    if guideStep > 1 then
+        actions[1] = { "Previous step", function() advance(guideStep - 1) end }
+    end
+    if guideStep < #model.steps then
+        actions[2] = { "Next step", function() advance(guideStep + 1) end }
+        actions[3] = { "Skip this step", function()
+            if addon.guidePreferences then model.skip(addon.guidePreferences, step.key) end
+            advance(guideStep + 1)
+        end }
+    else
+        actions[5] = { "Finish guide", function()
+            if addon.guidePreferences then model.finish(addon.guidePreferences) end
+            guideStep = nil
+            return "Guide complete. Missing scans remain pending until observed."
+        end }
+    end
+    if step.key == "bags" then
+        actions[4] = { "Scan bags", GoldWiseInventoryScan }
+    elseif step.key == "professions" then
+        actions[4] = { "Scan profession", GoldWiseProfessionScan }
+    elseif step.key == "auction" then
+        actions[4] = { "Observe browse", function()
+            view.frame:Hide()
+            GoldWiseAuctionObserve()
+        end }
+    elseif step.key == "ledger" then
+        actions[4] = { "Sample balance", GoldWiseLedgerSample }
+    end
+    actions[6] = { "Exit guide", function() guideStep = nil end }
+    return result
+end
+
 local function state()
+    if guideStep then return guidePage() end
     local result = { rows = {}, actions = {} }
     local rows, actions = result.rows, result.actions
     local time = now()
@@ -95,6 +189,7 @@ local function state()
             actions[3] = { "Clear label", function() GoldWiseLedgerCategorize(entry.observedAt, "unclassified") end }
         end
         actions[1] = { "Sample balance", GoldWiseLedgerSample }
+        actions[4] = { "Update my data", showGuide }
     elseif tab == 2 then
         actions[1] = { "Scan bags", function()
             vendor, page = nil, 1
@@ -266,7 +361,7 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. tabs[tab])
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
@@ -342,13 +437,14 @@ local function build()
 
     local title = text(frame, "GameFontNormalLarge", colors.gold, "LEFT", "MIDDLE")
     title:SetPoint("TOPLEFT", frame, "TOPLEFT", 16, -12)
-    title:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", -76, -38)
+    title:SetPoint("BOTTOMRIGHT", frame, "TOPRIGHT", -144, -38)
+    button(frame, "Guide", 56, width - 132, -12, showGuide)
     button(frame, "Close", 56, width - 68, -12, function() frame:Hide() end)
 
     local tabWidth = (width - 48) / #tabs
     for index, label in ipairs(tabs) do
         button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            tab, page = index, 1
+            guideStep, tab, page = nil, index, 1
         end)
     end
 
@@ -379,7 +475,13 @@ local function build()
     return { frame = frame, title = title, body = body, status = status, actions = actions, previous = previous, next = following }
 end
 
-function GoldWiseOpen()
+function GoldWiseOpen(command)
+    if command == "guide" then
+        showGuide()
+    elseif not guideOffered and addon.guidePreferences and not addon.guidePreferences.finished then
+        showGuide()
+    end
+    guideOffered = true
     if not addon.supportedClient then
         print("GoldWise dashboard unavailable on this client build.")
         return
@@ -392,7 +494,7 @@ function GoldWiseOpen()
         end
         view = dashboard
     end
-    if view.frame:IsShown() then
+    if view.frame:IsShown() and command ~= "guide" then
         view.frame:Hide()
         return
     end

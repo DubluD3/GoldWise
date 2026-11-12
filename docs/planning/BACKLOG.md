@@ -10,6 +10,7 @@ The owner reported that the `70888` build check passed. The existing feature ada
 
 | Story | Status | Evidence and next action |
 |---|---|---|
+| [GW-026](https://github.com/DubluD3/GoldWise/issues/41) | `IN_REVIEW` | Scan & Setup Guide with explicit source states and isolated preferences is developed on a stack over GW-017. Lua 5.1 syntax/unit/contract CI passed on commit 07a6b528 ([run](https://github.com/DubluD3/GoldWise/actions/runs/43191008974)); full-suite CI expansion and actual Forever dashboard/first-run/reload QA pending. Parent PRs #34-#37 are open drafts; do not merge without their integration. [Manual QA](../development/SCAN_GUIDE_TEST.md) |
 | [GW-001](https://github.com/DubluD3/GoldWise/issues/1) | `DONE` | Owner confirmed Forever `1.60.1`, build `70862`, interface `16001`. The discovery register identifies unsupported calls and their fallbacks. [Evidence commit](https://github.com/DubluD3/GoldWise/commit/cc1bdfc27321724077543c8d03dea001edcb3312) |
 | [GW-002](https://github.com/DubluD3/GoldWise/issues/2) | `DONE` | Blizzard sources reviewed and the smoke-test boundaries documented. Owner approved the documented scope for merge. [Review commit](https://github.com/DubluD3/GoldWise/commit/81daf60749a8df51ab9e923cbacc1ff2f7d24c04) |
 | [GW-003](https://github.com/DubluD3/GoldWise/issues/3) | `DONE` | Audited local recipe and browse observations and seven external sources. External imports remain excluded. Owner approved the local-only source audit for merge. [Audit PR](https://github.com/DubluD3/GoldWise/pull/29) |
@@ -39,6 +40,7 @@ The owner reported that the `70888` build check passed. The existing feature ada
 | CAP-06 Economic Decisions | F-06 reservations and valuation | GW-017, GW-018, GW-019 | G4 |
 | CAP-07 Goals & Accounting | F-07 personal plan and ledger | GW-020, GW-021, GW-022 | G5 |
 | CAP-08 Quality & Delivery | F-08 testing, UX, release | GW-023, GW-024, GW-025 | G6-G7 |
+| CAP-09 Guided Setup | F-09 scanner state and onboarding | GW-026 | G4-G6 |
 
 ## Stories (each entry is an independently testable issue)
 Each entry lists the story, priority, dependencies, and acceptance criteria.
@@ -83,6 +85,9 @@ Each entry lists the story, priority, dependencies, and acceptance criteria.
 - **GW-023 — P0 — GW-006:** CI lint/unit/contract test matrix and fixture policy. Accept: scripted repeatable suite; missing game tests reported.
 - **GW-024 — P0 — GW-019:** Performance, UX, accessibility and persistence QA. Accept: documented client QA on 2 inventories, low-data case and patched build.
 - **GW-025 — P0 — GW-024:** Beta package, attribution, license decision, privacy docs and release gate. Accept: manual installation works; no unsupported promises.
+
+### CAP-09 / F-09 - Guided Setup
+- **GW-026 - P0 - GW-019, GW-017:** First-run and on-demand guide, accurate source state, step-by-step manual capture and local preference persistence. Accept: no false automatic completion; UI and SavedVariables regression tests; owner client QA on verified build. Dependencies are currently stacked draft PRs. [Issue #41](https://github.com/DubluD3/GoldWise/issues/41).
 
 ## Story discipline
 Each issue: context, user story, evidence links, acceptance checklist, dependencies, tests, risks, DoD. Keep IDs unchanged. No 'AI-only' self-approval of compliance or release gates.

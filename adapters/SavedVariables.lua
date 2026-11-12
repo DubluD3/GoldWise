@@ -13,6 +13,14 @@ local function openSavedVariables()
 
     GoldWiseDB = state
     addon.storageState = state
+    -- Isolated guide preferences. Never overwrite malformed existing data.
+    local guide, guideStatus = addon.scanGuideModel.open(GoldWiseGuideDB)
+    if guide then
+        GoldWiseGuideDB = guide
+        addon.guidePreferences = guide
+    else
+        addon.guidePreferencesError = guideStatus
+    end
     print("GoldWise local storage " .. status .. " (schema " .. state.schemaVersion .. ").")
 end
 

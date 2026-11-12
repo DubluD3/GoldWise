@@ -1,3 +1,8 @@
+## Unreleased — GW-033 responsive companion positioning (2026-11-12)
+- Shared companion positioning now validates native frame bounds, UIParent dimensions, effective-scale compatibility and available adjacent screen space before attaching a profession, carried-inventory or Auction House side panel.
+- Flips to the opposite side when the preferred position does not fit, clamps vertical alignment and refuses unsupported layouts instead of placing interactive overlays offscreen. Checks placement again on manual reopen.
+- Native visual overlap, frame hierarchy, dynamic game UI scale and combat taint still require physical-client verification; the standalone GoldWise dashboard remains the fallback.
+
 ## Unreleased — GW-032 shared native companion presentation (2026-11-12)
 - Refactored optional profession, carried-bag and Auction House companions onto one conservative, shared UI chrome implementation for label colors, panel backgrounds and passive buttons. No new game-data calls or actions; standalone dashboards remain fallbacks.
 - Added a dedicated offline UI-style contract probe and updated isolated packaging regression fixtures to include the UI directory.

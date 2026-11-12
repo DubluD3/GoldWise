@@ -43,3 +43,10 @@
 4. Record results in [E01–E20](OWNER_E2E_QA.md) with PASS / FAIL / BLOCKED / NOT RUN and **sanitized** screenshots or exact error strings, not raw SavedVariables or character names. On any error, fully close game, restore the backed-up addon and leave unrelated SavedVariables untouched.
 
 **Release is explicitly BLOCKED.** No approved LICENSE, no signed owner in-client QA, and no integrated merge/release authorization. The candidate ZIP is private-owner QA only. Do not equate a green CI badge with production readiness.
+
+## GW-028 contextual profession companion — real-client QA NOT RUN
+- [ ] On a verified build with the **native crafting profession panel open**, manually choose **Scan profession** in GoldWise. Find the optional **GoldWise** button attached to that profession frame. If it overlaps native controls or is offscreen, report resolution/UI scale and a sanitized screenshot; do not mark it PASS.
+- [ ] Click GoldWise to reveal the adjacent summary. Verify it shows the observed profession, skill/cap and **filtered** learned-recipe count, not fabricated up-to-date information.
+- [ ] **Open GoldWise** must show the existing Professions dashboard; **Hide** must dismiss just the companion. Confirm native profession controls still function and the game produces no protected-action or taint errors, including in combat.
+- [ ] A failed or changed manual scan must dismiss stale companion details. Closing the native panel should hide its child controls. No automatic scan, polling, AH query, crafting or item movement may occur.
+- [ ] If the profession frame or widget API is unavailable/restricted, the addon must gracefully leave the standalone `/goldwise` dashboard usable. Record real build/interface and test status; currently **NOT RUN**.

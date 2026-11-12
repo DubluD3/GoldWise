@@ -857,6 +857,8 @@ function GoldWiseOpen(command)
         local request, reason = addon.goalCommands.parse(command)
         feedback = request and applyCustomGoal(request)
             or ("Invalid goal command (" .. (reason or "unknown") .. "). Use /goldwise goal help.")
+    elseif command == "profession" then
+        guideStep, tab, page, goalPanel, materialsPanel, professionReviewPanel, capacityPanel, testPanel = nil, 3, 1, false, false, false, false, false
     elseif command == "guide" then
         showGuide()
     elseif not guideOffered and addon.guidePreferences and not addon.guidePreferences.finished then
@@ -875,7 +877,7 @@ function GoldWiseOpen(command)
         end
         view = dashboard
     end
-    if view.frame:IsShown() and command ~= "guide" and not isGoalCommand then
+    if view.frame:IsShown() and command ~= "guide" and command ~= "profession" and not isGoalCommand then
         view.frame:Hide()
         return
     end

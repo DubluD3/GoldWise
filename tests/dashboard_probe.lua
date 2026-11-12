@@ -13,6 +13,8 @@ local function widget(kind, hidden)
         object[method] = function() end
     end
     function object:SetText(value) self.value = value end
+    function object:SetColorTexture(...) self.color = { ... } end
+    function object:SetTextColor(...) self.textColor = { ... } end
     function object:CreateTexture() return widget("Texture") end
     function object:CreateFontString()
         local label = widget("FontString")
@@ -101,6 +103,23 @@ local function hasText(fragment)
         if label.value and label.value:find(fragment, 1, true) then return true end
     end
 end
+local function visibleButton(label)
+    for _, candidate in ipairs(widgets) do
+        if candidate.shown and candidate.label and candidate.label.value == label then
+            return candidate
+        end
+    end
+end
+local function activeTab(label, other)
+    local selected = assert(visibleButton(label), "missing selected tab " .. label)
+    local inactive = assert(visibleButton(other), "missing inactive tab " .. other)
+    assert(selected.background and inactive.background)
+    assert(selected.background.color[1] ~= inactive.background.color[1],
+        "selected tab must be visually distinct")
+    assert(selected.label.textColor[1] ~= inactive.label.textColor[1],
+        "selected tab label must have visual emphasis")
+end
+
 local function click(label)
     for _, candidate in ipairs(widgets) do
         if candidate.shown and candidate.label and candidate.label.value == label then
@@ -118,6 +137,7 @@ globals.SlashCmdList.GOLDWISE()
 assert(widgets[1].shown and hasText("Scan & Setup Guide"))
 click("Exit guide")
 assert(hasText("GoldWise  /  Overview"))
+activeTab("Overview", "Inventory")
 globals.SlashCmdList.GOLDWISE("goal gold 25000")
 assert(hasText("GoldWise  /  My Goals") and hasText("Gold: unknown"))
 assert(hasText("Custom session target set"))
@@ -171,6 +191,7 @@ click("Back to Overview")
 assert(hasText("GoldWise  /  Overview"))
 print("PASS quick-test page provides a guided manual scan and navigation path")
 click("Inventory")
+activeTab("Inventory", "Overview")
 click("Scan bags")
 assert(reads == 2 and vendorReads == 0 and hasText("Fixture hide") and not hasText("Action unavailable"))
 click("Check vendor value")
@@ -189,6 +210,7 @@ print("PASS dashboard opens lazily, renders inventory, and reads vendor info onl
 
 click("Scan bags")
 click("Professions")
+activeTab("Professions", "Inventory")
 click("Scan profession")
 globals.SlashCmdList.GOLDWISE("goal gold 10000")
 assert(hasText("Gold: unknown") and hasText("Custom session target set"))

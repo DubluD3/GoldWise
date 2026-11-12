@@ -99,3 +99,6 @@ The optional profession sidecar now shows a **read-only summary of the current e
 
 ### GW-029 in-frame recipe details (draft)
 The optional profession companion now shows the current manually calculated **root recipe name and craft count**, and up to two sorted **missing carried item IDs and quantities**, with a count of additional missing item types. This remains conservative: it does not claim item availability from bank/alts, success probability, or the selected native recipe, and does not modify protected controls. Only a fresh plan bound to the same exact profession scan, complete carried inventory, character and build can appear. Panel size/position and taint are pending real client QA; the full dashboard remains the fallback.
+
+### GW-030 optional carried-bag companion (draft)
+After an explicit manual bag scan, GoldWise may offer a **GoldWise Bags** button on an already visible, readable `ContainerFrame1` (a **candidate** native frame, not yet verified on the supported Forever build). Its player-toggled side panel summarizes only fresh, complete, character-scoped carried inventory, with three item IDs/quantities maximum and no sell advice. No auto-scans or native inventory interactions. A missing frame or other invalid conditions leave the existing standalone inventory dashboard as the fallback. In-game positioning/protected UI safety **NOT RUN**.

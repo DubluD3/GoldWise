@@ -11,7 +11,8 @@
 
 ## B. Test player-controlled observations and navigation
 
-1. **Guide:** On first run, complete or skip steps. Reopen using `/goldwise guide`; confirm Pending / Partial / Stale states, manual vs automatic labels and Unsupported equipment, bank, alt sources. Completion does not mean scans succeeded.
+1. **Quick test (new):** After exiting the first-run guide, choose **Overview → Quick test**. It lists bags, profession, balance and reagent plan as observed or pending. Use **Scan bags**, **Scan profession** (with native crafting view open), **Sample balance**, **Choose recipe**, **My Plan**, and **Back to Overview**. A scan that fails or becomes stale must not be marked complete. This screen is an in-session QA aid, not a claim of gameplay validation.
+2. **Guide:** On first run, complete or skip steps. Reopen using `/goldwise guide`; confirm Pending / Partial / Stale states, manual vs automatic labels and Unsupported equipment, bank, alt sources. Completion does not mean scans succeeded.
 2. **Dashboard:** Open Overview, Inventory, Professions, Market and My Plan. Close/reopen `/goldwise`; check native UI placement, text and navigation at 100% and a smaller usable scale. Do not expect automated buying/crafting/mailing.
 3. **Inventory:** Click **Scan bags** and compare totals with native bags. Select a stack, use **Check vendor value** only if readable. Open **Review materials**: carried/held/manual-review amounts are informational, **never permission to sell**.
 4. **Ledger:** Outside trade and with no money on cursor, choose **Sample balance**; sample again after at least a second. Verify signed unclassified changes and reversible user labels, no fabricated sales.

@@ -246,3 +246,10 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 - Auction House is manual read-only: no addon-originated `SendSearchQuery`, `ReplicateItems`, automated retries or new event subscriptions. Market identity and AH fee/deposit model remain **UNKNOWN/BLOCKED** under API-012/API-010.
 - `GoldWiseGuideDB` uses only completion boolean, 1-based step index, known skipped source keys. Separate SavedVariables schema 1 is a compatibility strategy; client logout/reload persistence and current build UI behavior require owner testing.
 - Client actions and unsupported cases are enumerated in [SCAN_GUIDE_TEST.md](../development/SCAN_GUIDE_TEST.md). No new Blizzard API signature is claimed without evidence.
+
+## GW-018 offline alternative comparison (2026-11-12)
+- `INFERRED` domain logic only: `domain/ItemChoices.lua` uses no WoW API; its optional fee `verified=true`, `verified-per-unit-ask` basis and marketKey are **caller contracts**, not claims any current Forever client returns such evidence.
+- `UNKNOWN / BLOCKED-API-VERIFICATION`: actual Forever 70888 browse-price per-unit basis, auction market discriminator, realized sales/fees/deposits. See API-010 and API-012. No addon-originated AH queries are authorized. Actual vendor tooltip reference needs build-specific UI validation before being used as definitive realized proceeds.
+- `SYNTHETIC`: test item IDs 1001-1004 and fictional cloth/bolt/outfit/bandage conversion ratios, copper prices and auction fees in `tests/item_choices.lua`. They must **never** be loaded or represented as live WoW data.
+- `INFERRED`: vendor delta versus vending inputs is a reference opportunity-cost comparison only; no labor/time/sale-probability model. Material reservations are subtracted before graph planning. Missing inputs, stale or mismatched market data, unknown basis and numeric overflow explicitly abstain.
+- `OBSERVED-IN-GAME`: no new GW-018 observations; all market+value assumptions require owner confirmation on the exact build before UI/adapters or acceptance.

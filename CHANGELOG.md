@@ -1,3 +1,8 @@
+## Unreleased - GW-018 economic comparisons (offline only, 2026-11-12)
+- Pure Lua vendor-reference and crafting-opportunity-cost comparison using reservation-aware verified recipe graphs, plus guardrails for AH asking-price scenarios and externally evidenced fees.
+- Synthetic 100-unit cloth alternative regression; no live price/advice UI integration because market identity, unit basis and auction fees remain blocked.
+- **NOT A LIVE FEATURE** until target-build data and owner E2E evidence exist.
+
 ## Unreleased - GW-026 scan guide candidate (2026-11-12)
 - Added first-run and on-demand native Scan & Setup Guide, per-source method, status, timestamps/reasons, steps and nonautomated retry actions.
 - Added isolated versioned local `GoldWiseGuideDB` preferences for completion, resume step and skip flags; `GoldWiseDB` unchanged.

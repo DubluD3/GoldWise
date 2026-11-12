@@ -456,6 +456,9 @@ local function state()
     local market = scoped(addon.auctionObservation)
     local ledger = addon.ledgerView and addon.ledgerView()
     local plan = scoped(addon.recipePlan)
+    -- A plan belongs to the exact manual profession scan that created it.
+    -- Switching or re-scanning a profession never silently carries the plan forward.
+    if plan and (not profession or plan.professionSnapshot ~= profession) then plan = nil end
 
     if not addon.supportedClient then
         rows[1] = "This client build needs verification."

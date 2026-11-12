@@ -120,3 +120,10 @@ Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-V
 - [ ] Reserve the current plan's carried ingredients. Direct capacity must not subtract the same reservation twice; reservations held for a different recipe must reduce available counts.
 - [ ] A recipe with missing direct materials may show 0 covered runs even if nested crafting could theoretically produce them; it must *not* claim guaranteed craftability or future skill gain.
 - [ ] Refresh bags or switch characters/expire snapshot. Stale, partial, unknown, or cross-character figures should not remain trusted. Confirm no automatic crafting, Auction House action, extra game reads or persistent state. Record real client build and UI errors. **NOT RUN**.
+
+## GW-014 profession-scope and plan invalidation checks (NOT RUN)
+- [ ] On a verified client build, scan a profession and bags, then manually plan a learned fixed-output recipe with dependencies. Confirm its material plan appears.
+- [ ] Re-scan the **same profession**. The previous plan must no longer appear current in My Plan. Create a new plan; any producer steps must come from the newly observed profession session.
+- [ ] Switch to a different crafting profession (where available), scan and plan. Recipes captured from the previous profession must not be reused as ingredient producers.
+- [ ] Log another character or change client build. Cached sources and previous plan must not carry across contexts. Let a profession scan expire; planning must refuse until it is manually refreshed.
+- [ ] Check that no automatic game actions, background scans or additional client APIs were introduced. Record actual build, screenshot and Lua errors. **Client QA NOT RUN.**

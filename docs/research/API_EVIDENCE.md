@@ -281,3 +281,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 
 ## GW-014 direct material craft capacity (2026-11-12)
 `INFERRED/OFFLINE-TESTED`: On a player-triggered plan, the existing verified fixed-output schematic capture is kept in session memory with source character scope and timestamp. The pure `domain/CraftCapacity.lua` evaluator computes only direct reagent coverage from current complete carried inventory and reservations. It adds **zero** WoW API calls and no background scanning. `UNKNOWN`: nested profession routing, actual craft execution permissions, probability of skill gain, vendor/AH pricing, bank/alt stock, materials consumed by unobserved actions. In-game client check remains `NOT RUN`.
+
+## GW-014 profession-scoped producer cache (2026-11-12)
+`INFERRED/OFFLINE TESTED`: `adapters/RecipePlan.lua` now keys its session producer cache by character scope, current client build, and exact `professionSnapshot` object identity. Profession observations must be current within the 900-second source window before schematic capture. `adapters/Dashboard.lua` declines to render plans from a replaced profession snapshot. The change adds no WoW client API calls; no unseen recipe is claimed learned. **Actual in-game client E2E: NOT RUN**.

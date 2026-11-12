@@ -94,13 +94,16 @@ function Guide.evaluate(step, source, currentTime, maxAge, expectedScope, suppor
     if supportedClient ~= true then
         return "Unsupported", "This exact client build is not verified."
     end
+    if type(step) ~= "table" or type(step.method) ~= "string" then
+        return "Unsupported", "Scanner definition unavailable."
+    end
     if step.method == "Unsupported" then
         return "Unsupported", "No verified reader for this source."
     end
     if type(source) ~= "table" then
         return "Pending", "No observation in this session."
     end
-    if expectedScope and source.scope ~= expectedScope then
+    if type(expectedScope) ~= "string" or #expectedScope == 0 or source.scope ~= expectedScope then
         return "Pending", "Observation is from another or unknown character scope."
     end
     if not integer(source.observedAt, 1) or not integer(currentTime, 1)
@@ -112,8 +115,8 @@ function Guide.evaluate(step, source, currentTime, maxAge, expectedScope, suppor
     if currentTime - source.observedAt > maxAge then
         return "Stale", stamp .. " Refresh before using this data."
     end
-    if source.complete == false then
-        return "Partial", stamp .. " Only observed content is usable."
+    if source.complete ~= true then
+        return "Partial", stamp .. " Completeness is partial or unverified; only observed content is usable."
     end
     return "Last observed", stamp
 end

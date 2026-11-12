@@ -43,3 +43,7 @@ Do NOT merge/rebase the stack without rechecking actual heads, tests, conflicts,
 Run the **[GW-024 owner E2E QA checklist](OWNER_E2E_QA.md)** on the latest integrated candidate ZIP and report the real build, UI scale, E01-E20 results and errors. Keep failures as issues. Revalidate API evidence, implement independent only-evidenced adapters/stories and rerun all four Lua suites and ZIP checks. Merge PRs in dependency order after owner reviews. Only after all release gates and rights/license decision should an owner-authorized release ZIP be considered.
 
 No background automation or unchecked gameplay action is authorized by this checkpoint.
+
+## Follow-up hardening (2026-11-12)
+- The Node.js 20 deprecation warning was resolved on packaging PR #44 (head `02b269efc199736ebda96e3183c9b239287cb62e`, [CI PASS](https://github.com/DubluD3/GoldWise/actions/runs/43194780775)). This downstream hardening branch incorporates the same pinned Node.js 24 artifact uploader so its own QA ZIP does not reintroduce the warning. Future stack reconciliation must preserve this change when merging PR #44.
+- Guide completeness now requires an **explicit boolean true**, not merely absence of false. Unknown/malformed coverage is Partial. Missing character scope is Pending. Malformed scanner definitions fail closed. These are offline-only defensive semantics; actual Forever UI QA remains NOT RUN.

@@ -27,5 +27,5 @@ assert(check({reservations={[8]={[10]=0.5}}}).status=="unknown")
 assert(check({recipe={characterScope="A",observedAt=990,recipeId=7,itemId=90,quantity=1,reagents={}}}).status=="unknown")
 assert(check({recipe={characterScope="A",observedAt=990,recipeId=7,itemId=90,quantity=1,reagents={{itemId=10,quantity=2147483648}}}}).status=="unknown")
 local sparse={characterScope="A",observedAt=990,status="complete",totals={[10]=1,[11]=1}}
-assert(check({inventory=sparse}).maxDirectCrafts==0)
+assert(check({inventory=sparse,reservations={}}).maxDirectCrafts==0)
 print("PASS stale, scope, impossible reservations and unsupported recipe fail closed")

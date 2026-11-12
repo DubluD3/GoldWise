@@ -47,3 +47,6 @@ Each external dataset needs:
 - Removal/update plan and explicit owner approval.
 
 **Do not include competitor source code or datasets** merely because they are visible online. A public GitHub repository without appropriate license does not grant unrestricted reuse. Keep synthetic fixtures clearly labeled, never substitute them for real market observations.
+
+### GW-018 synthetic test data (2026-11-12)
+The fictional `tests/item_choices.lua` item identifiers, 100-cloth conversion, prices and fee examples are authored test-only data. They are **not** Forever recipes, vendor values, observed market prices or verified charges. The corresponding pure domain implementation does not import any third-party dataset and never consults external providers.

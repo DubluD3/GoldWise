@@ -20,6 +20,7 @@ adapters\ProfessionScan.lua
 adapters\TrainerCapture.lua
 adapters\TrainerObserve.lua
 data\RecipeMaterials.lua
+domain\ItemChoices.lua
 data\MaterialReservations.lua
 adapters\ReservationSession.lua
 adapters\RecipeSchematic.lua

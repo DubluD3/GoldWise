@@ -52,6 +52,9 @@ docs/           # product, planning, policy, architecture, research
 - Alt and bank snapshots are stale by default until re-observed.
 - No dynamic executable code, network calls, process access or input generation.
 
+## GW-018 offline economic alternative contracts
+`domain/ItemChoices.lua` is pure Lua: exact integer copper bounds, explicit vendor reference alternatives, reserved-stock-aware nested recipe material accounting (using `data/RecipeMaterials.lua`), and optional scoped fresh verified-unit-basis AH asking-price hypotheticals. Output differentiates vendor-reference comparisons from **ask-only** and **unknown**. AH fee/cut/deposit scenarios require explicit *verified* inputs and must never be interpreted as expected sale proceeds. No live Forever adapter is wired because API-010/012 and price unit basis remain unverified; test fixtures alone never authorize them.
+
 ## GW-026 guided capture state
 The pure `data/ScanGuide.lua` model describes supported local sources and maps actual session observations to Pending/Partial/Stale/Last observed/Unsupported. Capture method and successful capture are different fields. The dashboard reuses existing verified manual adapter entrypoints and does not issue new gameplay or AH requests. A new separate `GoldWiseGuideDB` (schema 1; completion, current step and skipped-step flags only) stores onboarding preferences without mutating or migrating `GoldWiseDB`. Reject invalid guide preferences without overwriting them. Actual snapshot contents are never reconstructed from a saved preference flag.
 

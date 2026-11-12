@@ -4,13 +4,16 @@ GoldWise is a planned **free, open-source, local-first, read-only economic and p
 
 > **Status: integrated test candidate.** Run `/goldwise` to open the native dashboard. The [integrated test guide](docs/development/INTEGRATED_TEST.md) covers the current build and manual feature flows.
 
+## Offline item-alternative comparison (GW-018 foundation)
+The `domain/ItemChoices.lua` module runs only on explicitly supplied, validated copper values and recipe inputs. It compares local vendor references against reserved-stock-aware crafting opportunities, and can describe hypothetical Auction House asking prices only when a future adapter supplies verified price basis, market scope, freshness and optionally fees. **No live AH economics or item advice is enabled**: the current client evidence does not support those claims. The 100-cloth scenarios are synthetic tests, not game data.
+
 ## Draft integrated guide (not merged into main)
 The stacked draft PRs #34-#37 contain the five-tab dashboard and session reagent reservations. The follow-on [GW-026 Scan & Setup Guide](docs/development/SCAN_GUIDE_TEST.md) adds a first-run wizard, Guide button and `/goldwise guide`. The guide labels automatic character observation separately from manual bags/professions/AH/ledger, and marks unsupported bank/equipment/alt sources honestly. The new account-local `GoldWiseGuideDB` stores only completion/step/skip preferences; existing `GoldWiseDB` is unchanged. **This is a test candidate, not a released or live-verified implementation.**
 
 ## Test the startup build
 
 1. Close WoW: Forever. Open the Forever installation folder from Battle.net.
-2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc`, `adapters`, and `data` into `GoldWise`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
+2. In its `Interface/AddOns` folder, create a folder named `GoldWise`. Copy `GoldWise.toc`, `adapters`, `data`, and `domain` into `GoldWise`. The manifest should be directly at `Interface/AddOns/GoldWise/GoldWise.toc`.
 3. Start Forever, enable GoldWise in the AddOns list, and log in. The startup message identifies the verified client build. A fresh install prints `GoldWise local storage created (schema 1).` A previously initialized install prints `GoldWise local storage current (schema 1).`
 4. Look for `GoldWise character snapshot ready.` on login and after `/reload`. If you have another character available, look for the same status when you log in on it. Report the status messages and any Lua error. The snapshot stays in memory for the session.
 5. Open your bags and run `/run GoldWiseInventoryScan()`. Compare the sample stack and carried total with the visible bags. A complete read reports `bags=complete, bank=unobserved, alts=unobserved`. A partial read labels the sample total as observed. Run the command again after bag changes to take a new observation.

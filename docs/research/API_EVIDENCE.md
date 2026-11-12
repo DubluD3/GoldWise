@@ -269,3 +269,6 @@ Use harmless, read-only console inspection of known symbols; do not query AH unt
 - `OBSERVED-IN-GAME` reused from API-007 manual balance and API-005 manual open profession on build 70862; no new API is called. Build 70888 requires integrated real-client validation.
 - `UNKNOWN`: profession progression skill-up probabilities, future gold income, time-to-goal, new persisted alt goals and game-client UI integration. Output contains no such forecasts.
 - `SYNTHETIC`: unit tests use fictional 25,000/50,000 copper balances and skill 80/100. This is a test-only data source, never real character data or market advice.
+
+## GW-020 dashboard integration (2026-11-12)
+`INFERRED/OFFLINE TESTED`: Existing manual `GoldWiseLedgerSample` and `GoldWiseProfessionScan` actions supply observed snapshots, and `addon.goalPlanner` computes targets. No new WoW APIs or unattended scans were added. The Goal subview uses only current-session snapshots and never silently treats a gold change as a sale. In-game installed UI, client-specific rendering and protection/taint remain `NOT RUN` pending owner verification.

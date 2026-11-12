@@ -89,3 +89,10 @@ Owner approval: PENDING
 **STOP** when a Lua error, protected UI taint, unintended auction query, unexpectedly deleted SavedVariables, cross-character data leak, or unverified client build appears. Fully exit game, restore backed-up `Interface/AddOns/GoldWise`, and retain backed-up SavedVariables. Re-enable old addon only on a build it previously supported. Do not remove whole `WTF` or touch another addon's SavedVariables. Report only sanitized outputs.
 
 Any blocker that needs new game API must be recorded as `UNKNOWN`/`BLOCKED-API-VERIFICATION` with exact client version, extracted source reference and owner confirmation before implementation. **The owner alone can sign off the game-client and public release gates.**
+
+## GW-020 My Goals additive checks (not yet run)
+- [ ] After logging in on a verified build, open `/goldwise`, finish/exit the guide, choose **Goals** from Overview. Without a balance sample verify "No active goal", then choose **Gold +1g** and confirm it refuses with a manual-sample prompt.
+- [ ] Return to Overview, choose **Sample balance** and revisit Goals. Choose **Gold +1g**; confirm the target is exactly **10,000 copper above the observed balance**, with no prediction of sales.
+- [ ] Open your crafting profession, choose **Scan profession**, return to My Goals and choose **Skill +10**. Confirm target is limited by the observed cap, and gold target remains intact.
+- [ ] Change/reload character, allow observations to expire, or switch to a different profession: stale/wrong-scoped targets must show **unknown** or reset, never a completed status. **Clear goals** must immediately remove all session targets.
+- [ ] Reload the addon: targets must not persist; no unexpected saved data; no new automatic gameplay action or AH request. Record actual UI scale and client build. Status: **NOT RUN**.

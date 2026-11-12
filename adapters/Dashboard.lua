@@ -16,6 +16,9 @@ local feedback
 local vendor
 local guideStep
 local guideOffered = false
+-- Goal targets exist only for this addon session; never persisted or sent externally.
+local activeGoal
+local goalPanel = false
 
 local function now()
     local ok, value = pcall(GetServerTime)
@@ -160,6 +163,124 @@ local function guidePage()
     return result
 end
 
+local function goalPage(time, ledger, profession)
+    local result = { rows = {
+        "Session goals only. Targets are private and reset on reload or character change.",
+        "Gold +1g and Skill +10 create explicit targets from your last fresh manual observations.",
+        "No projected earnings, skill-up chance, automatic selling or crafting.",
+    }, actions = {} }
+    local rows, actions = result.rows, result.actions
+    local character = addon.characterSnapshot
+    local scope = character and character.scopeKey
+    local buildId = addon.clientBuild
+    if activeGoal and (activeGoal.characterScope ~= scope or activeGoal.build ~= buildId) then
+        activeGoal = nil
+    end
+
+    local money
+    if ledger and ledger.latest then
+        money = {
+            characterScope = ledger.characterScope, build = ledger.build,
+            observedAt = ledger.latest.observedAt, balanceCopper = ledger.latest.balanceCopper,
+        }
+    end
+    local professionData
+    if profession then
+        professionData = {
+            characterScope = profession.characterScope, build = buildId,
+            observedAt = profession.observedAt, professionId = profession.professionId,
+            skill = profession.skill,
+        }
+    end
+    local evidence = { now = time, maxAge = snapshotAge, money = money, profession = professionData }
+    local function validMoney()
+        if not money or type(time) ~= "number" or money.characterScope ~= scope
+            or money.build ~= buildId or type(money.observedAt) ~= "number"
+            or money.observedAt > time or time - money.observedAt > snapshotAge
+            or type(money.balanceCopper) ~= "number" or money.balanceCopper < 0
+            or money.balanceCopper % 1 ~= 0 or money.balanceCopper > 2 ^ 53 - 1 - 10000 then
+            return false
+        end
+        return true
+    end
+    local function validProfession()
+        if not professionData or type(time) ~= "number" or professionData.characterScope ~= scope
+            or type(professionData.observedAt) ~= "number"
+            or professionData.observedAt > time or time - professionData.observedAt > snapshotAge
+            or type(professionData.skill) ~= "number" or professionData.skill % 1 ~= 0
+            or type(profession.cap) ~= "number" or profession.cap % 1 ~= 0
+            or profession.cap <= professionData.skill or professionData.skill < 0
+            or professionData.professionId == nil then
+            return false
+        end
+        return true
+    end
+    local function setTarget(which)
+        if type(scope) ~= "string" or #scope == 0 then
+            return "Character identity unavailable. Reopen after login."
+        end
+        local goal = activeGoal
+        local target = {
+            id = "session-goal", characterScope = scope, build = buildId,
+            goldTargetCopper = goal and goal.goldTargetCopper,
+            professionId = goal and goal.professionId,
+            professionTargetSkill = goal and goal.professionTargetSkill,
+        }
+        if which == "gold" then
+            if not validMoney() then return "Sample a current gold balance first." end
+            target.goldTargetCopper = money.balanceCopper + 10000
+        else
+            if not validProfession() then return "Scan a current profession below its cap first." end
+            target.professionId = professionData.professionId
+            target.professionTargetSkill = math.min(profession.cap, professionData.skill + 10)
+        end
+        local created, reason = addon.goalPlanner.new(target)
+        if not created then return "Goal unavailable: " .. (reason or "invalid target") end
+        activeGoal = created
+        return "Session target updated from current observed data."
+    end
+
+    if activeGoal then
+        local progress = addon.goalPlanner.evaluate(activeGoal, evidence)
+        rows[#rows + 1] = "Combined goal: " .. progress.status
+        if progress.gold then
+            if progress.gold.status == "unknown" then
+                rows[#rows + 1] = "Gold: unknown (sample a fresh character balance)"
+            else
+                rows[#rows + 1] = string.format("Gold: %.0f / %.0f copper, %.0f remaining (%s)",
+                    progress.gold.currentCopper, progress.gold.targetCopper,
+                    progress.gold.remainingCopper, progress.gold.status)
+            end
+        end
+        if progress.profession then
+            if progress.profession.status == "unknown" then
+                rows[#rows + 1] = "Profession: unknown (rescan the matching open profession)"
+            else
+                rows[#rows + 1] = string.format("Profession: %.0f / %.0f skill, %.0f remaining (%s)",
+                    progress.profession.currentSkill, progress.profession.targetSkill,
+                    progress.profession.remainingSkill, progress.profession.status)
+            end
+        end
+        if progress.nextSteps then
+            for _, instruction in ipairs(progress.nextSteps) do
+                rows[#rows + 1] = instruction
+            end
+        end
+        actions[3] = { "Clear goals", function()
+            activeGoal = nil
+            return "Session goals cleared."
+        end }
+    else
+        rows[#rows + 1] = "No active goal. Take manual samples before choosing a target."
+    end
+    actions[1] = { "Gold +1g", function() return setTarget("gold") end }
+    actions[2] = { "Skill +10", function() return setTarget("skill") end }
+    actions[4] = { "Back to plan", function() goalPanel = false end }
+    actions[5] = { "Sample balance", GoldWiseLedgerSample }
+    actions[6] = { "Scan profession", GoldWiseProfessionScan }
+    return result
+end
+
 local function state()
     if guideStep then return guidePage() end
     local result = { rows = {}, actions = {} }
@@ -190,6 +311,7 @@ local function state()
         end
         actions[1] = { "Sample balance", GoldWiseLedgerSample }
         actions[4] = { "Update my data", showGuide }
+        actions[5] = { "Goals", function() tab, page, goalPanel = 5, 1, true end }
     elseif tab == 2 then
         actions[1] = { "Scan bags", function()
             vendor, page = nil, 1
@@ -313,6 +435,8 @@ local function state()
                 row.itemLevel, row.minimumCopper, row.reportedQuantity)
         end)
     elseif tab == 5 then
+        if goalPanel then return goalPage(time, ledger, profession) end
+        actions[3] = { "Goals", function() goalPanel = true end }
         if not plan then
             rows[1] = "Choose a learned recipe under Professions and plan its reagents."
             return result
@@ -361,7 +485,7 @@ end
 
 local function render()
     local content = state()
-    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or tabs[tab]))
+    view.title:SetText("GoldWise  /  " .. (guideStep and "Scan & Setup Guide" or goalPanel and "My Goals" or tabs[tab]))
     local body = table.concat(content.rows, "\n"):gsub("|", "||")
     view.body:SetText(body)
     local message = (feedback or ""):gsub("|", "||")
@@ -444,7 +568,7 @@ local function build()
     local tabWidth = (width - 48) / #tabs
     for index, label in ipairs(tabs) do
         button(frame, label, tabWidth, 16 + (index - 1) * (tabWidth + 4), -49, function()
-            guideStep, tab, page = nil, index, 1
+            guideStep, tab, page, goalPanel = nil, index, 1, false
         end)
     end
 

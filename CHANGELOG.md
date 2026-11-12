@@ -1,3 +1,8 @@
+## Unreleased - GW-020 session goals in My Plan (2026-11-12)
+- New My Goals view reachable from Overview and My Plan; choose +1g and +10 skill from fresh manual snapshots.
+- Evaluates both targets with stale/character guards, allows reset and supports combined goals without persisting or predicting game outcomes.
+- Offline dashboard contract tests cover display, scope/freshness, creation and clearing; **client E2E NOT RUN**.
+
 ## Unreleased - GW-020 offline combined goal foundation (2026-11-12)
 - Added bounded copper/profession targets and read-only evaluation of fresh scoped observations with manual suggestions.
 - Missing, stale, mismatched or partially known observations abstain. No skill-up probabilities or projected earnings fabricated.

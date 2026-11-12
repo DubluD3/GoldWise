@@ -108,9 +108,12 @@ function Companion.show(snapshot)
         if not ok or not created then return false end
         attached = created
     end
-    if attached.toggle then attached.toggle:Show() end
     lastObservation = snapshot
-    return Companion.refresh()
+    local ready = Companion.refresh()
+    if attached.toggle then
+        if ready then attached.toggle:Show() else attached.toggle:Hide() end
+    end
+    return ready
 end
 
 addon.marketCompanion = Companion

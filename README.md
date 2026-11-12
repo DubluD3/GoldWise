@@ -96,3 +96,6 @@ When a supported crafting window is **already open** and the player manually sca
 
 ### Contextual plan information in the profession companion (GW-028 follow-up)
 The optional profession sidecar now shows a **read-only summary of the current exact manual reagent plan** (including validated missing carried units), or explicitly says **Plan unavailable** when the plan is stale, mismatched, absent or malformed. It updates the display only on a successful manual profession scan or when the player opens the sidecar; it does not scan bags or professions in the background, start crafting, or infer bank/alt stock. This remains an **unmerged candidate** awaiting native UI placement and protected-frame QA on Forever.
+
+### GW-029 in-frame recipe details (draft)
+The optional profession companion now shows the current manually calculated **root recipe name and craft count**, and up to two sorted **missing carried item IDs and quantities**, with a count of additional missing item types. This remains conservative: it does not claim item availability from bank/alts, success probability, or the selected native recipe, and does not modify protected controls. Only a fresh plan bound to the same exact profession scan, complete carried inventory, character and build can appear. Panel size/position and taint are pending real client QA; the full dashboard remains the fallback.

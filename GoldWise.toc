@@ -38,3 +38,4 @@ data\Ledger.lua
 adapters\LedgerCapture.lua
 adapters\VendorReference.lua
 adapters\Dashboard.lua
+adapters\ProfessionCompanion.lua

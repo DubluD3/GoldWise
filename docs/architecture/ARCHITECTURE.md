@@ -84,3 +84,6 @@ The existing five-tab layout remains unchanged. A Goals action in Overview and M
 
 ## GW-014 direct craft capacity (2026-11-12)
 The manual RecipePlan adapter attaches the captured fixed-output recipe to its ephemeral plan, scoped to its current character and timestamp. The read-only `domain/CraftCapacity.lua` coalesces duplicate direct reagents and computes floor(free stock/per-run requirement), where free stock subtracts other recipes' reservations but not the plan's own reservation. It fails closed on stale, partial, mismatched, malformed or impossible quantities. The My Plan subview never invokes a reader or crafts an item and never equates covered reagents with successful craft or skill gain.
+
+## GW-014 cache/plan evidence boundary (2026-11-12)
+The ephemeral recipe-producer cache is tied to the exact manually scanned profession snapshot identity, character scope and verified game build. Every scan transition clears cached schematics, even if the profession ID and timestamp appear identical. A captured root schema is tagged with the current profession ID and character scope. The dashboard checks the plan's `professionSnapshot` identity against the current scan before rendering; a previous plan is never treated as current after an observed profession transition. No change to SavedVariables schema or public API surface.

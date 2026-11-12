@@ -78,3 +78,6 @@ In **My Plan → Review progression**, GoldWise shows your manually observed pro
 
 ### Direct-reagent capacity (GW-014)
 After a manual fixed-output recipe plan, choose **My Plan → Direct capacity** to review how many *direct reagent sets* are covered by fresh observed carried bags. This only counts the recorded recipe's immediate fixed reagents, excludes stock held for other recipes and does not double count its own reservation. It does **not** account for nested crafts, bank, other characters, item quality, fees, actual crafting eligibility or profession skill-up odds. No crafting action is executed.
+
+### Recipe producer cache isolation (GW-014)
+Nested reagent plans use only schematics captured during the **same manual profession scan**, for the same character and client build. Switching professions, rescanning a profession, switching characters, or changing a verified build invalidates the temporary producer cache. The dashboard also stops showing a plan if its creating profession scan is no longer current. Refresh your profession scan, bags and recipe plan after changing context. No background scanning or cross-character crafting is assumed.

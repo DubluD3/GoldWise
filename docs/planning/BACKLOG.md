@@ -4,7 +4,7 @@ Statuses are `PROPOSED`, `READY`, `BLOCKED`, `IN_PROGRESS`, `READY_FOR_REVIEW`, 
 
 ## Current progress
 
-Last updated November 11, 2026. `READY_FOR_REVIEW` means the work is pushed and ready for owner review. Use `IN_REVIEW` when a story PR is open and `DONE` after owner acceptance, required evidence, and merge.
+Last updated November 12, 2026. `READY_FOR_REVIEW` means the work is pushed and ready for owner review. Use `IN_REVIEW` when a story PR is open and `DONE` after owner acceptance, required evidence, and merge.
 
 The owner reported that the `70888` build check passed. The existing feature adapters now accept both verified builds. [Build evidence](../research/API_EVIDENCE.md#selected-trainer-service-probe)
 
